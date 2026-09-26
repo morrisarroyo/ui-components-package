@@ -1,0 +1,32 @@
+.card {
+  /* 1px hairline borders throughout: the token sheet defines no border width. */
+  background: var(--ui-color-surface);
+  border: 1px solid var(--ui-color-border);
+  border-radius: var(--ui-radius-md);
+  padding: var(--ui-space-6);
+  font-family: var(--ui-font-family);
+  color: var(--ui-color-text);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ui-space-4);
+  margin-bottom: var(--ui-space-4);
+}
+
+.title {
+  margin: 0;
+  font-size: var(--ui-font-heading-size);
+  line-height: var(--ui-font-heading-line);
+  font-weight: var(--ui-font-heading-weight);
+}
+
+/* Keeps the actions hard right even when there is no title. */
+.actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--ui-space-2);
+}

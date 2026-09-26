@@ -103,7 +103,7 @@ see `AutoPhase.md`).
 
 ### T-1.4 Card
 - **Depends on:** T-1.1
-- **Status:** In progress — written, not yet tested
+- **Status:** Done
 - **Done when:** surface background, border, radius.md and space.6 padding come
   from tokens; the title renders in font.heading with actions right-aligned on
   the same row and space.4 below it; the header row is omitted entirely when
