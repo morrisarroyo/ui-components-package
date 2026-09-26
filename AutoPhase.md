@@ -69,3 +69,8 @@ Baseline before this run: 36 ui tests passing (5 files), app 0 tests, workspace 
 ## T-1.8 Library build
 - **Verified:** `npm run build --workspace ui` from an emptied `dist/` exits 0 and emits `ui.js`, `ui.css`, `index.d.ts` (plus per-component declarations). `ui.js` imports only `react` and `react/jsx-runtime`, with no React internals inlined. `ui.css` carries the tokens. From `packages/app`: `import('ui')` yields the five components, `ui/styles.css` resolves to `dist/ui.css`, a deep import of `ui/src/...` fails with `ERR_PACKAGE_PATH_NOT_EXPORTED`, and a throwaway consumer file importing `Button`, `ButtonVariant`, `TableRow` type-checks (deleted afterwards).
 - **Note:** no source change was needed; the build fix that made declarations emit landed in `44bbc19`.
+
+## T-3.1 App shell and routing
+- **Verified:** `npm run dev` (builds ui, starts Vite on :5173): `GET /` and `GET /patients/p-0001` → 200 `index.html` with `#root`; `/src/main.tsx` and the page modules → 200 compiled JS. `npm run build --workspace app` (tsc + vite build) succeeds against the built `ui`. `grep` over `packages/app/src` finds no `ui/src` or relative import into the library; the only `ui` import is `ui/styles.css` in `main.tsx`.
+- **Not verified:** the rendered DOM in a browser. The task's check is "serves both routes", which is met; what the pages render is checked by T-3.3 and T-3.4.
+- **Files beyond the plan:** page stubs `pages/PatientListPage.tsx` and `pages/PatientDetailPage.tsx` (filled in by T-3.3 and T-3.4), and `src/vite-env.d.ts`.

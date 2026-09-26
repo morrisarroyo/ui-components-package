@@ -194,7 +194,7 @@ T-1.7 and T-1.8 are next. See `AutoPhase.md`.
 
 ### T-3.1 App shell and routing
 - **Depends on:** T-0.4, T-1.8
-- **Status:** Not started
+- **Status:** Done
 - **Done when:** `app` renders through a router with a route for the patient
   list and one for a patient by id, imports `ui` and `ui/styles.css` by package
   name only, and overrides no `ui` styles.
