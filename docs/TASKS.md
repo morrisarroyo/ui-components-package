@@ -164,7 +164,7 @@ see `AutoPhase.md`).
 
 ### T-2.2 ASP.NET Core project
 - **Depends on:** T-0.2
-- **Status:** Not started
+- **Status:** Done
 - **Done when:** `api/Intrahealth.Api` is an ASP.NET Core project that starts on
   a fixed port matching the website's dev proxy.
 - **Verify:** `dotnet run --project api/Intrahealth.Api` starts and responds on
