@@ -225,7 +225,7 @@ T-1.7 and T-1.8 are next. See `AutoPhase.md`.
 
 ### T-3.4 Patient detail page
 - **Depends on:** T-3.2
-- **Status:** Not started
+- **Status:** Done
 - **Done when:** a Back button returns to the list; the page is titled with the
   patient's full name; a Card titled "Demographics" holds a DescriptionList of
   Name, Gender, Birth date, Phone, Email, Address; "Loading…" shows while the

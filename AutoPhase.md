@@ -88,3 +88,8 @@ Baseline before this run: 36 ui tests passing (5 files), app 0 tests, workspace 
 - **Measurement slip, not a defect:** the first browser read of the button's loading state came back idle because it read the DOM in the same tick as the click; React commits a discrete update in a microtask. Re-read 100ms later: loading.
 - **Known gap, recorded in INTERVIEW.md:** a null phone renders as a blank Table cell; the fix belongs in the library's Table spec.
 - **Decisions taken alone:** the search sits in a `<form role="search">` so Enter also searches (the brief does not require it, nor forbid it); an app layout stylesheet (`pages/Page.module.css`) uses only library tokens and styles only app elements; stale responses are dropped by request counter.
+
+## T-3.4 Patient detail page
+- **Verified in a real browser** against the running API: with 1.5 s latency, "Loading…" and no list; p-0001 complete — h1 "Amara Okonkwo", Card "Demographics", all six rows filled; p-0003 Email "—", p-0005 Address "—", p-0007 Phone "—", p-0011 all-null address "—", each dash computed in `rgb(107, 114, 128)` (color.text.muted); p-9999 → Card "Patient not found", no h1, Back present; Back from a patient opened via the list → `/`, Back from not-found → `/`; API stopped → Card "Something went wrong" with Back.
+- **Also:** `src/pages/PatientDetailPage.test.tsx`, 5 jsdom tests (loading, full demographics with `—` for email, not-found, error, Back). App suite 27 passed.
+- **Decisions taken alone:** Back navigates to `/` rather than history −1, so it "returns to Page 1" even when the detail URL was opened directly; the Back button is present in every state; a transport failure shows "Something went wrong", distinct from not-found, per the contract's error table.
