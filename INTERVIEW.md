@@ -58,7 +58,7 @@ commit, so the two can be read side by side.
 | `docs/API-CONTRACT.md` | One contract both `app` and `api` are written against. |
 | `docs/DECISIONS.md` | Choices recorded as they are made. This file is assembled from it. |
 | `AutoPhase.md` | The run log: for every task, what verified it, any decision taken alone, and any place the plan was wrong. |
-| Workflow skills | `auto-phase` drives a phase end to end; it calls `implement-tasks` (take a startable task, stay in scope, write status back), `test-and-fix` (diagnose to root cause, never weaken a test) and `commit-task` (scope the commit to one task, verify it captured what was intended). `commit-gate`, the human diff review, is the step full-auto mode replaces. |
+| `.claude/skills/` | The workflow skills, committed with the project. `auto-phase` drives a phase end to end; it calls `implement-tasks` (take a startable task, stay in scope, write status back), `test-and-fix` (diagnose to root cause, never weaken a test) and `commit-task` (scope the commit to one task, verify it captured what was intended). `commit-gate`, the human diff review, is the step full-auto mode replaces. |
 
 **How the build ran.** Phases 1 to 4 were driven by the `auto-phase` skill in
 full-auto mode: pick the startable task that unblocks the most, implement it,
@@ -130,6 +130,20 @@ results: an end-to-end check that reported every call failing because its
 browser read of the Search button taken in the same tick as the click, before
 React had applied the update. Both were re-run properly before anything was
 concluded from them.
+
+**Reading the history against the plan.** One commit per task, with the task
+id in the subject, with these exceptions, each explained in its own message:
+
+- `cecc901` is all of Phase 0 (T-0.1 to T-0.5) and the API contract (T-2.1).
+  That work was done before the repository had any history, and its files
+  reference each other, so it could not be split after the fact.
+- Three commits fix defects rather than complete a task: `44bbc19` (the
+  toolchain that never type-checked), `c7b9c8b` (`npm test` failing while
+  `app` had no tests), and the script change inside `0f651a5`, the clean-clone
+  failure found while verifying the README.
+- `e406dd7` and `196ea9c` record the pause for the manual browser check and its
+  result. `9c5342e` (T-1.7) and `d64307b` (T-3.5) close tasks whose tests
+  had already landed beside the code they test.
 
 **Where the plan itself was wrong.** Recorded rather than silently patched:
 T-0.3 was marked done on a check ("the config is internally consistent") that

@@ -12,8 +12,8 @@ carries:
 One task, one commit. The commit history and this file must tell the same
 story.
 
-**Status summary:** Phases 0 and 2 complete. Phase 1: T-1.1 to T-1.6 done;
-T-1.7 and T-1.8 are next. See `AutoPhase.md`.
+**Status summary:** All five phases complete; every task Done and verified by
+its own check. The run log with the evidence for each is `AutoPhase.md`.
 
 ---
 
@@ -276,7 +276,7 @@ T-1.7 and T-1.8 are next. See `AutoPhase.md`.
 
 ### T-4.4 Delivery check
 - **Depends on:** T-4.1, T-4.2, T-4.3
-- **Status:** Not started
+- **Status:** Done
 - **Done when:** the commit history reads as a sequence matching these tasks,
   the `.claude` harness is committed rather than ignored, and all three
   packages run from their documented commands on a clean checkout.
