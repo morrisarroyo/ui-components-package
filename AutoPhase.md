@@ -54,3 +54,14 @@ Run of 2026-09-25, Phase 1, full auto (commits unreviewed). One entry per task, 
 
 ## T-1.2 Button — manual checkpoint closed by the user
 - **Verified by the user:** `width.html` opened in Brave; all 8 idle/loading pairs (primary/secondary × sm/md × short/long label) reported `SAME` width and height, as predicted. T-1.2 marked Done; T-1.7 is now startable.
+
+---
+
+# Run 2 — 2026-09-25, resumed after T-1.2's checkpoint
+
+Baseline before this run: 36 ui tests passing (5 files), app 0 tests, workspace clean at `c7b9c8b`.
+
+## T-1.7 Component behaviour tests
+- **Verified:** `npx --workspace ui vitest run --reporter=verbose` — 36 passed, and each case T-1.7 lists is present by name: Button variants (4 variant×size + distinct), Button disabled, Button no onClick while loading, TextField error replaces helper text, TextField label association, Table empty state and row click (mouse, Enter, Space), DescriptionList `—` for null/undefined/''. No snapshots.
+- **Mutation check:** made `loading` no longer disable the Button and narrowed DescriptionList's empty test to `null` only → 4 named tests failed (`does not call onClick while loading`, `cannot be reached with Tab while loading`, em dash for `undefined`, em dash for `''`); restored, 36 pass.
+- **Note:** no new files — the tests were committed with their components (see T-1.2's plan discrepancy), so this commit carries only the status and this record.

@@ -131,7 +131,7 @@ T-1.7 and T-1.8 are next. See `AutoPhase.md`.
 
 ### T-1.7 Component behaviour tests
 - **Depends on:** T-1.2, T-1.3, T-1.4, T-1.5, T-1.6
-- **Status:** Not started
+- **Status:** Done
 - **Done when:** Vitest + Testing Library tests cover, at minimum: Button
   variants and disabled state, Button not firing `onClick` while loading,
   TextField error state replacing helper text, TextField label association,
