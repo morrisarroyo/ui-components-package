@@ -8,3 +8,6 @@ import './tokens.css';
 
 export { Button } from './components/Button';
 export type { ButtonProps, ButtonVariant, ButtonSize } from './components/Button';
+
+export { TextField } from './components/TextField';
+export type { TextFieldProps } from './components/TextField';

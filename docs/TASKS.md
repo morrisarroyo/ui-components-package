@@ -92,7 +92,7 @@ see `AutoPhase.md`).
 
 ### T-1.3 TextField
 - **Depends on:** T-1.1
-- **Status:** In progress — written, not yet tested
+- **Status:** Done
 - **Done when:** the label is programmatically associated with the input; the
   error state triggers on a non-empty `errorMessage`, turns the border
   color.danger and **replaces** the helper text; the helper text shows

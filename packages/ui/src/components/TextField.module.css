@@ -1,0 +1,58 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-space-1);
+  font-family: var(--ui-font-family);
+}
+
+.label {
+  font-size: var(--ui-font-label-size);
+  line-height: var(--ui-font-label-line);
+  font-weight: var(--ui-font-label-weight);
+  color: var(--ui-color-text-muted);
+}
+
+/* 1px hairline border: the token sheet defines no border width. */
+.input {
+  padding: var(--ui-space-2) var(--ui-space-3);
+  border: 1px solid var(--ui-color-border);
+  border-radius: var(--ui-radius-sm);
+  background: var(--ui-color-surface);
+  color: var(--ui-color-text);
+  font-family: inherit;
+  font-size: var(--ui-font-body-size);
+  line-height: var(--ui-font-body-line);
+}
+
+.input::placeholder {
+  color: var(--ui-color-text-muted);
+}
+
+.input:focus {
+  border-color: var(--ui-color-primary);
+  outline: var(--ui-focus-ring-width) solid var(--ui-color-focus);
+  outline-offset: 0;
+}
+
+.input:disabled {
+  background: var(--ui-color-disabled-bg);
+  color: var(--ui-color-disabled-text);
+  cursor: default;
+}
+
+.inputError,
+.inputError:focus {
+  border-color: var(--ui-color-danger);
+}
+
+.helper {
+  font-size: var(--ui-font-label-size);
+  line-height: var(--ui-font-label-line);
+  color: var(--ui-color-text-muted);
+}
+
+.error {
+  font-size: var(--ui-font-label-size);
+  line-height: var(--ui-font-label-line);
+  color: var(--ui-color-danger);
+}
