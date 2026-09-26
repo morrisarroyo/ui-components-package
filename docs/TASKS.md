@@ -212,7 +212,7 @@ T-1.7 and T-1.8 are next. See `AutoPhase.md`.
 
 ### T-3.3 Patient list page
 - **Depends on:** T-3.2
-- **Status:** Not started
+- **Status:** Done
 - **Done when:** the page is titled "Patients"; a Card holds the search field
   and Search button; a Table shows Name, Gender, Birth date, Phone; "Loading…"
   shows in place of the Table on first load; clicking Search filters the list

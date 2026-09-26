@@ -81,3 +81,10 @@ Baseline before this run: 36 ui tests passing (5 files), app 0 tests, workspace 
 - **Decision taken alone:** D-16, birth dates as "2 Mar 1984".
 - **Environment slip, not a defect:** the first end-to-end run reported every call as an error because my wait loop treated the proxy's 502 during the API's compile as "up". The re-run after a real health check passed.
 - **Files beyond the plan:** `src/test-setup.ts`, which the app's Vitest config already named but which did not exist.
+
+## T-3.3 Patient list page
+- **Verified in a real browser** (headless Brave driven over the DevTools protocol, dev server + running API): title "Patients"; with 1.5 s added latency "Loading…" shows and no table, then the table replaces it; headers Name, Gender, Birth date, Phone; 12 rows, first "Amara Okonkwo · Female · 2 Mar 1984 · +1 416 555 0133"; search "oko" → button disabled, `aria-busy`, spinner, width unchanged at 81.125px while in flight, then one row; "zzz" → "No patients match your search"; clicking row 3 → `/patients/p-0003`; focusing row 1 + Enter → `/patients/p-0001`; API stopped → Card "Something went wrong", no table, no "Loading…", search still present.
+- **Also:** `src/pages/PatientListPage.test.tsx`, 7 jsdom tests of the same states against mocked responses (MemoryRouter — a data router's Request breaks under jsdom). App suite 22 passed.
+- **Measurement slip, not a defect:** the first browser read of the button's loading state came back idle because it read the DOM in the same tick as the click; React commits a discrete update in a microtask. Re-read 100ms later: loading.
+- **Known gap, recorded in INTERVIEW.md:** a null phone renders as a blank Table cell; the fix belongs in the library's Table spec.
+- **Decisions taken alone:** the search sits in a `<form role="search">` so Enter also searches (the brief does not require it, nor forbid it); an app layout stylesheet (`pages/Page.module.css`) uses only library tokens and styles only app elements; stale responses are dropped by request counter.

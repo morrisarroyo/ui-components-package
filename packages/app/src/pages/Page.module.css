@@ -1,0 +1,45 @@
+/*
+ * Page layout for the website's own markup. It styles only the app's layout
+ * elements, never a `ui` component, and takes every value from the library's
+ * public tokens so the pages sit on the same scale as the components.
+ */
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-space-6);
+  /* No token fits a content width; 960px keeps a four-column table readable. */
+  max-width: 960px;
+  margin: 0 auto;
+  padding: var(--ui-space-8) var(--ui-space-4);
+  font-family: var(--ui-font-family);
+  color: var(--ui-color-text);
+}
+
+.title {
+  margin: 0;
+  font-size: var(--ui-font-title-size);
+  line-height: var(--ui-font-title-line);
+  font-weight: var(--ui-font-title-weight);
+}
+
+.status {
+  margin: 0;
+  font-size: var(--ui-font-body-size);
+  line-height: var(--ui-font-body-line);
+  color: var(--ui-color-text-muted);
+}
+
+/* The search field grows; the button sits level with the input, not the label. */
+.searchRow {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--ui-space-3);
+}
+
+.searchField {
+  flex: 1;
+}
+
+.backRow {
+  display: flex;
+}

@@ -82,8 +82,17 @@ does not have to be re-explained each session.
 
 ## Time-boxes and known gaps
 
-TODO — anything that fought back and was set aside, and what state it was left
-in.
+- **A missing phone is a blank cell on the patient list.** The `—` rule is
+  specified for `DescriptionList` only, and D-13 keeps the dash out of the
+  mapping layer, so a Table cell whose value is `null` renders empty
+  (Samuel Okafor, p-0007). The right fix is in the library — Table rendering
+  a missing cell the way DescriptionList does — which is a spec change, not a
+  page patch, so it is left as a known gap rather than papered over in `app`.
+- **Headless browser checks.** Driving Brave with `--dump-dom` hung in the
+  agent's sandbox, so the first in-browser check (Button width while
+  loading) went to a human. Driving the same browser over the DevTools
+  protocol worked, and the page walks after that were run that way against
+  the real API.
 
 ## What I would do with two more hours
 
