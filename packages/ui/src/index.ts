@@ -17,3 +17,9 @@ export type { CardProps } from './components/Card';
 
 export { Table } from './components/Table';
 export type { TableProps, TableColumn, TableRow } from './components/Table';
+
+export { DescriptionList } from './components/DescriptionList';
+export type {
+  DescriptionListProps,
+  DescriptionListItem,
+} from './components/DescriptionList';

@@ -123,7 +123,7 @@ see `AutoPhase.md`).
 
 ### T-1.6 DescriptionList
 - **Depends on:** T-1.1
-- **Status:** In progress — written, not yet tested
+- **Status:** Done
 - **Done when:** each row has a 160px fixed-width label in font.label and a
   value in font.body; rows carry a bottom border except the last; a value that
   is empty, `null` or `undefined` renders as an em dash in color.text.muted.
