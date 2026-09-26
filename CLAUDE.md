@@ -132,7 +132,7 @@ had to be corrected.
 ```bash
 npm install                          # once, at the root — installs both workspaces
 npm run build --workspace ui         # build the library
-npm test                             # every workspace's tests (ui, then app)
+npm test                             # build ui, then every workspace's tests
 npm run test  --workspace ui         # library tests only
 npm run dev                          # build ui, then start the website on :5173
 npm run api                          # start the mock API on :5080

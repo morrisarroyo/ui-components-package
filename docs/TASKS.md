@@ -257,7 +257,7 @@ T-1.7 and T-1.8 are next. See `AutoPhase.md`.
 
 ### T-4.2 Project README
 - **Depends on:** T-3.4, T-2.4
-- **Status:** Not started
+- **Status:** Done
 - **Done when:** `README.md` describes what the project is, how it is laid out
   and how to run each package, written as if the project were real, and links
   to `INTERVIEW.md`.

@@ -79,6 +79,15 @@ does not have to be re-explained each session.
    technology no longer saw a table of rows and cells at all. A test asserting
    the table still exposes its rows and cells caught it. The rows now keep
    their native role (decision D-15).
+4. **`npm test` passed in the working tree and failed from a clean clone.**
+   The app's page tests import `ui` through its built `dist/`, which a fresh
+   clone does not have until something builds it. It went unnoticed because
+   the working tree always had a `dist/` left over, and the first "clean"
+   check was not clean either: a stray `node_modules` symlink above the clone
+   let TypeScript quietly resolve `ui` to the original repository's build. Only
+   removing it exposed the failure. The root `test` and `typecheck` scripts now
+   build `ui` first, as `dev` already did. Lesson: a clean-checkout check has
+   to rule out everything above the checkout, not only inside it.
 
 ## Time-boxes and known gaps
 

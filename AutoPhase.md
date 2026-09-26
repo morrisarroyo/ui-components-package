@@ -99,3 +99,9 @@ Baseline before this run: 36 ui tests passing (5 files), app 0 tests, workspace 
 - **Mutation check:** fed the Table `patient.id` instead of `patient.name` → 4 named list-page tests failed, including the page test; restored, 27 pass.
 - **Also:** removed the app's `passWithNoTests`, added in `c7b9c8b` only until this test existed.
 - **Note:** the test itself was committed with T-3.3, beside the page it tests (same pattern as T-1.7).
+
+## T-4.2 Project README
+- **Verified from a clean clone** (fresh `git clone` in the scratchpad plus this task's three changed files, no `node_modules` in any ancestor): `npm install` → 188 packages; `npm test` → exit 0, ui 36 passed, app 27 passed; `npm run typecheck` → exit 0; `npm run build --workspace app` → built; `npm run api` + `npm run dev` → `/health` ok, `/api/patients` via proxy 200, site loaded in headless Brave: "Patients, 12 rows"; `dotnet run --project api/Intrahealth.Api` from the clone → `/health` ok.
+- **Defect found and fixed in this task:** from a clean clone, `npm test` failed the two app page test files (`Failed to resolve entry for package "ui"`): `ui/dist` does not exist until built. The root `test` and `typecheck` scripts now build ui first; README and CLAUDE.md say so. Recorded as INTERVIEW correction 4.
+- **Contaminated first attempt:** the first clean check passed typecheck falsely because `scratchpad/node_modules` (a symlink I left from the T-1.2 width check) let tsc resolve `ui` to the original repo's `dist/`. Removed; the second check ruled out ancestor `node_modules`.
+- **Files beyond the plan:** `package.json` (root scripts), `CLAUDE.md` (commands).
