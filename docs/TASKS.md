@@ -172,7 +172,7 @@ see `AutoPhase.md`).
 
 ### T-2.3 Seed data
 - **Depends on:** T-2.2
-- **Status:** Not started
+- **Status:** Done
 - **Done when:** an in-memory set of invented patients exists, large enough for
   search to be meaningful, **including at least one patient missing an optional
   field** so the `—` path on Page 2 is exercisable.
