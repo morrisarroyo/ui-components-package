@@ -20,5 +20,8 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: ['./src/test-setup.ts'],
+    // Lets the root `npm test` pass before the app has tests of its own
+    // (the page test is task T-3.5). Remove once that test exists.
+    passWithNoTests: true,
   },
 });
