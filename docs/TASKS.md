@@ -81,7 +81,7 @@ see `AutoPhase.md`).
 
 ### T-1.2 Button
 - **Depends on:** T-1.1
-- **Status:** In progress — written, not yet tested
+- **Status:** In progress — implemented and tested; the browser width check is a manual checkpoint (headless browser unavailable here)
 - **Done when:** `variant` and `size` are union-typed; the primary and
   secondary palettes and both size paddings come from tokens; a loading button
   shows a spinner in place of its label **without changing width** and cannot

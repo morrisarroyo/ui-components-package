@@ -5,3 +5,6 @@
  * else; nothing under `src/` is part of the public API.
  */
 import './tokens.css';
+
+export { Button } from './components/Button';
+export type { ButtonProps, ButtonVariant, ButtonSize } from './components/Button';

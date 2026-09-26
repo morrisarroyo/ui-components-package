@@ -66,6 +66,13 @@ does not have to be re-explained each session.
    `defineConfig` from `vitest/config`, and Vitest bumped to 3, which targets
    Vite 6. Lesson: "config exists and is internally consistent" was not a
    check; running the compiler is.
+2. **The loading Button lost its accessible name.** The generated Button hid
+   its label with `visibility: hidden` while loading, to keep the width
+   while showing the spinner. The width part was right, but
+   `visibility: hidden` also drops the text from the accessibility tree, so
+   a screen reader met a busy button with no name. A behaviour test querying
+   `getByRole('button', { name: 'Save' })` on a loading button caught it. The
+   label is now `opacity: 0`, which keeps both the width and the name.
 
 ## Time-boxes and known gaps
 
