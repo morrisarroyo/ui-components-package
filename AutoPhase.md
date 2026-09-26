@@ -93,3 +93,9 @@ Baseline before this run: 36 ui tests passing (5 files), app 0 tests, workspace 
 - **Verified in a real browser** against the running API: with 1.5 s latency, "Loading…" and no list; p-0001 complete — h1 "Amara Okonkwo", Card "Demographics", all six rows filled; p-0003 Email "—", p-0005 Address "—", p-0007 Phone "—", p-0011 all-null address "—", each dash computed in `rgb(107, 114, 128)` (color.text.muted); p-9999 → Card "Patient not found", no h1, Back present; Back from a patient opened via the list → `/`, Back from not-found → `/`; API stopped → Card "Something went wrong" with Back.
 - **Also:** `src/pages/PatientDetailPage.test.tsx`, 5 jsdom tests (loading, full demographics with `—` for email, not-found, error, Back). App suite 27 passed.
 - **Decisions taken alone:** Back navigates to `/` rather than history −1, so it "returns to Page 1" even when the detail URL was opened directly; the Back button is present in every state; a transport failure shows "Something went wrong", distinct from not-found, per the contract's error table.
+
+## T-3.5 Page test
+- **Verified:** `npm run test --workspace app` — 3 files, 27 passed, including `PatientListPage > renders the table from the list response` (mocked list of two patients; asserts headers and each row's cells).
+- **Mutation check:** fed the Table `patient.id` instead of `patient.name` → 4 named list-page tests failed, including the page test; restored, 27 pass.
+- **Also:** removed the app's `passWithNoTests`, added in `c7b9c8b` only until this test existed.
+- **Note:** the test itself was committed with T-3.3, beside the page it tests (same pattern as T-1.7).

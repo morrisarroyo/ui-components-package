@@ -236,7 +236,7 @@ T-1.7 and T-1.8 are next. See `AutoPhase.md`.
 
 ### T-3.5 Page test
 - **Depends on:** T-3.3
-- **Status:** Not started
+- **Status:** Done
 - **Done when:** a test renders the patient list page against a mocked list
   response and asserts the Table shows those patients.
 - **Verify:** `npm run test --workspace app` passes.
