@@ -142,7 +142,7 @@ T-1.7 and T-1.8 are next. See `AutoPhase.md`.
 
 ### T-1.8 Library build
 - **Depends on:** T-1.7
-- **Status:** Not started
+- **Status:** Done
 - **Done when:** `npm run build --workspace ui` emits `dist/ui.js`,
   `dist/ui.css` and `dist/index.d.ts`; React is external rather than bundled;
   the package `exports` map serves the entry point and `ui/styles.css`.
