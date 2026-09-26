@@ -181,7 +181,7 @@ see `AutoPhase.md`).
 
 ### T-2.4 Endpoints
 - **Depends on:** T-2.1, T-2.3
-- **Status:** Not started
+- **Status:** Done
 - **Done when:** the list endpoint returns all patients and filters by partial
   name match, case-insensitively, when the search parameter is supplied; the
   detail endpoint returns one patient by id and a 404 for an unknown id.
