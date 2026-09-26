@@ -247,7 +247,7 @@ T-1.7 and T-1.8 are next. See `AutoPhase.md`.
 
 ### T-4.1 Library documentation
 - **Depends on:** T-1.8
-- **Status:** Not started
+- **Status:** Done
 - **Done when:** `packages/ui/README.md` has all four required sections —
   getting started, styling, component reference, contributing — with a props
   table, one runnable usage example and a when-to-use note per component.
