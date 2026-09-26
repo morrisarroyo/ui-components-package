@@ -266,7 +266,7 @@ T-1.7 and T-1.8 are next. See `AutoPhase.md`.
 
 ### T-4.3 Interview notes
 - **Depends on:** T-4.2
-- **Status:** Not started
+- **Status:** Done
 - **Done when:** `INTERVIEW.md` covers the decisions the spec left open and
   why, the process and AI usage including at least one thing that had to be
   checked or corrected, pointers to these tasks and the harness, and what two

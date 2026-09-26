@@ -1,58 +1,92 @@
 # Interview Notes
 
-> **Status: in progress.** Written as the work happens, not reconstructed at
-> the end (task T-4.3 in `docs/TASKS.md`). Sections marked TODO are not yet
-> written.
-
 Everything specific to the exercise lives here. The project README is written
 as if the project were real; this file is not.
 
 ## Decisions
 
-The full log, with alternatives and reasoning, is in
-[`docs/DECISIONS.md`](./docs/DECISIONS.md). The headlines:
+The full log, with the alternatives considered and what would change each
+answer, is [`docs/DECISIONS.md`](./docs/DECISIONS.md). It was written as each
+choice was made; this table is assembled from it.
 
-| Choice | What | Why, in one line |
-| --- | --- | --- |
-| Repository | One repo, npm workspaces | `app` consumes `ui` as an installed package without publishing or `npm link`. |
-| Styling | CSS Modules + CSS custom properties for tokens | Scoped by build, no runtime, no framework forced on the consumer; tokens stay themeable and inspectable. |
-| Build | Vite, library mode for `ui`, React external | One toolchain for both packages; no risk of two copies of React. |
-| Tests | Vitest + Testing Library | Reuses the Vite config; pushes tests towards behaviour and accessible queries. |
-| Routing | React Router, two routes | The detail page is addressable by id and Back behaves like history. |
-| API shape | A small purpose-built payload, not FHIR | FHIR conformance is not assessed; the payload keeps only the EHR-shaped parts the pages need. |
-| API access | Same-origin `/api`, proxied by the dev server | No CORS, no base URL in client code. |
-| Missing values | Mapping decides *whether*, the component decides *what it looks like* | One definition of "missing", one definition of `—`. |
+| # | Choice | What | Why, in one line |
+| --- | --- | --- | --- |
+| D-1 | Repository | One repo, three packages | `app` consumes `ui` as an installed package without publishing or `npm link`. |
+| D-2 | Workspace tool | npm workspaces | Ships with Node; three packages have no build graph worth a task runner. |
+| D-3 | Styling | CSS Modules | Scoped at build time, no runtime, no framework forced on the consumer. |
+| D-4 | Tokens | `--ui-` CSS custom properties on `:root` | Defined once, referenced by name, inspectable, and themeable on purpose. |
+| D-5 | Class names | `ui-[local]-[hash]` | The hash prevents collisions; the readable part keeps devtools usable. |
+| D-6 | Build | Vite, library mode for `ui`, React external | One toolchain; the app never gets two copies of React. |
+| D-7 | Consumption | `app` imports the built `dist`, through `exports` | Makes "no deep imports" enforced by resolution, not by discipline. |
+| D-8 | Tests | Vitest + Testing Library, no snapshots | Reuses the Vite pipeline; pushes tests towards behaviour. |
+| D-9 | Routing | React Router, two routes | The detail page is addressable by id and Back behaves like history. |
+| D-10 | API access | Same-origin `/api`, proxied by the dev server | No CORS, no base URL in client code. |
+| D-11 | API shape | A small purpose-built payload, not FHIR | FHIR is not assessed; the payload keeps only the EHR-shaped parts the pages need. |
+| D-12 | Formatting | The API returns data, the website composes strings | Keeps the one mapping layer the brief assesses where it can be seen. |
+| D-13 | Missing values | Mapping decides *whether*, the component decides *how it looks* | One definition of "missing", one definition of `—`. |
+| D-14 | Package names | `ui` and `app` | The brief names them; a real product would scope them. |
+| D-15 | Clickable rows | Native row role, not `role="button"` | Keyboard-operable without breaking table navigation for screen readers. |
+| D-16 | Birth dates | "2 Mar 1984", read from the string's parts | Unambiguous across locales and immune to timezone day-shifts. |
 
-TODO — expand once the build is finished, and add anything decided along the
-way that is not yet in the log.
+A few smaller choices were taken inside tasks rather than logged as decisions,
+and are recorded in the task log (`AutoPhase.md`): the search is a form so
+Enter also searches; Back goes to `/` rather than one step back in history, so
+it returns to the list even from a directly opened link; the app's page layout
+uses the library's tokens in its own stylesheet and never targets a `ui` class.
 
 ## Process and AI usage
 
-**Tools.** Claude Code (Opus) in the terminal.
+**Tools.** Claude Code in the terminal, on Claude Opus.
 
-**How the work was decomposed.** The brief arrived as two files — a markdown
-copy and a PDF. Both were reconciled first (they turned out to be the same
-document; see section 0 of `docs/DESIGNDOCUMENT.md`), then turned into a design
-document, a set of conventions, an API contract, and a phased task list with a
-done state and a verification check per task. Those documents are the harness:
-they are what the agent reads before touching anything, so the specification
-does not have to be re-explained each session.
+**How the work was decomposed.** The brief arrived as two files, a markdown
+copy and a PDF. They were reconciled first (they turned out to be the same
+document; section 0 of `docs/DESIGNDOCUMENT.md`), then turned into a design
+document, a set of conventions, an API contract, and a phased task list in
+`docs/TASKS.md`: five phases, 26 tasks, each with its dependencies, a done
+state, and the specific check that proves it. Those documents were written
+before any code, and the commit history follows the task list one task per
+commit, so the two can be read side by side.
 
 **The harness.**
 
-| File | What it does |
+| Part | What it does |
 | --- | --- |
 | `CLAUDE.md` | Working context: what the project is, where the truth lives, the non-negotiable rules, the phases. Read first, every session. |
 | `docs/DESIGNDOCUMENT.md` | The reconciled spec. Every token value and prop table, so they are never re-derived from the brief. |
 | `docs/TASKS.md` | The work order. Each task has dependencies, a done state and the check that proves it. |
-| `docs/CONVENTIONS.md` | House style, so generated code looks like the rest of the repo. |
+| `docs/CONVENTIONS.md` | House style, so generated code looks like the rest of the repository. |
 | `docs/API-CONTRACT.md` | One contract both `app` and `api` are written against. |
-| `docs/DECISIONS.md` | Choices recorded as they are made, which this file is assembled from. |
-| `.claude/` | TODO — agent configuration and any skills, committed rather than ignored. |
+| `docs/DECISIONS.md` | Choices recorded as they are made. This file is assembled from it. |
+| `AutoPhase.md` | The run log: for every task, what verified it, any decision taken alone, and any place the plan was wrong. |
+| Workflow skills | `auto-phase` drives a phase end to end; it calls `implement-tasks` (take a startable task, stay in scope, write status back), `test-and-fix` (diagnose to root cause, never weaken a test) and `commit-task` (scope the commit to one task, verify it captured what was intended). `commit-gate`, the human diff review, is the step full-auto mode replaces. |
 
-**What was delegated, and what was not.** TODO.
+**How the build ran.** Phases 1 to 4 were driven by the `auto-phase` skill in
+full-auto mode: pick the startable task that unblocks the most, implement it,
+run that task's own check, commit it, move on. It commits without a human
+reviewing each diff, which is a deliberate trade, so the safety net is in how
+it commits: one task per commit so any task reverts cleanly, every commit
+type-checked and tested on its own, a mutation check (break the behaviour,
+watch a named test fail, restore) on the tasks that close out test suites, and
+a full end-of-run pass compared against a baseline recorded before the run.
+The loop stops only for something the agent cannot settle, and it did stop
+once, for a manual browser check (below).
 
-**What had to be checked or corrected.** Recorded as each one happened.
+**What was delegated, and what was not.** The agent wrote the code, the tests
+and the documentation, ran every check, and committed. Two things came back
+to a person:
+
+- **A check tooling could not do.** T-1.2 asks for the Button's width to be
+  compared in a real browser with `loading` on and off. The agent's headless
+  browser would not run, so the loop parked the task, carried on with
+  everything that did not depend on it, and handed over a page that printed
+  the eight measurements and what would count as a failure. It was confirmed
+  by hand — all eight the same — before T-1.2 was closed. The agent did not
+  mark it done on the strength of the CSS looking right.
+- **Choosing the trade.** Running in full auto, with review after the fact
+  rather than before each commit, was a human decision made in advance.
+
+**What had to be checked or corrected.** Recorded as each one happened, not
+reconstructed at the end.
 
 1. **The generated toolchain had never type-checked.** The Phase 0 config
    was written and marked done on the strength of looking right. The first
@@ -89,6 +123,21 @@ does not have to be re-explained each session.
    build `ui` first, as `dev` already did. Lesson: a clean-checkout check has
    to rule out everything above the checkout, not only inside it.
 
+Two smaller slips were the agent's own measurement errors rather than defects,
+and are recorded in `AutoPhase.md` because they are the kind that produce false
+results: an end-to-end check that reported every call failing because its
+"is the server up yet" test counted the proxy's error page as up, and a
+browser read of the Search button taken in the same tick as the click, before
+React had applied the update. Both were re-run properly before anything was
+concluded from them.
+
+**Where the plan itself was wrong.** Recorded rather than silently patched:
+T-0.3 was marked done on a check ("the config is internally consistent") that
+never ran the compiler; and the component tasks named T-1.7's tests as their
+check while T-1.7 depended on them. The tests were written first, used to
+verify each component, and committed beside it, which is also where the
+conventions put them.
+
 ## Time-boxes and known gaps
 
 - **A missing phone is a blank cell on the patient list.** The `—` rule is
@@ -103,6 +152,23 @@ does not have to be re-explained each session.
   protocol worked, and the page walks after that were run that way against
   the real API.
 
+- **The API has no automated tests.** Its behaviour is pinned by the
+  contract and was checked with curl and end to end through the website, but
+  nothing re-runs that on a change.
+
 ## What I would do with two more hours
 
-TODO.
+1. **Give Table the same missing-value rule as DescriptionList,** so a missing
+   phone shows `—` on the list page too. It is a small library change, but a
+   spec change, so it would go through the design document first.
+2. **Turn the browser walks into a test suite.** Every page state was walked
+   in a real browser against the real API, but by one-off scripts. Playwright
+   running the same walks would make them repeatable, including the loading
+   Button's width.
+3. **Integration tests for the API** with `WebApplicationFactory`: the search
+   rules, the 404 body, and nulls serialised as `null`.
+4. **An automated accessibility pass** (axe in the component tests), to back
+   the manual reasoning behind D-15 and the label and error wiring with a
+   tool.
+5. **Keep the search when coming Back** from a patient, by putting the search
+   term in the list page's URL.
