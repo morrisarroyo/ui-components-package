@@ -1,5 +1,5 @@
-import { resolve } from 'node:path';
-import { defineConfig } from 'vite';
+// Imported from vitest/config so the `test` block below is typed.
+import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
 
 export default defineConfig({
@@ -13,7 +13,8 @@ export default defineConfig({
   },
   build: {
     lib: {
-      entry: resolve(__dirname, 'src/index.ts'),
+      // Resolved against the package root, so no Node path helpers are needed.
+      entry: 'src/index.ts',
       formats: ['es'],
       fileName: () => 'ui.js',
     },

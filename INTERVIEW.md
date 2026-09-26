@@ -52,10 +52,20 @@ does not have to be re-explained each session.
 
 **What was delegated, and what was not.** TODO.
 
-**What had to be checked or corrected.** TODO — at least one real instance,
-recorded when it happens. Candidates to watch for: the em-dash and empty-value
-handling, whether the loading button's width genuinely does not change, and
-whether anything in `app` reaches past the `ui` entry point.
+**What had to be checked or corrected.** Recorded as each one happened.
+
+1. **The generated toolchain had never type-checked.** The Phase 0 config
+   was written and marked done on the strength of looking right. The first
+   real `tsc` run failed three ways: no type declaration for `*.module.css`
+   imports (so the library's declaration build could not emit), a
+   `vite.config.ts` using `__dirname` with no Node types installed, and a
+   `test` block Vite's own `defineConfig` does not know about. Underneath the
+   last one, Vitest 2 had pulled in its own nested Vite 5 while the build ran
+   on Vite 6, so the two plugin types could never agree. Fixed at the root:
+   a `vite-env.d.ts` for Vite's import types, a relative library entry,
+   `defineConfig` from `vitest/config`, and Vitest bumped to 3, which targets
+   Vite 6. Lesson: "config exists and is internally consistent" was not a
+   check; running the compiler is.
 
 ## Time-boxes and known gaps
 
