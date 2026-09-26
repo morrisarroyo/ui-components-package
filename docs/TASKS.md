@@ -112,7 +112,7 @@ see `AutoPhase.md`).
 
 ### T-1.5 Table
 - **Depends on:** T-1.1
-- **Status:** In progress — written, not yet tested
+- **Status:** Done
 - **Done when:** the header row uses font.label on the subtle surface; body
   cells use the specified padding and bottom border; hover highlighting and the
   pointer cursor appear **only** when `onRowClick` is set; clickable rows are

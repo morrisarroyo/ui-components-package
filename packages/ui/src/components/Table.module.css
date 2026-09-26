@@ -1,0 +1,47 @@
+/* 1px hairline borders throughout: the token sheet defines no border width. */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--ui-font-family);
+  color: var(--ui-color-text);
+  text-align: left;
+}
+
+.headerCell {
+  background: var(--ui-color-surface-subtle);
+  color: var(--ui-color-text-muted);
+  font-size: var(--ui-font-label-size);
+  line-height: var(--ui-font-label-line);
+  font-weight: var(--ui-font-label-weight);
+  padding: var(--ui-space-3) var(--ui-space-4);
+  border-bottom: 1px solid var(--ui-color-border);
+}
+
+.cell {
+  font-size: var(--ui-font-body-size);
+  line-height: var(--ui-font-body-line);
+  padding: var(--ui-space-3) var(--ui-space-4);
+  border-bottom: 1px solid var(--ui-color-border);
+}
+
+.clickableRow {
+  cursor: pointer;
+}
+
+.clickableRow:hover,
+.clickableRow:focus-visible {
+  background: var(--ui-color-surface-subtle);
+}
+
+.clickableRow:focus-visible {
+  outline: var(--ui-focus-ring-width) solid var(--ui-color-focus);
+  outline-offset: calc(var(--ui-focus-ring-offset) * -1);
+}
+
+.empty {
+  padding: var(--ui-space-8) var(--ui-space-4);
+  text-align: center;
+  color: var(--ui-color-text-muted);
+  font-size: var(--ui-font-body-size);
+  line-height: var(--ui-font-body-line);
+}

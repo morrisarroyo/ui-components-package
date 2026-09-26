@@ -14,3 +14,6 @@ export type { TextFieldProps } from './components/TextField';
 
 export { Card } from './components/Card';
 export type { CardProps } from './components/Card';
+
+export { Table } from './components/Table';
+export type { TableProps, TableColumn, TableRow } from './components/Table';

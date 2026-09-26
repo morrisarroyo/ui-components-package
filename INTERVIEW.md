@@ -73,6 +73,12 @@ does not have to be re-explained each session.
    a screen reader met a busy button with no name. A behaviour test querying
    `getByRole('button', { name: 'Save' })` on a loading button caught it. The
    label is now `opacity: 0`, which keeps both the width and the name.
+3. **Keyboard-accessible rows broke the table.** The generated Table made
+   clickable rows keyboard-operable, as the spec asks, but did it with
+   `role="button"` on each `<tr>`. That strips the row role, so assistive
+   technology no longer saw a table of rows and cells at all. A test asserting
+   the table still exposes its rows and cells caught it. The rows now keep
+   their native role (decision D-15).
 
 ## Time-boxes and known gaps
 

@@ -203,3 +203,26 @@ to decide what missing *looks like*.
 product — a real one would be `@intrahealth/ui` — but matching the brief keeps
 every import in the documentation identical to the import the reviewer expects
 to read. Noted here so the choice reads as deliberate rather than naive.
+
+---
+
+## D-15 — Clickable Table rows keep the native row role
+
+**Decided:** 2026-09-25 · **Status:** settled
+
+A clickable row is a `<tr>` with `tabIndex={0}` and Enter/Space handlers.
+It does not take `role="button"`.
+
+**Why.** `role="button"` on a `<tr>` replaces its row role, so its cells stop
+being cells and a screen reader can no longer move through the table by row
+and column. That trades the whole table's accessibility for one row's. With
+the native role kept, the row is still reachable by Tab and activatable from
+the keyboard, which is what the spec requires.
+
+**Considered.** `role="button"` on the row (the first draft; breaks table
+navigation), and a link or button inside the first cell (keeps both
+semantics but changes the Table API, since the consumer would have to say
+which cell holds it).
+
+**What would change it.** A requirement for screen readers to announce the
+row as actionable, which would favour the in-cell control.
