@@ -203,7 +203,7 @@ T-1.7 and T-1.8 are next. See `AutoPhase.md`.
 
 ### T-3.2 API client and display mapping
 - **Depends on:** T-2.4, T-3.1
-- **Status:** Not started
+- **Status:** Done
 - **Done when:** one module holds the typed calls to both endpoints and the
   single mapping from API payload to display values, including how missing
   fields are represented; no page formats an API field itself.

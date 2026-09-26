@@ -226,3 +226,27 @@ which cell holds it).
 
 **What would change it.** A requirement for screen readers to announce the
 row as actionable, which would favour the in-cell control.
+
+---
+
+## D-16 — Birth dates display as "2 Mar 1984"
+
+**Decided:** 2026-09-25 · **Status:** settled
+
+Day, short month name, four-digit year, built from the parts of the
+`YYYY-MM-DD` string in the mapping module. A value that is not a valid
+`YYYY-MM-DD` passes through unchanged.
+
+**Why.** The contract says "formatted for display" and leaves the format
+open. A numeric form is ambiguous between the Canadian, American and ISO
+readings of `02/03/1984`, and a clinician misreading a birth date is a real
+safety problem. Reading the string's parts, rather than going through
+`Date`, means the date can never shift by a day with the viewer's
+timezone.
+
+**Considered.** Showing the ISO string as-is (unambiguous but reads as data,
+not as a date), and `Intl.DateTimeFormat` (locale-aware, but needs a `Date`,
+which brings the timezone problem back unless every call is pinned to UTC).
+
+**What would change it.** A product locale setting, at which point this
+becomes `Intl.DateTimeFormat` with `timeZone: 'UTC'`.
