@@ -42,3 +42,12 @@ Run of 2026-09-25, Phase 1, full auto (commits unreviewed). One entry per task, 
 
 ## T-2.4 Endpoints
 - **Verified** with `dotnet run --project api/Intrahealth.Api` and curl: full list → 200, 12 patients, `email: null` / `address: null` serialised as JSON null; `search=oko`, `OKO`, `amara oko`, `mara okon` → `[p-0001]`; `search=ok` → Okonkwo and Okafor; whitespace-only search → all 12; `search=zzz` → 200 `[]`; `p-0011` → 200 with an all-null address object; `p-9999` → 404 `application/problem+json` with the exact type, title, status and detail the contract shows.
+
+## End of run — full pass
+- `npm run test --workspace ui`: 5 files, **36 passed** (baseline 0). `npm run typecheck`: clean in `ui` and `app`. `npm run build --workspace ui`: `ui.js`, `ui.css`, `index.d.ts` emitted; `ui.js` imports `react` and `react/jsx-runtime` rather than inlining them. `dotnet build api/Intrahealth.Api`: 0 warnings, 0 errors.
+- Every commit from `44bbc19` to `5af19f5` was also checked out on its own and passes `tsc` and its tests (11 → 19 → 23 → 31 → 36).
+
+## Stopped — waiting on the user
+- **Blocker:** T-1.2's manual check, "the width is identical with `loading` on and off", in a real browser. T-1.7 depends on T-1.2, T-1.8 on T-1.7, and every Phase 3 and 4 task on T-1.8, so nothing is startable until it is confirmed.
+- **Prediction to confirm:** identical widths and heights for all 8 pairs (primary/secondary × sm/md × short/long label). Loading only changes the label's `opacity` and adds an absolutely positioned spinner, neither of which takes part in layout.
+- **Once confirmed:** mark T-1.2 Done. T-1.7 is then verification only — its listed cases are already committed, so run `npm run test --workspace ui` and check each case is present. T-1.8 follows (build and React-external check already pass, see above).

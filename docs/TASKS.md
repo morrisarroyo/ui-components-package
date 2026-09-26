@@ -12,8 +12,9 @@ carries:
 One task, one commit. The commit history and this file must tell the same
 story.
 
-**Status summary:** Phase 0 complete. Phase 1 in progress (auto-phase run,
-see `AutoPhase.md`).
+**Status summary:** Phases 0 and 2 complete. Phase 1: T-1.1 and T-1.3 to
+T-1.6 done; T-1.2 waits on a manual in-browser width check, which holds T-1.7,
+T-1.8 and everything after them. See `AutoPhase.md`.
 
 ---
 
