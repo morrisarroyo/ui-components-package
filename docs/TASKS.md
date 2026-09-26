@@ -12,8 +12,8 @@ carries:
 One task, one commit. The commit history and this file must tell the same
 story.
 
-**Status summary:** Phase 0 complete. Phase 1 components drafted but unverified
-— no tests exist and the library has never been built.
+**Status summary:** Phase 0 complete. Phase 1 in progress (auto-phase run,
+see `AutoPhase.md`).
 
 ---
 

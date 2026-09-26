@@ -1,0 +1,66 @@
+/**
+ * Design tokens.
+ *
+ * Every value in the token sheet is defined here once, as a CSS custom
+ * property on :root, and referenced by name from the component stylesheets.
+ * Components never hard-code a colour, a spacing value or a font size.
+ *
+ * The `--ui-` prefix keeps the library's tokens out of the consuming app's
+ * namespace. An app may override a token globally by redefining it on :root
+ * after importing `ui/styles.css`, but that is a deliberate theming escape
+ * hatch, not part of the component API.
+ */
+:root {
+  /* Colour */
+  --ui-color-primary: #1f6feb;
+  --ui-color-primary-hover: #185cc4;
+  --ui-color-danger: #c93c37;
+  --ui-color-text: #1a1a1a;
+  --ui-color-text-muted: #6b7280;
+  --ui-color-border: #d1d5db;
+  --ui-color-focus: #93c5fd;
+  --ui-color-surface: #ffffff;
+  --ui-color-surface-subtle: #f3f4f6;
+  --ui-color-disabled-bg: #e5e7eb;
+  --ui-color-disabled-text: #9ca3af;
+
+  /* Spacing */
+  --ui-space-1: 4px;
+  --ui-space-2: 8px;
+  --ui-space-3: 12px;
+  --ui-space-4: 16px;
+  --ui-space-6: 24px;
+  --ui-space-8: 32px;
+
+  /* Radius */
+  --ui-radius-sm: 4px;
+  --ui-radius-md: 8px;
+
+  /* Typography: each role is a size, a line height and a weight. */
+  --ui-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Helvetica, Arial, sans-serif;
+
+  --ui-font-body-size: 14px;
+  --ui-font-body-line: 20px;
+  --ui-font-body-weight: 400;
+
+  --ui-font-label-size: 12px;
+  --ui-font-label-line: 16px;
+  --ui-font-label-weight: 400;
+
+  --ui-font-button-size: 14px;
+  --ui-font-button-line: 20px;
+  --ui-font-button-weight: 600;
+
+  --ui-font-heading-size: 20px;
+  --ui-font-heading-line: 28px;
+  --ui-font-heading-weight: 600;
+
+  --ui-font-title-size: 24px;
+  --ui-font-title-line: 32px;
+  --ui-font-title-weight: 600;
+
+  /* Focus ring: one definition, used by every focusable component. */
+  --ui-focus-ring-width: 2px;
+  --ui-focus-ring-offset: 2px;
+}
