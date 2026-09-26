@@ -51,3 +51,6 @@ Run of 2026-09-25, Phase 1, full auto (commits unreviewed). One entry per task, 
 - **Blocker:** T-1.2's manual check, "the width is identical with `loading` on and off", in a real browser. T-1.7 depends on T-1.2, T-1.8 on T-1.7, and every Phase 3 and 4 task on T-1.8, so nothing is startable until it is confirmed.
 - **Prediction to confirm:** identical widths and heights for all 8 pairs (primary/secondary × sm/md × short/long label). Loading only changes the label's `opacity` and adds an absolutely positioned spinner, neither of which takes part in layout.
 - **Once confirmed:** mark T-1.2 Done. T-1.7 is then verification only — its listed cases are already committed, so run `npm run test --workspace ui` and check each case is present. T-1.8 follows (build and React-external check already pass, see above).
+
+## T-1.2 Button — manual checkpoint closed by the user
+- **Verified by the user:** `width.html` opened in Brave; all 8 idle/loading pairs (primary/secondary × sm/md × short/long label) reported `SAME` width and height, as predicted. T-1.2 marked Done; T-1.7 is now startable.

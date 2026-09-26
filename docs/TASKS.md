@@ -12,9 +12,8 @@ carries:
 One task, one commit. The commit history and this file must tell the same
 story.
 
-**Status summary:** Phases 0 and 2 complete. Phase 1: T-1.1 and T-1.3 to
-T-1.6 done; T-1.2 waits on a manual in-browser width check, which holds T-1.7,
-T-1.8 and everything after them. See `AutoPhase.md`.
+**Status summary:** Phases 0 and 2 complete. Phase 1: T-1.1 to T-1.6 done;
+T-1.7 and T-1.8 are next. See `AutoPhase.md`.
 
 ---
 
@@ -82,7 +81,7 @@ T-1.8 and everything after them. See `AutoPhase.md`.
 
 ### T-1.2 Button
 - **Depends on:** T-1.1
-- **Status:** In progress — implemented and tested; the browser width check is a manual checkpoint (headless browser unavailable here)
+- **Status:** Done
 - **Done when:** `variant` and `size` are union-typed; the primary and
   secondary palettes and both size paddings come from tokens; a loading button
   shows a spinner in place of its label **without changing width** and cannot
