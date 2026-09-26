@@ -1,0 +1,67 @@
+# Interview Notes
+
+> **Status: in progress.** Written as the work happens, not reconstructed at
+> the end (task T-4.3 in `docs/TASKS.md`). Sections marked TODO are not yet
+> written.
+
+Everything specific to the exercise lives here. The project README is written
+as if the project were real; this file is not.
+
+## Decisions
+
+The full log, with alternatives and reasoning, is in
+[`docs/DECISIONS.md`](./docs/DECISIONS.md). The headlines:
+
+| Choice | What | Why, in one line |
+| --- | --- | --- |
+| Repository | One repo, npm workspaces | `app` consumes `ui` as an installed package without publishing or `npm link`. |
+| Styling | CSS Modules + CSS custom properties for tokens | Scoped by build, no runtime, no framework forced on the consumer; tokens stay themeable and inspectable. |
+| Build | Vite, library mode for `ui`, React external | One toolchain for both packages; no risk of two copies of React. |
+| Tests | Vitest + Testing Library | Reuses the Vite config; pushes tests towards behaviour and accessible queries. |
+| Routing | React Router, two routes | The detail page is addressable by id and Back behaves like history. |
+| API shape | A small purpose-built payload, not FHIR | FHIR conformance is not assessed; the payload keeps only the EHR-shaped parts the pages need. |
+| API access | Same-origin `/api`, proxied by the dev server | No CORS, no base URL in client code. |
+| Missing values | Mapping decides *whether*, the component decides *what it looks like* | One definition of "missing", one definition of `—`. |
+
+TODO — expand once the build is finished, and add anything decided along the
+way that is not yet in the log.
+
+## Process and AI usage
+
+**Tools.** Claude Code (Opus) in the terminal.
+
+**How the work was decomposed.** The brief arrived as two files — a markdown
+copy and a PDF. Both were reconciled first (they turned out to be the same
+document; see section 0 of `docs/DESIGNDOCUMENT.md`), then turned into a design
+document, a set of conventions, an API contract, and a phased task list with a
+done state and a verification check per task. Those documents are the harness:
+they are what the agent reads before touching anything, so the specification
+does not have to be re-explained each session.
+
+**The harness.**
+
+| File | What it does |
+| --- | --- |
+| `CLAUDE.md` | Working context: what the project is, where the truth lives, the non-negotiable rules, the phases. Read first, every session. |
+| `docs/DESIGNDOCUMENT.md` | The reconciled spec. Every token value and prop table, so they are never re-derived from the brief. |
+| `docs/TASKS.md` | The work order. Each task has dependencies, a done state and the check that proves it. |
+| `docs/CONVENTIONS.md` | House style, so generated code looks like the rest of the repo. |
+| `docs/API-CONTRACT.md` | One contract both `app` and `api` are written against. |
+| `docs/DECISIONS.md` | Choices recorded as they are made, which this file is assembled from. |
+| `.claude/` | TODO — agent configuration and any skills, committed rather than ignored. |
+
+**What was delegated, and what was not.** TODO.
+
+**What had to be checked or corrected.** TODO — at least one real instance,
+recorded when it happens. Candidates to watch for: the em-dash and empty-value
+handling, whether the loading button's width genuinely does not change, and
+whether anything in `app` reaches past the `ui` entry point.
+
+## Time-boxes and known gaps
+
+TODO — anything that fought back and was set aside, and what state it was left
+in.
+
+## What I would do with two more hours
+
+TODO.

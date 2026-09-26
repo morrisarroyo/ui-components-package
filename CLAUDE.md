@@ -1,0 +1,141 @@
+# CLAUDE.md — EHR Design System
+
+Working context for agents and humans. Read this first, then the document it
+points at for whatever you are about to touch.
+
+## What this project is
+
+A React + TypeScript design system for an EHR product suite, proven by a small
+website that consumes it and a C# mock API that feeds it. Three packages in one
+repository:
+
+| Package | Path | What it is |
+| --- | --- | --- |
+| `ui` | `packages/ui` | The component library. Five components, one entry point. |
+| `app` | `packages/app` | The website. Two pages, built only from `ui`. |
+| `api` | `api/` | ASP.NET Core mock API serving invented patient data. |
+
+## Where the truth lives
+
+| Question | Document |
+| --- | --- |
+| What am I building, and to what spec? | `docs/DESIGNDOCUMENT.md` |
+| What is the next piece of work? | `docs/TASKS.md` |
+| What shape are the API and its payloads? | `docs/API-CONTRACT.md` |
+| Why was it done this way? | `docs/DECISIONS.md` |
+| How do I write code that fits here? | `docs/CONVENTIONS.md` |
+| How does a consumer use the library? | `packages/ui/README.md` |
+
+`docs/DESIGNDOCUMENT.md` is the reconciled design input, derived from the
+candidate brief in the repository root. **The brief is the source of truth for
+requirements; do not contradict it.** If the design document and the brief ever
+disagree, the brief wins and the design document gets fixed.
+
+## Rules that are not negotiable
+
+These come straight from the brief and are what the work is assessed on.
+
+1. **`app` consumes `ui` as a package.** Imports come from the `ui` entry point
+   only. No deep imports into `ui/src`, no relative paths into the library, and
+   `app` never overrides a `ui` style.
+2. **`ui` components never take a colour or a pixel value as a prop.** The
+   consumer picks a variant or a size; the library owns the appearance.
+3. **Every value in the token sheet is defined once**, in
+   `packages/ui/src/tokens.css`, and referenced by custom property name. No
+   hard-coded hex, spacing or font size in a component stylesheet.
+4. **States are the component's job**, not the page's: hover, focus, error,
+   loading and disabled all live inside the component.
+5. **Accessible by default.** Labels are associated with inputs, anything
+   clickable works from the keyboard, and disabled things are genuinely
+   disabled rather than styled to look it.
+6. **The documentation must match the code exactly.** An undocumented prop and
+   a documented prop that does not exist are equally wrong. When a prop
+   changes, the props table in `packages/ui/README.md` changes in the same
+   commit.
+7. **One mapping layer.** The translation from API payload to display values
+   lives in exactly one module in `app`, and it is what handles missing fields.
+
+## Phases
+
+Work proceeds in phases. Each phase is broken into tasks in `docs/TASKS.md`,
+where each task has its own done state and its own verification check.
+
+### Phase 0 — Repository and toolchain
+
+Stand up the monorepo so every later phase has somewhere to land: npm
+workspaces at the root, the `ui` and `app` package skeletons with their build
+and test configuration, the `api` project, and the project documents.
+
+**Done when:** `npm install` succeeds at the root, each package has a
+documented command, and the docs in the table above exist.
+
+### Phase 1 — The component library
+
+Build the five components — Button, TextField, Card, Table, DescriptionList —
+against section 3 of the design document. Tokens first, then components, then
+behaviour tests, then the library build that `app` will consume.
+
+**Done when:** all five components are exported from the single entry point,
+their specified behaviours are implemented rather than only styled, the tests
+pass, and `npm run build --workspace ui` produces a consumable package.
+
+### Phase 2 — The mock API
+
+An ASP.NET Core project serving invented patient data from memory, to the
+contract in `docs/API-CONTRACT.md`. No database, no authentication.
+
+**Done when:** `dotnet run --project api/Intrahealth.Api` serves every endpoint
+in the contract, including the search filter and the not-found case, and the
+seed data includes patients with missing fields so the `—` path is exercisable.
+
+### Phase 3 — The website
+
+The patient list and patient detail pages, built only from `ui` components and
+plain layout markup, reading from the running API through one mapping layer.
+
+**Done when:** both pages behave exactly as section 5 of the design document
+describes — loading, search, empty results, API failure, row navigation,
+missing values and patient-not-found — against the real API.
+
+### Phase 4 — Documentation and delivery
+
+The library documentation in `packages/ui/README.md` (the graded Part 2), the
+project README, and the interview notes.
+
+**Done when:** a developer could build a third page from `packages/ui/README.md`
+alone, every documented prop exists and every existing prop is documented, each
+package's documented command has been run and works from a clean checkout, and
+`INTERVIEW.md` records the decisions, the process and at least one thing that
+had to be corrected.
+
+## Working agreements
+
+- **Follow `docs/CONVENTIONS.md`** for file layout, naming, styling and tests.
+- **One task, one commit.** The commit history is assessed against
+  `docs/TASKS.md`, so the two must tell the same story. Commit messages say what
+  changed and why, not "wip".
+- **Verify before claiming done.** Each task in `docs/TASKS.md` carries a
+  verification check; run it. Do not report a task complete on the strength of
+  the code looking right.
+- **Record decisions as they are made,** in `docs/DECISIONS.md`, while the
+  reasoning is fresh. `INTERVIEW.md` is assembled from that log, not
+  reconstructed from memory at the end.
+- **Record corrections as they happen.** When something generated is wrong and
+  gets fixed, that goes in `INTERVIEW.md` — the brief asks for it explicitly.
+- **Time-box anything that fights back,** note it in `INTERVIEW.md`, and move
+  on. Scope is small on purpose.
+- **Do not build what is out of scope.** Section 9 of the design document lists
+  what is explicitly not assessed; work spent there is work taken from what is.
+
+## Commands
+
+```bash
+npm install                          # once, at the root — installs both workspaces
+npm run build --workspace ui         # build the library
+npm run test  --workspace ui         # library tests
+npm run dev                          # build ui, then start the website on :5173
+npm run api                          # start the mock API on :5080
+```
+
+The website's dev server proxies `/api` to the mock API, so both need to be
+running to use the site.
