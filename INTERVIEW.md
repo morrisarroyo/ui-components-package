@@ -122,6 +122,14 @@ reconstructed at the end.
    removing it exposed the failure. The root `test` and `typecheck` scripts now
    build `ui` first, as `dev` already did. Lesson: a clean-checkout check has
    to rule out everything above the checkout, not only inside it.
+5. **The story test passed and did not type-check.** The test that renders
+   every Storybook story (T-5.2) was generated iterating one object of all
+   five story modules. Vitest ran it green, 76 of 76, but `tsc` rejected it:
+   a union of five modules' composed stories has no single component type
+   to render. Vitest strips types rather than checking them, so a green test
+   run said nothing about it. Each module is now composed on its own and the
+   results flattened into a typed list. The lesson from the first correction
+   again: the check that counts is the compiler, not the test runner.
 
 Two smaller slips were the agent's own measurement errors rather than defects,
 and are recorded in `AutoPhase.md` because they are the kind that produce false

@@ -1,3 +1,4 @@
+import type { FormEvent } from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Button } from './Button';
@@ -95,5 +96,57 @@ describe('Button', () => {
     await userEvent.tab();
 
     expect(screen.getByRole('button', { name: 'Save' })).not.toHaveFocus();
+  });
+  it('renders the sizes differently from each other', () => {
+    render(
+      <>
+        <Button size="sm">Small</Button>
+        <Button size="md">Medium</Button>
+      </>,
+    );
+
+    expect(screen.getByRole('button', { name: 'Small' }).className).not.toBe(
+      screen.getByRole('button', { name: 'Medium' }).className,
+    );
+  });
+
+  it('submits its form when type is "submit"', async () => {
+    const onSubmit = vi.fn((event: FormEvent) => event.preventDefault());
+    render(
+      <form onSubmit={onSubmit}>
+        <Button type="submit">Search</Button>
+      </form>,
+    );
+
+    await userEvent.click(screen.getByRole('button', { name: 'Search' }));
+
+    expect(onSubmit).toHaveBeenCalledTimes(1);
+  });
+
+  it('does not submit its form while loading', async () => {
+    const onSubmit = vi.fn((event: FormEvent) => event.preventDefault());
+    render(
+      <form onSubmit={onSubmit}>
+        <Button type="submit" loading>
+          Search
+        </Button>
+      </form>,
+    );
+
+    await userEvent.click(screen.getByRole('button', { name: 'Search' }));
+
+    expect(onSubmit).not.toHaveBeenCalled();
+  });
+
+  it('uses aria-label as its accessible name when given', () => {
+    render(<Button aria-label="Close patient record">×</Button>);
+
+    expect(screen.getByRole('button', { name: 'Close patient record' })).toBeInTheDocument();
+  });
+
+  it('is not busy when it is not loading', () => {
+    render(<Button>Save</Button>);
+
+    expect(screen.getByRole('button', { name: 'Save' })).not.toHaveAttribute('aria-busy');
   });
 });

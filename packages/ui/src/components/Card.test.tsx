@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { Card } from './Card';
 import { Button } from './Button';
 
@@ -35,5 +36,33 @@ describe('Card', () => {
     // behind to add stray spacing above it.
     expect(container.firstElementChild?.childNodes).toHaveLength(1);
     expect(screen.queryByRole('heading')).not.toBeInTheDocument();
+  });
+  it('renders its children', () => {
+    render(
+      <Card title="Demographics">
+        <p>Born in London</p>
+      </Card>,
+    );
+
+    expect(screen.getByText('Born in London')).toBeInTheDocument();
+  });
+
+  it('uses a level-two heading for the title', () => {
+    render(<Card title="Demographics">Body</Card>);
+
+    expect(screen.getByRole('heading', { level: 2, name: 'Demographics' })).toBeInTheDocument();
+  });
+
+  it('keeps its actions interactive', async () => {
+    const onEdit = vi.fn();
+    render(
+      <Card title="Demographics" actions={<button onClick={onEdit}>Edit</button>}>
+        Body
+      </Card>,
+    );
+
+    await userEvent.click(screen.getByRole('button', { name: 'Edit' }));
+
+    expect(onEdit).toHaveBeenCalledTimes(1);
   });
 });

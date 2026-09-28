@@ -296,3 +296,16 @@ its own check. The run log with the evidence for each is `AutoPhase.md`.
 - **Verify:** `npm run build-storybook --workspace ui` completes and its index
   lists a story per variant and state; `npm run build --workspace ui` emits no
   story files; `npm run typecheck` and `npm test` still pass.
+
+### T-5.2 Component library test coverage
+- **Depends on:** T-1.7, T-5.1
+- **Status:** Done
+- **Done when:** every component prop and state without a behaviour test has
+  one — Button sizes, form submission and `aria-label`; TextField value,
+  placeholder and error announcement; Card heading level and interactive
+  actions; Table missing cells, empty state and ignored keys; DescriptionList
+  order and node values — plus a test that the entry point exports exactly
+  the five components and a test that renders every Storybook story.
+- **Verify:** `npm test` and `npm run typecheck` pass; a deliberate break in a
+  component (Button always `type="submit"` and always busy) makes the new
+  tests fail, and reverting it makes them pass.

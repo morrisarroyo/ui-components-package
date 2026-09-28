@@ -99,4 +99,49 @@ describe('TextField', () => {
 
     expect(onChange).not.toHaveBeenCalled();
   });
+  it('shows the value it is given', () => {
+    render(<TextField label="Name" value="Ada" onChange={() => {}} />);
+
+    expect(screen.getByLabelText('Name')).toHaveValue('Ada');
+  });
+
+  it('shows the placeholder', () => {
+    render(<Controlled label="Search" placeholder="Name or health card number" />);
+
+    expect(screen.getByLabelText('Search')).toHaveAttribute(
+      'placeholder',
+      'Name or health card number',
+    );
+  });
+
+  it('marks the input invalid and announces the error', () => {
+    render(<Controlled label="Search" errorMessage="Enter at least two characters." />);
+
+    const input = screen.getByLabelText('Search');
+    expect(input).toHaveAttribute('aria-invalid', 'true');
+    expect(screen.getByRole('alert')).toHaveTextContent('Enter at least two characters.');
+    expect(input).toHaveAccessibleDescription('Enter at least two characters.');
+  });
+
+  it('has no description and no alert when there is no message', () => {
+    render(<Controlled label="Search" />);
+
+    const input = screen.getByLabelText('Search');
+    expect(input).not.toHaveAttribute('aria-describedby');
+    expect(input).not.toHaveAttribute('aria-invalid');
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+  });
+
+  it('is skipped by Tab when disabled', async () => {
+    render(
+      <>
+        <Controlled label="Disabled" disabled />
+        <Controlled label="Enabled" />
+      </>,
+    );
+
+    await userEvent.tab();
+
+    expect(screen.getByLabelText('Enabled')).toHaveFocus();
+  });
 });

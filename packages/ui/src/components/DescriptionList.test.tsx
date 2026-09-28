@@ -34,4 +34,33 @@ describe('DescriptionList', () => {
 
     expect(screen.getByRole('definition')).toHaveTextContent('0');
   });
+  it('keeps the items in the order they are given', () => {
+    render(
+      <DescriptionList
+        items={[
+          { label: 'Phone', value: '555-0101' },
+          { label: 'Address', value: '1 Main St' },
+          { label: 'Email', value: 'ada@example.com' },
+        ]}
+      />,
+    );
+
+    expect(screen.getAllByRole('term').map((term) => term.textContent)).toEqual([
+      'Phone',
+      'Address',
+      'Email',
+    ]);
+  });
+
+  it('renders a React node as the value', () => {
+    render(<DescriptionList items={[{ label: 'Email', value: <a href="mailto:ada@example.com">ada@example.com</a> }]} />);
+
+    expect(screen.getByRole('link', { name: 'ada@example.com' })).toBeInTheDocument();
+  });
+
+  it('renders nothing but the list when there are no items', () => {
+    const { container } = render(<DescriptionList items={[]} />);
+
+    expect(container.querySelector('dl')).toBeEmptyDOMElement();
+  });
 });

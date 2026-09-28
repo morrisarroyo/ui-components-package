@@ -85,4 +85,50 @@ describe('Table', () => {
     expect(screen.getAllByRole('row')).toHaveLength(3);
     expect(screen.getAllByRole('cell')).toHaveLength(4);
   });
+  it('renders an empty cell when a row has no value for a column', () => {
+    render(<Table columns={columns} rows={[{ name: 'Grace Hopper' }]} />);
+
+    const cells = within(screen.getAllByRole('row')[1]).getAllByRole('cell');
+    expect(cells.map((cell) => cell.textContent)).toEqual(['Grace Hopper', '']);
+  });
+
+  it('only shows columns that are defined, not every key on the row', () => {
+    render(<Table columns={columns} rows={rows} />);
+
+    expect(screen.queryByText('p1')).not.toBeInTheDocument();
+  });
+
+  it('spans the empty message across every column', () => {
+    render(<Table columns={columns} rows={[]} />);
+
+    expect(screen.getByRole('cell', { name: 'No results' })).toHaveAttribute('colspan', '2');
+  });
+
+  it('does not make the empty message row clickable', async () => {
+    const onRowClick = vi.fn();
+    render(<Table columns={columns} rows={[]} onRowClick={onRowClick} />);
+
+    await userEvent.click(screen.getByText('No results'));
+
+    expect(onRowClick).not.toHaveBeenCalled();
+  });
+
+  it('ignores keys other than Enter and Space on a clickable row', async () => {
+    const onRowClick = vi.fn();
+    render(<Table columns={columns} rows={rows} onRowClick={onRowClick} />);
+
+    await userEvent.tab();
+    await userEvent.keyboard('a{Escape}{ArrowDown}');
+
+    expect(onRowClick).not.toHaveBeenCalled();
+  });
+
+  it('marks header cells as column headers', () => {
+    render(<Table columns={columns} rows={rows} />);
+
+    expect(screen.getAllByRole('columnheader').map((header) => header.textContent)).toEqual([
+      'Name',
+      'Phone',
+    ]);
+  });
 });
