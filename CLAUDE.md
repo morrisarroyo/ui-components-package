@@ -108,6 +108,15 @@ package's documented command has been run and works from a clean checkout, and
 `INTERVIEW.md` records the decisions, the process and at least one thing that
 had to be corrected.
 
+### Phase 5 — Library additions
+
+Work on `ui` after delivery: Storybook as a browsable set of usage examples,
+and behaviour tests that close the gaps in the component test suite.
+
+**Done when:** `npm run storybook` shows every component in every state, the
+stories are kept rendering by a test, and each component's props and states
+are covered by a behaviour test that fails when the behaviour breaks.
+
 ## Working agreements
 
 - **Follow `docs/CONVENTIONS.md`** for file layout, naming, styling and tests.
@@ -136,6 +145,7 @@ npm test                             # build ui, then every workspace's tests
 npm run test  --workspace ui         # library tests only
 npm run dev                          # build ui, then start the website on :5173
 npm run api                          # start the mock API on :5080
+npm run storybook                    # browse the ui components on :6006
 ```
 
 The website's dev server proxies `/api` to the mock API, so both need to be

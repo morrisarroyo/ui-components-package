@@ -250,3 +250,28 @@ which brings the timezone problem back unless every call is pinned to UTC).
 
 **What would change it.** A product locale setting, at which point this
 becomes `Intl.DateTimeFormat` with `timeZone: 'UTC'`.
+
+---
+
+## D-17 — Storybook for the component library
+
+**Decided:** 2026-09-28 · **Status:** settled
+
+Storybook 10 with the `@storybook/react-vite` framework, installed as a dev
+dependency of `ui` only. One `Name.stories.tsx` beside each component, one
+story per variant and state. Stories are excluded from the declaration build
+and never reach `dist/`.
+
+**Why.** It gives a place to see every state — hover, focus, error, loading,
+disabled — without running the API and the site. The Vite framework reuses
+`vite.config.ts`, so stories render with the same CSS Modules naming and the
+same `tokens.css` a consumer gets. The design document counts Storybook as
+usage examples, not documentation, so `packages/ui/README.md` stays the
+reference.
+
+**Considered.** Ladle (lighter, but a second, less familiar tool), and a demo
+page in `app` (would mix library states into the website).
+
+**What would change it.** Interaction or visual-regression tests in CI, at
+which point the stories become the test fixtures via the Storybook Vitest
+addon.

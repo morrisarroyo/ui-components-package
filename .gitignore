@@ -7,3 +7,4 @@ coverage/
 # .NET
 bin/
 obj/
+storybook-static/

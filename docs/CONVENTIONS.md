@@ -24,6 +24,8 @@ packages/ui/
       Button.tsx
       Button.module.css
       Button.test.tsx
+      Button.stories.tsx
+  .storybook/                 Storybook config (dev-only, not published)
   README.md                   the library documentation (deliverable)
 packages/app/
   src/
@@ -35,9 +37,11 @@ api/Intrahealth.Api/          the ASP.NET Core project
 
 ## The `ui` package
 
-### One component, three files, one folder
+### One component, four files, one folder
 
-`components/Name.tsx`, `components/Name.module.css`, `components/Name.test.tsx`.
+`components/Name.tsx`, `components/Name.module.css`, `components/Name.test.tsx`,
+`components/Name.stories.tsx`. Stories are usage examples for Storybook; they
+are excluded from the library build and are not documentation on their own.
 No barrel files inside `components/` — `src/index.ts` is the only place that
 re-exports.
 

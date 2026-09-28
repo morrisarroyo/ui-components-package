@@ -281,3 +281,18 @@ its own check. The run log with the evidence for each is `AutoPhase.md`.
   the `.claude` harness is committed rather than ignored, and all three
   packages run from their documented commands on a clean checkout.
 - **Verify:** clone into a fresh directory and run every documented command.
+
+---
+
+## Phase 5 — Library additions
+
+### T-5.1 Storybook
+- **Depends on:** T-1.8
+- **Status:** Done
+- **Done when:** `npm run storybook` serves every component in every variant
+  and state from one `Name.stories.tsx` beside each component; stories render
+  with the same tokens and CSS Modules naming as the published build and are
+  excluded from `dist/`; the commands and file layout are documented.
+- **Verify:** `npm run build-storybook --workspace ui` completes and its index
+  lists a story per variant and state; `npm run build --workspace ui` emits no
+  story files; `npm run typecheck` and `npm test` still pass.

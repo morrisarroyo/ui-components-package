@@ -497,13 +497,18 @@ edits (use [TextField](#textfield)).
 How to add a sixth component so it fits with the existing five. The house
 style this summarises is `docs/CONVENTIONS.md` in the repository root.
 
-### 1. Three files, one place
+### 1. Four files, one place
 
 ```
 src/components/Badge.tsx          the component
 src/components/Badge.module.css   its styles
 src/components/Badge.test.tsx     its behaviour tests
+src/components/Badge.stories.tsx  its Storybook stories, one per variant and state
 ```
+
+Run `npm run storybook` from the repository root to browse every component
+and state on http://localhost:6006. Stories are left out of the published
+build.
 
 No subfolders and no barrel files inside `components/`.
 
