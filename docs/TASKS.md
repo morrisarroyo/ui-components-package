@@ -415,7 +415,7 @@ accepted these fixes (grilling round 1, Q1–Q11).
 
 ### T-7.1 Concise documentation
 - **Depends on:** T-6.6
-- **Status:** In progress
+- **Status:** Done
 - **Done when:** the library README and the project README say the same things
   in substantially fewer words, with no fact, example or test-checked table lost.
 - **Verify:** word counts before and after; `npm test` passes, including the
