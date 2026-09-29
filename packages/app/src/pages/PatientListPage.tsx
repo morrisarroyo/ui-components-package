@@ -51,6 +51,10 @@ export function PatientListPage() {
     };
   }, []);
 
+  useEffect(() => {
+    document.title = 'Patients';
+  }, []);
+
   async function handleSearch(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setSearching(true);

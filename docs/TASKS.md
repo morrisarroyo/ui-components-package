@@ -501,7 +501,7 @@ accepted these fixes (grilling round 1, Q1–Q11).
 
 ### T-7.12 The detail page titles the browser tab
 - **Depends on:** T-3.4
-- **Status:** Not started
+- **Status:** Done
 - **Done when:** the tab reads the patient's full name on Page 2 and "Patients"
   on Page 1.
 - **Verify:** page tests on `document.title`.

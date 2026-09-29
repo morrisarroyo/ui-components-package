@@ -26,6 +26,13 @@ export function PatientDetailPage() {
     };
   }, [id]);
 
+  // The browser tab names the page too: the patient once loaded.
+  const documentTitle =
+    state.status === 'ok' ? state.patient.name : state.status === 'not-found' ? 'Patient not found' : 'Patients';
+  useEffect(() => {
+    document.title = documentTitle;
+  }, [documentTitle]);
+
   return (
     <main className={styles.page}>
       {/* Back is present in every state, including not-found and error. */}

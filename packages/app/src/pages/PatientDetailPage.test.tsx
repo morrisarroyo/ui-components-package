@@ -56,6 +56,7 @@ describe('PatientDetailPage', () => {
     renderPage();
 
     expect(await screen.findByRole('heading', { level: 1, name: 'Priya Raman' })).toBeInTheDocument();
+    expect(document.title).toBe('Priya Raman');
     expect(screen.getByRole('heading', { name: 'Demographics' })).toBeInTheDocument();
     expect(demographics()).toEqual({
       Name: 'Priya Raman',

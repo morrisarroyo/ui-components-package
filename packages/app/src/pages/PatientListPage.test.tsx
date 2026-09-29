@@ -72,6 +72,7 @@ describe('PatientListPage', () => {
     expect(screen.getByRole('heading', { level: 1, name: 'Patients' })).toBeInTheDocument();
     // Let the list settle; an unfiltered empty list says "No patients yet".
     await screen.findByText('No patients yet');
+    expect(document.title).toBe('Patients');
   });
 
   it('shows "Loading…" instead of the table until the list arrives', async () => {
