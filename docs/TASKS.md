@@ -309,3 +309,98 @@ its own check. The run log with the evidence for each is `AutoPhase.md`.
 - **Verify:** `npm test` and `npm run typecheck` pass; a deliberate break in a
   component (Button always `type="submit"` and always busy) makes the new
   tests fail, and reverting it makes them pass.
+
+---
+
+## Phase 6 — Documentation depth, extension and project tests
+
+Raised after the Phase 5 review: the library documentation says what each
+component's props are, but not what each state looks like, how the components
+are used together in a real screen, or how to extend the library. It also has
+to read more clearly and point into the code. The project's `app` and `api`
+need unit tests of their own.
+
+### T-6.1 Component state reference
+- **Depends on:** T-5.1
+- **Status:** Not started
+- **Done when:** `packages/ui/README.md` has, for every component, a table of
+  its states — default, hover, focus, error, loading, disabled, empty, as they
+  apply — saying how each is triggered (prop or interaction), what it looks
+  like in terms of the tokens it uses, and which Storybook story shows it;
+  plus a screenshot per state captured from the built Storybook and stored
+  in `packages/ui/docs/states/` (time-boxed: if a headless browser fights,
+  record it and ship the tables without images).
+- **Verify:** every state in each table maps to a behaviour in the component
+  source and a story that exists in the built Storybook index; every token
+  named exists in `tokens.css`; every image path resolves.
+
+### T-6.2 Worked example: a real screen
+- **Depends on:** T-5.1
+- **Status:** Not started
+- **Done when:** a "Patient lookup" example that uses all five components
+  together the way a product screen would (search in a Card, results in a
+  Table, the selected record in a DescriptionList, loading, error and empty
+  handled) exists as a Storybook story under `Examples/`, and appears near
+  the top of `packages/ui/README.md` as a complete code listing identical to
+  the story apart from the import line.
+- **Verify:** the story renders in the story test and in the built
+  Storybook; the README listing is diffed against the story source and
+  differs only in the import; the listing compiles when pasted into `app`.
+
+### T-6.3 Component scaffold
+- **Depends on:** T-5.2
+- **Status:** Not started
+- **Done when:** `npm run new-component --workspace ui -- <Name>` creates the
+  four files of a new component (component, styles from tokens, behaviour
+  test, stories) and adds its export to `src/index.ts`; the story test and
+  the entry-point test discover components rather than listing them, so a
+  scaffolded component is covered without editing any test.
+- **Verify:** scaffold a throwaway component, then `npm run typecheck`,
+  `npm test`, `npm run build --workspace ui` and `build-storybook` all pass
+  with it present; remove it and they still pass; the script refuses a name
+  that already exists or is not PascalCase.
+
+### T-6.4 Extending the library
+- **Depends on:** T-6.3
+- **Status:** Not started
+- **Done when:** `packages/ui/README.md` has an "Extending the library"
+  section that starts from the scaffold command, walks through adding a
+  component end to end, and explains which architectural choices make that
+  cheap — tokens defined once, CSS Modules scoping, the single entry point,
+  co-located files, discovered tests and stories — each pointing at the code
+  that implements it.
+- **Verify:** follow the section literally to add a throwaway component and
+  confirm every step works as written; then remove it.
+
+### T-6.5 Documentation layout and code references
+- **Depends on:** T-6.1, T-6.2, T-6.4
+- **Status:** Not started
+- **Done when:** `packages/ui/README.md` is reorganised into clearly
+  separated sections with a contents list that matches its headings, and
+  every claim about how the library works links to the code with a line
+  number (`src/components/Button.tsx:26`-style links); a test checks that
+  every such reference points at an existing file and a line that exists.
+- **Verify:** the reference test passes, and fails when a referenced line is
+  moved out of range; the contents list matches the headings exactly.
+
+### T-6.6 Three clarity passes
+- **Depends on:** T-6.5
+- **Status:** Not started
+- **Done when:** the library documentation has had three rounds of review by
+  a fresh reader told to treat it as unclear and find everything that is,
+  each round's findings applied and logged in `AutoPhase.md`; the props
+  tables still match the code exactly.
+- **Verify:** each round's findings list and what changed is recorded; the
+  reference test and full suite pass after the final round; every prop in
+  the code appears in a table and every documented prop exists.
+
+### T-6.7 Unit tests for `app` and `api`
+- **Depends on:** T-3.5, T-2.4
+- **Status:** Not started
+- **Done when:** the `app` mapping and API client have unit tests for every
+  field rule and failure path not already covered, and `api` has an xUnit
+  test project covering every endpoint in `docs/API-CONTRACT.md`, the search
+  filter, the not-found case and the seed patients with missing fields;
+  `npm run test:api` runs it and the project README documents it.
+- **Verify:** `npm test` and `npm run test:api` pass; a deliberate break in
+  the search filter and in the mapping each fail a test.

@@ -117,6 +117,19 @@ and behaviour tests that close the gaps in the component test suite.
 stories are kept rendering by a test, and each component's props and states
 are covered by a behaviour test that fails when the behaviour breaks.
 
+### Phase 6 — Documentation depth, extension and project tests
+
+The library documentation grows from a props reference into something a
+developer can build from: what every state looks like, a worked example of a
+real screen, an extension guide backed by a component scaffold, a clearer
+layout that links into the code by line, and three clarity passes. `app` and
+`api` get unit tests of their own.
+
+**Done when:** each state of each component is documented with how it is
+triggered and what it looks like, the worked example renders and matches its
+listing, a scaffolded component passes every check untouched, every code
+reference in the docs resolves, and `npm test` and `npm run test:api` pass.
+
 ## Working agreements
 
 - **Follow `docs/CONVENTIONS.md`** for file layout, naming, styling and tests.
@@ -146,6 +159,7 @@ npm run test  --workspace ui         # library tests only
 npm run dev                          # build ui, then start the website on :5173
 npm run api                          # start the mock API on :5080
 npm run storybook                    # browse the ui components on :6006
+npm run test:api                     # the mock API's xUnit tests
 ```
 
 The website's dev server proxies `/api` to the mock API, so both need to be
