@@ -139,6 +139,15 @@ reconstructed at the end.
    expected value is guessed tests the guess; had the guess happened to
    agree with a bug, it would have passed. Expected values now come from the
    specification or the data, computed, never recalled.
+7. **The documentation promised a check that did not exist.** The library
+   README said its props tables were "checked against" the code, and T-4.1
+   had verified them once by script. But nothing re-ran that check, and no
+   test existed. The first clarity pass in T-6.6 caught it. The fix made the
+   claim true rather than deleting it: `src/readme.test.ts` now compares
+   every props table with its interface and defaults. The second pass then
+   found that test's own default parser misread one-line signatures. The
+   Contributing walkthrough would have failed on exactly that, when followed
+   literally.
 
 Two smaller slips were the agent's own measurement errors rather than defects,
 and are recorded in `AutoPhase.md` because they are the kind that produce false

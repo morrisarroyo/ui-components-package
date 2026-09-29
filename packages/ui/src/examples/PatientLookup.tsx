@@ -72,20 +72,19 @@ export function PatientLookup() {
   }));
 
   return (
-    <div style={{ display: 'grid', gap: 16, maxWidth: 720 }}>
+    // Layout is the screen's job: plain elements, spaced with tokens. Widths
+    // have no token; how wide a page is, is the page's decision.
+    <div style={{ display: 'grid', gap: 'var(--ui-space-4)', maxWidth: 720 }}>
       <Card title="Find a patient">
-        <form onSubmit={search} style={{ display: 'flex', gap: 8, alignItems: 'flex-start' }}>
-          <div style={{ flex: 1 }}>
-            <TextField
-              label="Name"
-              value={query}
-              onChange={setQuery}
-              placeholder="At least two letters, e.g. Lo"
-              errorMessage={queryError}
-            />
-          </div>
-          {/* Drops the button to the input's line: the label's 16px line plus the field's 4px gap. */}
-          <div style={{ paddingTop: 20 }}>
+        <form onSubmit={search} style={{ display: 'grid', gap: 'var(--ui-space-3)' }}>
+          <TextField
+            label="Name"
+            value={query}
+            onChange={setQuery}
+            placeholder="At least two letters, e.g. Lo"
+            errorMessage={queryError}
+          />
+          <div>
             <Button type="submit" loading={loading}>
               Search
             </Button>
@@ -95,7 +94,7 @@ export function PatientLookup() {
 
       {failed ? (
         <Card title="Results" actions={<Button variant="secondary" size="sm" onClick={() => search()}>Try again</Button>}>
-          <p>Something went wrong. Your search was not run.</p>
+          <p>The search failed. Try again, and if it keeps failing, check your connection.</p>
         </Card>
       ) : null}
 

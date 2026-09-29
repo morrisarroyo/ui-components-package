@@ -54,7 +54,7 @@ describe('PatientLookup example', () => {
 
     await searchFor('error');
 
-    expect(await screen.findByText(/Something went wrong/)).toBeInTheDocument();
+    expect(await screen.findByText(/The search failed/)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Try again' })).toBeInTheDocument();
   });
 });

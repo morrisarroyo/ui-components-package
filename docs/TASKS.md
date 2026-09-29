@@ -385,7 +385,7 @@ need unit tests of their own.
 
 ### T-6.6 Three clarity passes
 - **Depends on:** T-6.5
-- **Status:** Not started
+- **Status:** Done
 - **Done when:** the library documentation has had three rounds of review by
   a fresh reader told to treat it as unclear and find everything that is,
   each round's findings applied and logged in `AutoPhase.md`; the props

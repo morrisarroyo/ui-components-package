@@ -173,3 +173,78 @@ Run of 2026-09-28, Phase 6, full auto (commits unreviewed — the user is asleep
 - **Verified:** `src/readme.test.ts` (78 tests) — every line reference's text matches its target, the file exists, the line is in range and contains the title text; every file link and image exists; the contents list equals the `##`/`###` headings in order with GitHub anchors. `tsc` clean.
 - **Mutation checks:** a reference moved to line 999 fails its test; one line inserted at the top of `Button.tsx` fails the four Button references; renaming one contents entry fails the contents test. All restored.
 - **Decision taken alone:** titles on links as the drift check (not just the line range the task asked for), because a reference that stays in range but points at the wrong code is the likelier failure after an edit.
+
+## T-6.6 Three clarity passes — round 1
+- **Reviewer:** a fresh general-purpose agent, read-only, told "this documentation is shit and needs to be clearer" and to read as a React developer new to the repo. 25 findings.
+- **Checked before acting:** the load-bearing claims were verified against the code, and all held. `false`/whitespace render blank in DescriptionList. TextField has no `onBlur`. The example used pixel literals and TextField's private 4px gap. Nothing tested the props tables, despite the README saying so.
+- **Applied:**
+  - **Missing values:** one "Missing values: who draws the dash" section, reconciling DescriptionList and Table.
+  - **False claims corrected:** "never blank"; blur validation (the TextField example now validates on submit and clears on edit).
+  - **TextField limits stated:** no `name`, `type`, `onBlur` or `ref`.
+  - **Component sections reordered:** When to use it → Example → Props → Behaviour → States → Source, with Source last. "When not to" is now a bullet list.
+  - **Maintainer material moved out of the consumer path:** Getting started has no code links; the links note moved to Contributing; "How a component uses them" folded into Contributing step 2.
+  - **Tokens:** the custom property comes first, and the spec name is labelled as such. Typography names are written out in full; `title` is for the page `<h1>`.
+  - **Stylesheet:** says what it does and doesn't style, and what happens if you forget it.
+  - **Install:** tarball location and rebuild steps.
+  - **Table:** `id` is not special, rows are keyed by position, and each clickable row is a Tab stop.
+  - **States tables:** the column is renamed Storybook, with real sidebar paths and "(hover it)/(tab to it)". The "what it looks like" text is plain language first, then the key token, with duplicated behaviour removed.
+  - **Styling contract:** spacing between components belongs to the consumer, and SaveOrCancel now has a gap. The theming scope is stated.
+  - **Card:** `<section>` + `<h2>`, plain-text title, the actions-without-title fact.
+  - **Props tables:** now carry a Required column, and each lists its exported types in its own Props section (the separate types table is gone).
+  - **Contributing:** step 6 no longer invites a duplicate export. Step 7 gives the section skeleton, the `STATES` row format and the Playwright prerequisite.
+  - **Wording:** vague words replaced.
+  - **Example:** layout now uses tokens and the button sits on its own row; the screenshot was re-captured.
+- **New test:** `README props tables` in `src/readme.test.ts` — every component in `components/` must have a `### Name` section whose props table matches its `NameProps` interface (names in order, required-ness) and its destructuring defaults. Mutations: a wrong default (`size` → `'sm'`) fails Button's table; an undocumented `subtitle` prop fails Card's; renaming the DescriptionList heading fails its table and the contents test. The scaffold's closing message now says `npm test` fails until the component is documented.
+- **Rejected:** moving the worked example below the component reference. The user asked for it early (T-6.2), so it stays second and a "New here?" line points readers to it.
+- **Slip, caught:** the contents-regeneration script located "the next `---`" after `## Contents`. The rewrite put a rule directly under that heading, so the script deleted the whole Getting started section. The contents test caught it (listed headings ≠ actual headings); the section was restored and the script now replaces only the list lines.
+- **Verified:** readme + example tests 85 pass, `tsc` clean. All eight README tsx blocks outside Contributing, extracted by script into `packages/app/src`, compile under the app's `tsc` against the built ui, and render in jsdom with no "undefined". EmailForm validates on submit and clears on edit, and SaveOrCancel is busy while saving. Temporary files removed.
+
+## T-6.6 — round 2
+- **Reviewer:** a fresh agent with the same framing, asked to read the README twice: top to bottom, and one section at a time as someone arriving from a search. 20 findings, 5 marked as factual errors.
+- **Verified before acting:**
+  - The props test's default regex misread a one-line signature: `tone = 'neutral', children` was read whole. Confirmed in node, so the Contributing Badge would have failed the test when followed literally.
+  - `vite build --watch` empties `dist/` on each rebuild, deleting `index.d.ts`: `emptyOutDir` defaults to true.
+  - The focus ring differs by component: TextField uses `:focus` with offset 0, and Table uses a negative offset.
+- **Code fixed:**
+  - The props test parses defaults with `/(\w+) = ('[^']*'|[^,\s}]+)/g`, so one-line and multi-line signatures both work.
+  - `ui`'s `dev` script is now `vite build --watch --emptyOutDir false`. Verified: after a full build, two watch rebuilds left `dist/index.d.ts` in place.
+- **README:**
+  - Intro: says it is meant to be read in the repository (the tarball ships no pictures, source or Storybook).
+  - Install: fixed the `dist/` wording that contradicted the `exports` rule; the dev loop is described truthfully.
+  - Tokens: introduced in Getting started before first use; spec names labelled as not valid CSS; "Used for" filled out; the focus ring described per component.
+  - Styling contract: class names are "not a stable API" (the old claim that they change between builds was wrong); container widths are stated.
+  - Component reference: the intro is prose plus bullets, and explains the code links there.
+  - Missing values: the rule is stated once, with inline pointers, and "anything else" is no longer ambiguous.
+  - Table: the `id` paragraph moved into Behaviour.
+  - Button: loading drops keyboard focus, and it now says so.
+  - TextField: the "whole API" list is complete, and the duplicate is gone.
+  - Contributing: the expected-failure note is explicit, with a scoped vitest command. Step 7 carries Badge's real props rows, the three table rules the test enforces, and the contents-list entry. The tokens rationale row now says the tokens reach `ui.css` through the entry point.
+- **Example:** the failure copy is now "The search failed. Try again, and if it keeps failing, check your connection." ("Your search was not run" was false). The example test's copy assertion was updated to match: the copy changed on purpose, and the assertion still requires the failure text. There is also a comment on why `maxWidth` is a number.
+- **Rejected or partial:**
+  - Adding `docs` to the package's `files`: publishing is out of scope (design doc §9), so the intro note covers it.
+  - Cutting the "Why adding a component is this short" table to four rows: the user asked specifically for an explanation of how the architecture makes extension easier, so it stays with its misleading row fixed.
+  - The unverified screen-reader claim about `aria-busy`: the wording now only states what the code does.
+- **Verified:** readme and example tests 85 pass.
+
+## T-6.6 — round 3, and close
+- **Reviewer:** a fresh agent read the README three ways: as a newcomer, as a skimmer, and as a contributor following Contributing literally in a scratch copy. That last reading passed end to end (169 tests). 20 findings, 5 marked as facts.
+- **Verified before acting:** the root `workspaces` is an explicit list, so a new package is not a workspace and `"ui": "*"` fetches the public `ui` package. Grid and flex-column items stretch, so Button does too. `exports` does not govern relative paths.
+- **Applied:**
+  - Install: tells the reader to add their package to `workspaces` first.
+  - Styling contract: the widths bullet is corrected (Button stretches; wrap it in a `<div>` or use `justifyItems: 'start'`), and the lookup explains its bare `<div>`. Theming moved into the contract as a bullet.
+  - Use: the `exports` claim is limited to `ui/...` paths, and relative imports are forbidden outright. The rules sit in one bold-led list.
+  - Contributing intro: says what `readme.test.ts` checks (four things) and names the example's test separately. Every command runs from the root, except the one scoped vitest run.
+  - Step 2: focus rule is `:focus-visible` for clickables, `:focus` for inputs. Step 3: accessibility wording corrected.
+  - Step 7: now a numbered sequence — contents entry after DescriptionList, `STATES` rows, capture, and pictures last, because the test fails on a missing image.
+  - Rationale table: its two cells that contradicted the rest are fixed.
+  - DescriptionList: Behaviour now agrees with Missing values ("pass the value as it is").
+  - TextField: its limits paragraph became a Behaviour bullet, so the section keeps the same shape as the others.
+  - Button: the focus advice now says there is no `ref`.
+  - Tokens: labels use one shape.
+  - Wording: long or passive sentences rewritten.
+- **Verified, T-6.6's own check:** followed Contributing literally in the real tree. After the scaffold, `npm run test --workspace ui` failed in exactly one test (Badge undocumented), as the README says. After steps 1–7 (listings written from the README by script, index lines changed, the step-7 template inserted after DescriptionList, the contents and component-table rows added): 169 ui tests passed, ui typecheck was clean, and the library build and build-storybook passed. Badge was then removed and the README and index restored. The props tables match the code, enforced by the props test. The reference test passes.
+
+## End of run 3 — full pass
+- **Baseline:** 76 ui + 27 app = 103, api 0.
+- **End:** **164 ui + 47 app + 23 api = 234 tests, all passing.** `npm run typecheck` clean; `npm run build` (ui and app) and `build-storybook` clean.
+- **Stopped because Phase 6 is complete:** T-6.1 to T-6.7 all Done. The plan has no separate close-out task. The documents were updated inside each task, and this entry records the counts.

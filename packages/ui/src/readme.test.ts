@@ -27,6 +27,10 @@ const lineRefs = [...readme.matchAll(/\[`([^`]+):(\d+)`\]\(([^#)\s]+)#L(\d+)(?: 
 const fileLinks = [...readme.matchAll(/\]\(((?:src|scripts|docs|\.storybook)\/[^#)\s]+)\)/g)].map(([, path]) => path);
 const images = [...readme.matchAll(/<img src="([^"]+)"/g)].map(([, path]) => path);
 
+function withoutCode(markdown: string) {
+  return markdown.replace(/```[\s\S]*?```/g, '');
+}
+
 function slug(heading: string) {
   return heading.toLowerCase().replace(/`/g, '').replace(/[^a-z0-9 -]/g, '').replace(/ /g, '-');
 }
@@ -57,9 +61,75 @@ describe('README contents list', () => {
     const contents = readme.slice(readme.indexOf('## Contents'), readme.indexOf('\n---', readme.indexOf('## Contents')));
     const listed = [...contents.matchAll(/^(?:\d+\.|   -) \[(.+)\]\(#(.+)\)$/gm)].map(([, text, anchor]) => ({ text, anchor }));
 
-    const afterContents = readme.slice(readme.indexOf('## Contents') + '## Contents'.length);
+    // Headings inside fenced code (the Contributing template) are not sections.
+    const afterContents = withoutCode(readme.slice(readme.indexOf('## Contents') + '## Contents'.length));
     const headings = [...afterContents.matchAll(/^#{2,3} (.+)$/gm)].map(([, text]) => ({ text, anchor: slug(text) }));
 
     expect(listed).toEqual(headings);
+  });
+});
+
+// --- Props tables against the code -----------------------------------------
+
+const componentSources = Object.fromEntries(
+  Object.entries(
+    import.meta.glob<string>(
+      ['./components/*.tsx', '!./components/*.test.tsx', '!./components/*.stories.tsx'],
+      { query: '?raw', import: 'default', eager: true },
+    ),
+  ).map(([path, source]) => [path.replace('./components/', '').replace('.tsx', ''), source]),
+);
+
+interface PropRow {
+  name: string;
+  required: boolean;
+  default: string;
+}
+
+/** Props as the code declares them: the `<Name>Props` interface, and defaults from the destructuring. */
+function propsInCode(name: string, source: string): PropRow[] {
+  const body = new RegExp(`export interface ${name}Props \\{([\\s\\S]*?)\\n\\}`).exec(source)?.[1] ?? '';
+  const signature = new RegExp(`export function ${name}\\(\\{([\\s\\S]*?)\\}: ${name}Props`).exec(source)?.[1] ?? '';
+  const defaults = Object.fromEntries(
+    // One prop per line or all on one line: `name = 'literal'` or `name = false`.
+    [...signature.matchAll(/(\w+) = ('[^']*'|[^,\s}]+)/g)].map(([, prop, value]) => [prop, value]),
+  );
+  return [...body.matchAll(/^ {2}'?([\w-]+)'?(\?)?:/gm)].map(([, prop, optional]) => ({
+    name: prop,
+    required: !optional,
+    default: defaults[prop] ?? '—',
+  }));
+}
+
+/** Props as the README's table for that component lists them. */
+function propsInReadme(name: string): PropRow[] | undefined {
+  const text = withoutCode(readme);
+  const start = text.indexOf(`\n### ${name}\n`);
+  if (start === -1) return undefined;
+  const section = text.slice(start + 1).split(/\n#{2,3} /)[0];
+  const table = section.slice(section.indexOf('#### Props'));
+  return table
+    .split('\n')
+    .filter((line) => /^\| `/.test(line))
+    .map((line) => line.split(/(?<!\\)\|/).slice(1, -1).map((cell) => cell.trim()))
+    .map(([prop, , required, fallback]) => ({
+      name: prop.replace(/`/g, ''),
+      required: required === 'yes',
+      default: fallback.replace(/`/g, ''),
+    }));
+}
+
+describe('README props tables', () => {
+  it('finds the components it checks', () => {
+    expect(Object.keys(componentSources).length).toBeGreaterThanOrEqual(5);
+  });
+
+  it.each(Object.entries(componentSources))('%s is documented, and its table matches its code', (name, source) => {
+    const documented = propsInReadme(name);
+    expect(documented, `${name} has no "### ${name}" section in the README`).toBeDefined();
+
+    const inCode = propsInCode(name, source);
+    expect(inCode.length, `could not read ${name}Props from the source`).toBeGreaterThan(0);
+    expect(documented).toEqual(inCode);
   });
 });

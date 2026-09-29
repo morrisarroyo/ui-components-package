@@ -84,4 +84,5 @@ writeFileSync(
   `${index}\n\nexport { ${name} } from './components/${name}';\nexport type { ${name}Props } from './components/${name}';\n`,
 );
 console.log('added the export to src/index.ts');
-console.log(`\nNext: add a props table for ${name} to README.md, then run npm test.`);
+console.log(`\nNext: make it your component, then add a "### ${name}" section to README.md.`);
+console.log('npm test fails, naming it, until that section and its props table exist.');
