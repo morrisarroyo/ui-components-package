@@ -449,7 +449,7 @@ accepted these fixes (grilling round 1, Q1–Q11).
 
 ### T-7.5 The harness explained
 - **Depends on:** T-4.4
-- **Status:** Not started
+- **Status:** Done
 - **Done when:** `.claude/skills/` includes the `phase-tasks` skill the others
   call, and `.claude/README.md` says these are reusable skills written for
   other projects and maps their terms to this repository.
