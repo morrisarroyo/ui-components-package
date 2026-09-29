@@ -517,7 +517,7 @@ accepted these fixes (grilling round 1, Q1–Q11).
 
 ### T-7.14 Walkthrough outline
 - **Depends on:** T-7.13
-- **Status:** Not started
+- **Status:** Done
 - **Done when:** a timed, one-page outline for the 15–20 minute recording
   exists for the owner, drawn from INTERVIEW.md.
 - **Verify:** every claim in it is in INTERVIEW.md or the code.
