@@ -464,7 +464,7 @@ accepted these fixes (grilling round 1, Q1–Q11).
 
 ### T-7.7 Process record matches the repository
 - **Depends on:** T-7.1 … T-7.6
-- **Status:** Not started
+- **Status:** Done
 - **Done when:** INTERVIEW.md states the real phase and task counts, labels
   Phases 5–7 as post-delivery work directed by the owner with the time it
   took, discloses that Phase 1 was drafted before being committed task by

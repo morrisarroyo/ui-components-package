@@ -1,208 +1,155 @@
 # Interview Notes
 
-Everything specific to the exercise lives here. The project README is written
-as if the project were real; this file is not.
+Everything specific to the exercise. The project README is written as if the
+project were real; this file is not.
 
 ## Decisions
 
-The full log, with the alternatives considered and what would change each
-answer, is [`docs/DECISIONS.md`](./docs/DECISIONS.md). It was written as each
-choice was made; this table is assembled from it.
+The full log, with alternatives and what would change each answer, is
+[`docs/DECISIONS.md`](./docs/DECISIONS.md), written as each choice was made.
 
 | # | Choice | What | Why, in one line |
 | --- | --- | --- | --- |
 | D-1 | Repository | One repo, three packages | `app` consumes `ui` as an installed package without publishing or `npm link`. |
-| D-2 | Workspace tool | npm workspaces | Ships with Node; three packages have no build graph worth a task runner. |
+| D-2 | Workspace tool | npm workspaces | Ships with Node; three packages need no task runner. |
 | D-3 | Styling | CSS Modules | Scoped at build time, no runtime, no framework forced on the consumer. |
-| D-4 | Tokens | `--ui-` CSS custom properties on `:root` | Defined once, referenced by name, inspectable, and themeable on purpose. |
-| D-5 | Class names | `ui-[local]-[hash]` | The hash prevents collisions; the readable part keeps devtools usable. |
-| D-6 | Build | Vite, library mode for `ui`, React external | One toolchain; the app never gets two copies of React. |
-| D-7 | Consumption | `app` imports the built `dist`, through `exports` | Makes "no deep imports" enforced by resolution, not by discipline. |
+| D-4 | Tokens | `--ui-` CSS custom properties on `:root` | Defined once, referenced by name, inspectable. |
+| D-5 | Class names | `ui-[local]-[hash]` | No collisions; still readable in devtools. |
+| D-6 | Build | Vite library mode, React external | One toolchain; the app never gets two copies of React. |
+| D-7 | Consumption | `app` imports the built `dist` through `exports` | "No deep imports" is enforced by resolution, not discipline. |
 | D-8 | Tests | Vitest + Testing Library, no snapshots | Reuses the Vite pipeline; pushes tests towards behaviour. |
-| D-9 | Routing | React Router, two routes | The detail page is addressable by id and Back behaves like history. |
+| D-9 | Routing | React Router, two routes | The detail page is addressable by id. |
 | D-10 | API access | Same-origin `/api`, proxied by the dev server | No CORS, no base URL in client code. |
-| D-11 | API shape | A small purpose-built payload, not FHIR | FHIR is not assessed; the payload keeps only the EHR-shaped parts the pages need. |
-| D-12 | Formatting | The API returns data, the website composes strings | Keeps the one mapping layer the brief assesses where it can be seen. |
-| D-13 | Missing values | Mapping decides *whether*, the component decides *how it looks* | One definition of "missing", one definition of `—`. |
-| D-14 | Package names | `ui` and `app` | The brief names them; a real product would scope them. |
-| D-15 | Clickable rows | Native row role, not `role="button"` | Keyboard-operable without breaking table navigation for screen readers. |
-| D-16 | Birth dates | "2 Mar 1984", read from the string's parts | Unambiguous across locales and immune to timezone day-shifts. |
+| D-11 | API shape | A small purpose-built payload, not FHIR | FHIR is not assessed; keep only what the pages need. |
+| — | Endpoints | `GET /api/patients?search=`, `GET /api/patients/{id}` | Search is a filter on the list, not a separate resource; an unknown id is `404` with ASP.NET Core's standard `ProblemDetails`, so the site can tell "not found" from "failed". |
+| D-12 | Formatting | The API returns data, the website composes strings | Keeps the one mapping layer visible. |
+| D-13 | Missing values | The mapping module decides what is missing and how it reaches the screen | DescriptionList draws `—` itself; for Table cells the mapping spells it out (amended in T-7.2). |
+| D-14 | Package names | `ui` and `app` | The brief names them. |
+| D-15 | Clickable rows | Native row role, not `role="button"` | Keyboard-operable without breaking table navigation. |
+| D-16 | Birth dates | "2 Mar 1984", from the string's parts | Unambiguous across locales, no timezone day-shift. |
+| D-17 | Stories | Storybook 10, `@storybook/react-vite` | Every state visible without the API; same Vite config as the build. |
+| D-18 | API tests | xUnit, real `Program` in memory via `WebApplicationFactory` | Tests the wire shape, not the C# record. |
 
-A few smaller choices were taken inside tasks rather than logged as decisions,
-and are recorded in the task log (`AutoPhase.md`): the search is a form so
-Enter also searches; Back goes to `/` rather than one step back in history, so
-it returns to the list even from a directly opened link; the app's page layout
-uses the library's tokens in its own stylesheet and never targets a `ui` class.
+Smaller choices taken inside tasks are in `AutoPhase.md`: the search is a form,
+so Enter also searches; Back goes to `/`, so it works from a directly opened
+link; the app's layout CSS uses the library's tokens and never targets a `ui`
+class.
 
 ## Process and AI usage
 
 **Tools.** Claude Code in the terminal, on Claude Opus.
 
-**How the work was decomposed.** The brief arrived as two files, a markdown
-copy and a PDF. They were reconciled first (they turned out to be the same
-document; section 0 of `docs/DESIGNDOCUMENT.md`), then turned into a design
-document, a set of conventions, an API contract, and a phased task list in
-`docs/TASKS.md`: five phases, 26 tasks, each with its dependencies, a done
-state, and the specific check that proves it. Those documents were written
-before any code, and the commit history follows the task list one task per
-commit, so the two can be read side by side.
+**Timeline.** Phases 0–4 are the submission the brief asks for. Phases 5–7
+came after it, at my direction.
 
-**The harness.**
+| Phase | When (agent wall clock) | What |
+| --- | --- | --- |
+| 0–4 | 25 Sep, 17:37–19:16 | Plan, library, API, website, docs, delivery check |
+| 5 | 28 Sep, afternoon (two commits, 16:06–16:07) | Storybook; more component tests |
+| 6 | 28 Sep, 20:30–21:32, unattended | State screenshots, worked example, scaffold, extension guide, code references, three doc clarity passes, `app` and `api` tests |
+| 7 | 29 Sep | Fixes from a review of the whole project against the brief |
 
-| Part | What it does |
-| --- | --- |
-| `CLAUDE.md` | Working context: what the project is, where the truth lives, the non-negotiable rules, the phases. Read first, every session. |
-| `docs/DESIGNDOCUMENT.md` | The reconciled spec. Every token value and prop table, so they are never re-derived from the brief. |
-| `docs/TASKS.md` | The work order. Each task has dependencies, a done state and the check that proves it. |
-| `docs/CONVENTIONS.md` | House style, so generated code looks like the rest of the repository. |
-| `docs/API-CONTRACT.md` | One contract both `app` and `api` are written against. |
-| `docs/DECISIONS.md` | Choices recorded as they are made. This file is assembled from it. |
-| `AutoPhase.md` | The run log: for every task, what verified it, any decision taken alone, and any place the plan was wrong. |
-| `.claude/skills/` | The workflow skills, committed with the project. `auto-phase` drives a phase end to end; it calls `implement-tasks` (take a startable task, stay in scope, write status back), `test-and-fix` (diagnose to root cause, never weaken a test) and `commit-task` (scope the commit to one task, verify it captured what was intended). `commit-gate`, the human diff review, is the step full-auto mode replaces. |
+**Decomposition.** The brief (a markdown copy and a PDF, reconciled first) was
+turned into a design document, conventions, an API contract and a task list,
+`docs/TASKS.md`: 8 phases and 44 tasks, each with dependencies, a done state
+and the check that proves it. The documents came before the code. The Phase 1
+components were drafted together and then verified and committed one task at
+a time, which is why those five commits are seconds apart.
 
-**How the build ran.** Phases 1 to 4 were driven by the `auto-phase` skill in
-full-auto mode: pick the startable task that unblocks the most, implement it,
-run that task's own check, commit it, move on. It commits without a human
-reviewing each diff, which is a deliberate trade, so the safety net is in how
-it commits: one task per commit so any task reverts cleanly, every commit
-type-checked and tested on its own, a mutation check (break the behaviour,
-watch a named test fail, restore) on the tasks that close out test suites, and
-a full end-of-run pass compared against a baseline recorded before the run.
-The loop stops only for something the agent cannot settle, and it did stop
-once, for a manual browser check (below).
+**The harness.** `CLAUDE.md` (context and rules, read first), the documents in
+`docs/`, `AutoPhase.md` (the run log: what verified each task, decisions taken
+alone, where the plan was wrong) and the skills in `.claude/skills/`, explained
+in [`.claude/README.md`](./.claude/README.md). `phase-tasks` is the planning
+skill (Phases 6 and 7 were planned directly in conversation); `auto-phase`
+ran Phases 1–4 and 6 in full auto: implement one task, run
+its own check, commit it, move on. The safety net is how it commits: one task
+per commit, so each reverts cleanly; a mutation check (break it, watch a named
+test fail, restore) where tests are edited; a full pass against a recorded
+baseline at the end.
 
-**What was delegated, and what was not.** The agent wrote the code, the tests
-and the documentation, ran every check, and committed. Two things came back
-to a person:
+**What came back to a person.** The loop stops only for what it cannot settle:
+- Button's width with `loading` on and off had to be compared in a real
+  browser, and the headless browser would not run. The task was parked, the
+  eight measurements confirmed by hand (all equal), then closed.
+- Running in full auto, reviewed after the fact rather than before each
+  commit, was my decision. Phase 6 ran while I was asleep; it was then
+  reviewed against the brief (four areas, graded), and the fixes are Phase 7.
 
-- **A check tooling could not do.** T-1.2 asks for the Button's width to be
-  compared in a real browser with `loading` on and off. The agent's headless
-  browser would not run, so the loop parked the task, carried on with
-  everything that did not depend on it, and handed over a page that printed
-  the eight measurements and what would count as a failure. It was confirmed
-  by hand — all eight the same — before T-1.2 was closed. The agent did not
-  mark it done on the strength of the CSS looking right.
-- **Choosing the trade.** Running in full auto, with review after the fact
-  rather than before each commit, was a human decision made in advance.
+**What had to be checked or corrected.**
 
-**What had to be checked or corrected.** Recorded as each one happened, not
-reconstructed at the end.
-
-1. **The generated toolchain had never type-checked.** The Phase 0 config
-   was written and marked done on the strength of looking right. The first
-   real `tsc` run failed three ways: no type declaration for `*.module.css`
-   imports (so the library's declaration build could not emit), a
-   `vite.config.ts` using `__dirname` with no Node types installed, and a
-   `test` block Vite's own `defineConfig` does not know about. Underneath the
-   last one, Vitest 2 had pulled in its own nested Vite 5 while the build ran
-   on Vite 6, so the two plugin types could never agree. Fixed at the root:
-   a `vite-env.d.ts` for Vite's import types, a relative library entry,
-   `defineConfig` from `vitest/config`, and Vitest bumped to 3, which targets
-   Vite 6. Lesson: "config exists and is internally consistent" was not a
-   check; running the compiler is.
-2. **The loading Button lost its accessible name.** The generated Button hid
-   its label with `visibility: hidden` while loading, to keep the width
-   while showing the spinner. The width part was right, but
-   `visibility: hidden` also drops the text from the accessibility tree, so
-   a screen reader met a busy button with no name. A behaviour test querying
-   `getByRole('button', { name: 'Save' })` on a loading button caught it. The
-   label is now `opacity: 0`, which keeps both the width and the name.
-3. **Keyboard-accessible rows broke the table.** The generated Table made
-   clickable rows keyboard-operable, as the spec asks, but did it with
-   `role="button"` on each `<tr>`. That strips the row role, so assistive
-   technology no longer saw a table of rows and cells at all. A test asserting
-   the table still exposes its rows and cells caught it. The rows now keep
-   their native role (decision D-15).
-4. **`npm test` passed in the working tree and failed from a clean clone.**
-   The app's page tests import `ui` through its built `dist/`, which a fresh
-   clone does not have until something builds it. It went unnoticed because
-   the working tree always had a `dist/` left over, and the first "clean"
-   check was not clean either: a stray `node_modules` symlink above the clone
-   let TypeScript quietly resolve `ui` to the original repository's build. Only
-   removing it exposed the failure. The root `test` and `typecheck` scripts now
-   build `ui` first, as `dev` already did. Lesson: a clean-checkout check has
-   to rule out everything above the checkout, not only inside it.
-5. **The story test passed and did not type-check.** The test that renders
-   every Storybook story (T-5.2) was generated iterating one object of all
-   five story modules. Vitest ran it green, 76 of 76, but `tsc` rejected it:
-   a union of five modules' composed stories has no single component type
-   to render. Vitest strips types rather than checking them, so a green test
-   run said nothing about it. Each module is now composed on its own and the
-   results flattened into a typed list. The lesson from the first correction
-   again: the check that counts is the compiler, not the test runner.
-6. **A test's expected answer was guessed, twice.** The API test pinning
-   every patient whose name contains "an" (T-6.7) was written with the
-   expected ids worked out by eye from the seed data. It failed; the API was
-   right, the expectation was missing Jordan. Corrected by eye again, it
-   failed again, missing Morgan. Only then was the set derived by a script
-   over `SeedData.cs`, and it matched what the API returned. A test whose
-   expected value is guessed tests the guess; had the guess happened to
-   agree with a bug, it would have passed. Expected values now come from the
-   specification or the data, computed, never recalled.
-7. **The documentation promised a check that did not exist.** The library
-   README said its props tables were "checked against" the code, and T-4.1
-   had verified them once by script. But nothing re-ran that check, and no
-   test existed. The first clarity pass in T-6.6 caught it. The fix made the
-   claim true rather than deleting it: `src/readme.test.ts` now compares
-   every props table with its interface and defaults. The second pass then
-   found that test's own default parser misread one-line signatures. The
-   Contributing walkthrough would have failed on exactly that, when followed
-   literally.
-
-Two smaller slips were the agent's own measurement errors rather than defects,
-and are recorded in `AutoPhase.md` because they are the kind that produce false
-results: an end-to-end check that reported every call failing because its
-"is the server up yet" test counted the proxy's error page as up, and a
-browser read of the Search button taken in the same tick as the click, before
-React had applied the update. Both were re-run properly before anything was
-concluded from them.
+1. **The toolchain had never type-checked.** Phase 0 was marked done because
+   the config looked consistent. The first real `tsc` run failed three ways,
+   underneath which Vitest 2 had nested its own Vite 5 against the build's
+   Vite 6. Fixed at the root (Vite import types, `defineConfig` from
+   `vitest/config`, Vitest 3). Lesson: run the compiler.
+2. **The loading Button lost its accessible name.** `visibility: hidden` kept
+   the width but removed the label from the accessibility tree. A test
+   querying the button by name while loading caught it; the label is now
+   `opacity: 0`.
+3. **Keyboard rows broke the table.** `role="button"` on each `<tr>` stripped
+   the row role, so screen readers lost the table. A test caught it; rows keep
+   their native role (D-15).
+4. **`npm test` failed from a clean clone.** The app's tests import `ui` from
+   `dist/`, which a fresh clone lacks, and a stray `node_modules` symlink above
+   the first "clean" clone hid it. The root scripts now build `ui` first.
+5. **A test passed and did not type-check.** Vitest strips types, so the
+   story test ran green while `tsc` rejected it. Lesson 1 again.
+6. **A test's expected answer was guessed, twice.** The API search test's
+   expected ids were worked out by eye from the seed data and were wrong
+   twice; the API was right. The set is now computed from `SeedData.cs`.
+7. **The docs claimed a check that did not exist.** The library README said
+   its props tables were checked against the code; no test did it. The claim
+   was made true: `src/readme.test.ts` now compares every props table with
+   its interface and defaults.
+8. **The review found more (Phase 7).** A missing phone showed as a blank cell
+   on the list; a loading Button dropped keyboard focus; the API port could
+   not be overridden; process documents (this one included) had stale counts.
+   Each is fixed in its own Phase 7 commit.
 
 **Reading the history against the plan.** One commit per task, with the task
-id in the subject, with these exceptions, each explained in its own message:
+id in the subject, except:
+- `cecc901` holds all of Phase 0 and the API contract (T-2.1), though its
+  message names only T-0.1 to T-0.5. That work predates the repository.
+- `44bbc19`, `c7b9c8b`, `f504ef8` and the script change in `0f651a5` fix
+  defects rather than complete a task.
+- `e406dd7` and `196ea9c` record the pause for the manual browser check.
+- `4ab9ce8` and `36afea8` plan Phases 6 and 7; Phase 5's two tasks were added
+  in their first commit.
 
-- `cecc901` is all of Phase 0 (T-0.1 to T-0.5) and the API contract (T-2.1).
-  That work was done before the repository had any history, and its files
-  reference each other, so it could not be split after the fact.
-- Three commits fix defects rather than complete a task: `44bbc19` (the
-  toolchain that never type-checked), `c7b9c8b` (`npm test` failing while
-  `app` had no tests), and the script change inside `0f651a5`, the clean-clone
-  failure found while verifying the README.
-- `e406dd7` and `196ea9c` record the pause for the manual browser check and its
-  result. `9c5342e` (T-1.7) and `d64307b` (T-3.5) close tasks whose tests
-  had already landed beside the code they test.
+**Where the plan was wrong.** T-0.3 was closed on a check that never ran the
+compiler, and the component tasks named T-1.7's tests as their check while
+T-1.7 depended on them.
 
-**Where the plan itself was wrong.** Recorded rather than silently patched:
-T-0.3 was marked done on a check ("the config is internally consistent") that
-never ran the compiler; and the component tasks named T-1.7's tests as their
-check while T-1.7 depended on them. The tests were written first, used to
-verify each component, and committed beside it, which is also where the
-conventions put them.
+**Tests** (`npm test`, `npm run test:api`):
 
-## Time-boxes and known gaps
+| Suite | Tests | What they are |
+| --- | --- | --- |
+| `ui` components | 60 | Behaviour: roles, labels, keyboard, disabled, loading, error, empty, `—` |
+| `ui` worked example | 5 | 4 behaviour, 1 keeps the README listing identical to the source |
+| `ui` entry point | 2 | Every component is exported, nothing else |
+| `ui` stories | 19 | Smoke: every story renders |
+| `ui` README | 81 | Documentation checks: code links, contents, props tables |
+| `app` | 50 | The mapping module and both pages in every state |
+| `api` | 23 | Every endpoint, search rules, 404 body, wire shape |
 
-- **Headless browser checks.** Driving Brave with `--dump-dom` hung in the
-  agent's sandbox, so the first in-browser check (Button width while
-  loading) went to a human. Driving the same browser over the DevTools
-  protocol worked, and the page walks after that were run that way against
-  the real API.
+## Known gaps
 
-- **The API had no automated tests until Phase 6.** Through delivery its
-  behaviour was pinned by the contract and checked with curl and end to end
-  through the website. T-6.7 added the `WebApplicationFactory` tests listed
-  below as item 3 (`npm run test:api`); they are not part of the root
-  `npm test`, which needs only Node.
+- **Clickable rows aren't announced as clickable.** A focusable `<tr>` keeps
+  table navigation (D-15), but a screen reader doesn't say the row opens a
+  patient.
+- **An empty list on first load would say "No patients match your search"**
+  though nothing was searched. The seed data never triggers it.
+- **The detail page's browser tab still reads "Patients".** The page title
+  requirement is met by its `<h1>`.
+- **Back clears the search.**
 
 ## What I would do with two more hours
 
-1. **Turn the browser walks into a test suite.** Every page state was walked
-   in a real browser against the real API, but by one-off scripts. Playwright
-   running the same walks would make them repeatable, including the loading
-   Button's width.
-2. **Integration tests for the API** with `WebApplicationFactory`: the search
-   rules, the 404 body, and nulls serialised as `null`. *Done after delivery,
-   in T-6.7.*
-3. **An automated accessibility pass** (axe in the component tests), to back
-   the manual reasoning behind D-15 and the label and error wiring with a
-   tool.
-4. **Keep the search when coming Back** from a patient, by putting the search
-   term in the list page's URL.
+1. **Make clickable rows announce themselves:** a real link in the first cell,
+   the row still clickable around it.
+2. **Keep the search when coming Back,** by putting it in the list page's URL.
+3. **Turn the browser walks into Playwright tests,** including the loading
+   Button's width and focus.
+4. **An automated accessibility pass** (axe in the component tests).
+5. **A generic Table row type,** so `onRowClick` returns the consumer's own
+   row type and the id needs no runtime check.

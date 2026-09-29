@@ -248,3 +248,18 @@ Run of 2026-09-28, Phase 6, full auto (commits unreviewed — the user is asleep
 - **Baseline:** 76 ui + 27 app = 103, api 0.
 - **End:** **164 ui + 47 app + 23 api = 234 tests, all passing.** `npm run typecheck` clean; `npm run build` (ui and app) and `build-storybook` clean.
 - **Stopped because Phase 6 is complete:** T-6.1 to T-6.7 all Done. The plan has no separate close-out task. The documents were updated inside each task, and this entry records the counts.
+
+---
+
+# Phase 7 — fixes from the review against the brief (29 Sep, owner present)
+
+A four-area review graded the project against the brief (library 8, docs 8, integration 8, API 9, process 7). The owner accepted the recommended fixes in a grilling round (Q1–Q11), so this phase ran with the owner in the conversation rather than in full auto.
+
+- **T-7.1 Concise docs:** library README 7,572 → 5,343 words, project README 1,055 → 698. Three inaccuracies fixed on the way. Verified by `npm test` (README tests included).
+- **T-7.2 "—" on Page 1:** `toPatientRow` in the mapping module spells a missing phone as `—`; D-13 amended. Page and mapping tests added. Mutation: an unmapped phone fails both.
+- **T-7.3 Loading Button keeps focus:** `aria-disabled` while loading, and activation blocked in code (including form submission); `disabled` stays native. Two test assertions were rewritten to the new rule (owner's decision, Q7). Mutations: without `preventDefault`, two submit tests fail; with native disabled for loading, the tab-order test fails. The first version of that test passed vacuously under jsdom and was replaced. Checked in Chromium against the running site: focus stays on Search while busy and after.
+- **T-7.4 API port:** 5080 only as the default. Checked four ways (npm run api, `--urls`, `ASPNETCORE_URLS` without a launch profile, no configuration).
+- **T-7.5 Harness:** `phase-tasks` committed; `.claude/README.md` maps the generic skill terms to this repo.
+- **T-7.6 Share-ready:** the brief copies are untracked and ignored (they remain in history, so share privately); `.idea/` and `Summary.md` ignored.
+- **T-7.7 Process record:** INTERVIEW.md rewritten concisely. Counts come from commands run on the final tree: 8 phases and 44 tasks from `grep` over `docs/TASKS.md`; test counts per file from `vitest --reporter=verbose`, split into behaviour and documentation tests. Also added: post-delivery phases labelled with their commit times, the Phase 1 drafting disclosed, the `cecc901` note corrected, the review's deferred items listed.
+- **T-7.8, T-7.9:** blocked on the owner (a first-person review account; the push).
