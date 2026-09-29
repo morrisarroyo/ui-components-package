@@ -481,8 +481,49 @@ accepted these fixes (grilling round 1, Q1–Q11).
   owner personally reviewed or verified.
 - **Verify:** the owner confirms every sentence is true.
 
+### T-7.10 Clickable rows announce themselves
+- **Depends on:** T-1.5
+- **Status:** Not started
+- **Done when:** in a clickable Table, the first cell of each row is a real
+  `<button>` named by that cell's content, so a screen reader announces the row
+  as actionable; the whole row stays clickable; `onRowClick` fires once per
+  activation; no prop changes; D-15 and the README updated.
+- **Verify:** Table tests for Tab to the button, Enter, Space, a click on the
+  button and a click elsewhere in the row (each fires once), and no buttons
+  when not clickable; mutation check.
+
+### T-7.11 The empty message only follows a search
+- **Depends on:** T-3.3
+- **Status:** Not started
+- **Done when:** the list says "No patients match your search" only when a
+  search has run; an empty unfiltered list says "No patients yet".
+- **Verify:** page tests for both.
+
+### T-7.12 The detail page titles the browser tab
+- **Depends on:** T-3.4
+- **Status:** Not started
+- **Done when:** the tab reads the patient's full name on Page 2 and "Patients"
+  on Page 1.
+- **Verify:** page tests on `document.title`.
+
+### T-7.13 Back keeps the search
+- **Depends on:** T-3.4
+- **Status:** Not started
+- **Done when:** the list page keeps its search in the URL (`/?search=…`),
+  runs it on load, and the detail page's Back returns to it; Back from a
+  directly opened patient still goes to `/`.
+- **Verify:** a test that searches, opens a patient, presses Back and sees the
+  search and its results; a test for Back from a direct link.
+
+### T-7.14 Walkthrough outline
+- **Depends on:** T-7.13
+- **Status:** Not started
+- **Done when:** a timed, one-page outline for the 15–20 minute recording
+  exists for the owner, drawn from INTERVIEW.md.
+- **Verify:** every claim in it is in INTERVIEW.md or the code.
+
 ### T-7.9 Submit
-- **Depends on:** T-7.1 … T-7.8
+- **Depends on:** T-7.1 … T-7.8, T-7.10 … T-7.14
 - **Status:** Blocked — needs the owner's go-ahead
 - **Done when:** the repository is pushed to a private GitHub repository shared
   with the reviewers.
