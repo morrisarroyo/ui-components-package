@@ -14,9 +14,10 @@ one stylesheet, no styling framework required.
 ## Contents
 
 1. [Getting started](#getting-started)
-2. [Styling](#styling)
-3. [Component reference](#component-reference)
-4. [Contributing](#contributing)
+2. [A real screen: patient lookup](#a-real-screen-patient-lookup)
+3. [Styling](#styling)
+4. [Component reference](#component-reference)
+5. [Contributing](#contributing)
 
 ---
 
@@ -114,6 +115,169 @@ wrappers:
 | `CardProps` | Card's props. |
 | `TableProps`, `TableColumn`, `TableRow` | Table's props, one column definition, one row. |
 | `DescriptionListProps`, `DescriptionListItem` | DescriptionList's props, one label/value item. |
+
+## A real screen: patient lookup
+
+The component reference below shows each component alone. This is all five
+working together the way a product screen uses them: a search form in a
+`Card`, results in a `Table`, the chosen record in a `DescriptionList`, and
+the loading, validation, empty and failure cases each handled by the
+component that owns them.
+
+Run it with `npm run storybook` and open **Examples / Patient lookup**. Search
+`lo` for results, `zz` for none, `error` for a failed request, or a single
+letter for the validation error, then click a row.
+
+<img src="docs/examples/patient-lookup.png" alt="Patient lookup after searching &quot;lo&quot; and clicking Ada Lovelace: search card, results table with the row highlighted, and her record in a description list" width="560">
+
+What to notice:
+
+- **The screen holds the data; the components hold the states.** The screen
+  never styles a loading button, a focused row or an error border. It passes
+  `loading`, `errorMessage` or `emptyMessage` and the component does the rest.
+- **One `primary` button.** Search is the screen's main action; Try again and
+  Close are `secondary` and `sm` because they sit in a card header.
+- **Missing values.** `DescriptionList` shows `—` for a missing value on its
+  own; `Table` prints cells exactly as given, so the screen maps a missing
+  health card to `—` itself.
+- **Layout is yours.** The `div`s with inline grid and flex styles are the
+  screen's layout. They position components; they never restyle them.
+
+The listing is the source of the story, apart from the import path, and a test
+fails if the two drift apart.
+
+<!-- example:PatientLookup -->
+```tsx
+import { useState, type FormEvent } from 'react';
+import { Button, Card, DescriptionList, Table, TextField, type TableRow } from 'ui';
+
+interface Patient {
+  id: string;
+  name: string;
+  dateOfBirth: string;
+  healthCardNumber?: string;
+  phone?: string;
+}
+
+const PATIENTS: Patient[] = [
+  { id: 'p1', name: 'Ada Lovelace', dateOfBirth: '10 Dec 1985', healthCardNumber: '1234-567-890', phone: '555-0101' },
+  { id: 'p2', name: 'Alan Turing', dateOfBirth: '23 Jun 1972', phone: '555-0102' },
+  { id: 'p3', name: 'Grace Hopper', dateOfBirth: '9 Dec 1966', healthCardNumber: '9876-543-210' },
+];
+
+/** Stands in for a real API call: answers after a short delay, and fails for "error". */
+function searchPatients(query: string): Promise<Patient[]> {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      if (query.toLowerCase() === 'error') {
+        reject(new Error('Search failed'));
+      } else {
+        resolve(PATIENTS.filter((patient) => patient.name.toLowerCase().includes(query.toLowerCase())));
+      }
+    }, 300);
+  });
+}
+
+const columns = [
+  { key: 'name', header: 'Name' },
+  { key: 'dateOfBirth', header: 'Date of birth' },
+  { key: 'healthCardNumber', header: 'Health card' },
+];
+
+export function PatientLookup() {
+  const [query, setQuery] = useState('');
+  const [queryError, setQueryError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [failed, setFailed] = useState(false);
+  const [results, setResults] = useState<Patient[] | null>(null);
+  const [selected, setSelected] = useState<Patient | null>(null);
+
+  async function search(event?: FormEvent) {
+    event?.preventDefault();
+    if (query.trim().length < 2) {
+      setQueryError('Enter at least two characters.');
+      return;
+    }
+    setQueryError('');
+    setLoading(true);
+    setFailed(false);
+    setSelected(null);
+    try {
+      setResults(await searchPatients(query.trim()));
+    } catch {
+      setResults(null);
+      setFailed(true);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  // Table cells show exactly what they are given, so the screen decides how a
+  // missing value reads. DescriptionList does this itself.
+  const rows: TableRow[] = (results ?? []).map((patient) => ({
+    id: patient.id,
+    name: patient.name,
+    dateOfBirth: patient.dateOfBirth,
+    healthCardNumber: patient.healthCardNumber ?? '—',
+  }));
+
+  return (
+    <div style={{ display: 'grid', gap: 16, maxWidth: 720 }}>
+      <Card title="Find a patient">
+        <form onSubmit={search} style={{ display: 'flex', gap: 8, alignItems: 'flex-start' }}>
+          <div style={{ flex: 1 }}>
+            <TextField
+              label="Name"
+              value={query}
+              onChange={setQuery}
+              placeholder="At least two letters, e.g. Lo"
+              errorMessage={queryError}
+            />
+          </div>
+          {/* Drops the button to the input's line: the label's 16px line plus the field's 4px gap. */}
+          <div style={{ paddingTop: 20 }}>
+            <Button type="submit" loading={loading}>
+              Search
+            </Button>
+          </div>
+        </form>
+      </Card>
+
+      {failed ? (
+        <Card title="Results" actions={<Button variant="secondary" size="sm" onClick={() => search()}>Try again</Button>}>
+          <p>Something went wrong. Your search was not run.</p>
+        </Card>
+      ) : null}
+
+      {results ? (
+        <Card title="Results">
+          <Table
+            columns={columns}
+            rows={rows}
+            emptyMessage="No patients match that name"
+            onRowClick={(row) => setSelected(results.find((patient) => patient.id === row.id) ?? null)}
+          />
+        </Card>
+      ) : null}
+
+      {selected ? (
+        <Card
+          title={selected.name}
+          actions={<Button variant="secondary" size="sm" onClick={() => setSelected(null)}>Close</Button>}
+        >
+          <DescriptionList
+            items={[
+              { label: 'Date of birth', value: selected.dateOfBirth },
+              { label: 'Health card', value: selected.healthCardNumber },
+              { label: 'Phone', value: selected.phone },
+            ]}
+          />
+        </Card>
+      ) : null}
+    </div>
+  );
+}
+```
 
 ---
 

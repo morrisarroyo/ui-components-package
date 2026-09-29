@@ -336,7 +336,7 @@ need unit tests of their own.
 
 ### T-6.2 Worked example: a real screen
 - **Depends on:** T-5.1
-- **Status:** Not started
+- **Status:** Done
 - **Done when:** a "Patient lookup" example that uses all five components
   together the way a product screen would (search in a Card, results in a
   Table, the selected record in a DescriptionList, loading, error and empty
