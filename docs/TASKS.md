@@ -396,7 +396,7 @@ need unit tests of their own.
 
 ### T-6.7 Unit tests for `app` and `api`
 - **Depends on:** T-3.5, T-2.4
-- **Status:** Not started
+- **Status:** Done
 - **Done when:** the `app` mapping and API client have unit tests for every
   field rule and failure path not already covered, and `api` has an xUnit
   test project covering every endpoint in `docs/API-CONTRACT.md`, the search

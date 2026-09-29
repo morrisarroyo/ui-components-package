@@ -130,3 +130,96 @@ describe('fetchPatient', () => {
     expect(await fetchPatient('p-0001')).toEqual({ status: 'error' });
   });
 });
+
+describe('toPatientDisplay, field by field', () => {
+  it.each([
+    ['female', 'Female'],
+    ['male', 'Male'],
+    ['other', 'Other'],
+    ['unknown', 'Unknown'],
+  ])('capitalises the contract gender %s', (gender, expected) => {
+    expect(toPatientDisplay({ ...complete, gender }).gender).toBe(expected);
+  });
+
+  it('joins the given and family name with one space', () => {
+    expect(toPatientDisplay({ ...complete, givenName: 'Élise', familyName: 'Gagnon' }).name).toBe('Élise Gagnon');
+  });
+
+  it('treats a blank phone as missing', () => {
+    expect(toPatientDisplay({ ...complete, phone: '' }).phone).toBeNull();
+  });
+
+  it('keeps a present value exactly as sent, without trimming it', () => {
+    expect(toPatientDisplay({ ...complete, phone: '+1 416 555 0133 ' }).phone).toBe('+1 416 555 0133 ');
+  });
+
+  it('skips blank address parts as well as null ones', () => {
+    const display = toPatientDisplay({
+      ...complete,
+      address: { line: '  ', city: 'Halifax', region: '', postalCode: 'B3H 1A1' },
+    });
+
+    expect(display.address).toBe('Halifax, B3H 1A1');
+  });
+
+  it.each(['1984-00-02', '1984-3-2', '02/03/1984', ''])(
+    'passes the unreadable birth date %j through unchanged',
+    (birthDate) => {
+      expect(toPatientDisplay({ ...complete, birthDate }).birthDate).toBe(birthDate);
+    },
+  );
+
+  it('formats the last month of the year', () => {
+    expect(toPatientDisplay({ ...complete, birthDate: '1989-12-03' }).birthDate).toBe('3 Dec 1989');
+  });
+
+  it('does not change the payload it is given', () => {
+    const dto = structuredClone(complete);
+
+    toPatientDisplay(dto);
+
+    expect(dto).toEqual(complete);
+  });
+});
+
+describe('fetchPatients, more failures', () => {
+  it('reports a body that is not JSON as an error', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response('<html>proxy error</html>', { status: 200 })));
+
+    expect(await fetchPatients()).toEqual({ status: 'error' });
+  });
+
+  it('returns an empty list, not an error, for no matches', async () => {
+    respond(200, []);
+
+    expect(await fetchPatients('zzz')).toEqual({ status: 'ok', patients: [] });
+  });
+
+  it('treats a 404 from the list endpoint as an error, not as no results', async () => {
+    respond(404, {});
+
+    expect(await fetchPatients()).toEqual({ status: 'error' });
+  });
+});
+
+describe('fetchPatient, more failures', () => {
+  it('encodes the id into the path', async () => {
+    respond(200, complete);
+
+    await fetchPatient('a/b c');
+
+    expect(fetch).toHaveBeenCalledWith('/api/patients/a%2Fb%20c');
+  });
+
+  it('reports a network failure as an error', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new TypeError('Failed to fetch')));
+
+    expect(await fetchPatient('p-0001')).toEqual({ status: 'error' });
+  });
+
+  it('reports a body that is not JSON as an error', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response('not json', { status: 200 })));
+
+    expect(await fetchPatient('p-0001')).toEqual({ status: 'error' });
+  });
+});

@@ -46,3 +46,6 @@ static bool Matches(Patient patient, string term) =>
     patient.GivenName.Contains(term, StringComparison.OrdinalIgnoreCase)
     || patient.FamilyName.Contains(term, StringComparison.OrdinalIgnoreCase)
     || $"{patient.GivenName} {patient.FamilyName}".Contains(term, StringComparison.OrdinalIgnoreCase);
+
+// Makes the entry point visible to the test project's WebApplicationFactory.
+public partial class Program;

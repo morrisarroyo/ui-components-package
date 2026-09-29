@@ -27,7 +27,7 @@ packages/ui     the component library    → packages/ui/README.md for how to us
 packages/app    the website
   src/api/        the API client and the one payload-to-display mapping
   src/pages/      the two pages
-api/            the mock API
+api/            the mock API, and its tests in api/Intrahealth.Api.Tests
 docs/           design document, API contract, tasks, decisions, conventions
 ```
 
@@ -66,12 +66,14 @@ the intended behaviour, not a setup problem.
 | `app` | `npm run build --workspace app` | Type-checks and builds the site for production. Needs `ui` built. |
 | `app` | `npm run test --workspace app` | Mapping and page tests. Needs `ui` built. |
 | `api` | `dotnet run --project api/Intrahealth.Api` | The mock API, the same as `npm run api`. |
+| `api` | `dotnet test api/Intrahealth.Api.Tests` | The API's tests, the same as `npm run test:api`. |
 
 ## Tests
 
 ```bash
 npm test                       # builds ui, then runs every workspace's tests: ui, then app
 npm run typecheck              # builds ui, then runs tsc across both workspaces
+npm run test:api               # the mock API's xUnit tests (needs the .NET SDK)
 ```
 
 Both build `ui` first because `app` resolves `ui` through its built `dist/`,
@@ -79,15 +81,20 @@ exactly as an outside consumer would. Run per package, `app`'s tests and
 type-check need `npm run build --workspace ui` to have run once.
 
 - **`ui`** — Vitest and Testing Library, one test file beside each
-  component. They check behaviour, not markup: a disabled or loading Button
+  component, plus a test that the entry point exports every component, one
+  that renders every Storybook story, and one that keeps the README's worked
+  example identical to its source. They check behaviour, not markup: a disabled or loading Button
   cannot be clicked or tabbed to, a TextField's error replaces its helper
   text, a clickable Table row works from the keyboard, a DescriptionList shows
   `—` for a missing value. There are no snapshot tests.
 - **`app`** — the display mapping (names, dates, missing fields, the three
   outcomes of a request) and both pages in each of their states, against
   mocked API responses.
-- **`api`** — no automated tests; its behaviour is specified in
-  `docs/API-CONTRACT.md` and exercised end to end through the website.
+- **`api`** — xUnit in `api/Intrahealth.Api.Tests`, running the real API in
+  memory through `WebApplicationFactory`: every endpoint in
+  `docs/API-CONTRACT.md`, the search filter's matching rules, the 404
+  ProblemDetails body, the wire shape (camelCase, nulls sent rather than
+  omitted), and the seed patients with missing fields.
 
 ## The API
 

@@ -275,3 +275,27 @@ page in `app` (would mix library states into the website).
 **What would change it.** Interaction or visual-regression tests in CI, at
 which point the stories become the test fixtures via the Storybook Vitest
 addon.
+
+---
+
+## D-18 — The API is tested in memory, through its real pipeline
+
+**Decided:** 2026-09-28 · **Status:** settled
+
+An xUnit project, `api/Intrahealth.Api.Tests`, hosts the real `Program` with
+`WebApplicationFactory` and sends HTTP requests to it in memory. Tests read
+the raw JSON rather than deserialising into `Patient`.
+
+**Why.** The contract is the wire shape — camelCase names, nulls present
+rather than omitted, the 404 ProblemDetails body — and deserialising into
+the record the API serialised from would hide exactly those. In-memory
+hosting runs the same routing and serialisation as `dotnet run` with no port
+to allocate. The only change to the API is a `public partial class Program`
+so the factory can see the entry point.
+
+**Considered.** Unit-testing the search predicate alone (misses routing,
+query binding and serialisation), and tests against a running server on
+:5080 (needs orchestration and a free port, for no extra coverage).
+
+**What would change it.** A real database, at which point the factory would
+swap the data source for a test one.

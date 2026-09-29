@@ -13,7 +13,8 @@
     "test": "npm run build --workspace ui && npm run test --workspaces --if-present",
     "typecheck": "npm run build --workspace ui && npm run typecheck --workspaces --if-present",
     "api": "dotnet run --project api/Intrahealth.Api",
-    "storybook": "npm run storybook --workspace ui"
+    "storybook": "npm run storybook --workspace ui",
+    "test:api": "dotnet test api/Intrahealth.Api.Tests"
   },
   "engines": {
     "node": ">=20"

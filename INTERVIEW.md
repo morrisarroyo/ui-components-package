@@ -130,6 +130,15 @@ reconstructed at the end.
    run said nothing about it. Each module is now composed on its own and the
    results flattened into a typed list. The lesson from the first correction
    again: the check that counts is the compiler, not the test runner.
+6. **A test's expected answer was guessed, twice.** The API test pinning
+   every patient whose name contains "an" (T-6.7) was written with the
+   expected ids worked out by eye from the seed data. It failed; the API was
+   right, the expectation was missing Jordan. Corrected by eye again, it
+   failed again, missing Morgan. Only then was the set derived by a script
+   over `SeedData.cs`, and it matched what the API returned. A test whose
+   expected value is guessed tests the guess; had the guess happened to
+   agree with a bug, it would have passed. Expected values now come from the
+   specification or the data, computed, never recalled.
 
 Two smaller slips were the agent's own measurement errors rather than defects,
 and are recorded in `AutoPhase.md` because they are the kind that produce false
@@ -174,9 +183,11 @@ conventions put them.
   protocol worked, and the page walks after that were run that way against
   the real API.
 
-- **The API has no automated tests.** Its behaviour is pinned by the
-  contract and was checked with curl and end to end through the website, but
-  nothing re-runs that on a change.
+- **The API had no automated tests until Phase 6.** Through delivery its
+  behaviour was pinned by the contract and checked with curl and end to end
+  through the website. T-6.7 added the `WebApplicationFactory` tests listed
+  below as item 3 (`npm run test:api`); they are not part of the root
+  `npm test`, which needs only Node.
 
 ## What I would do with two more hours
 
@@ -188,7 +199,8 @@ conventions put them.
    running the same walks would make them repeatable, including the loading
    Button's width.
 3. **Integration tests for the API** with `WebApplicationFactory`: the search
-   rules, the 404 body, and nulls serialised as `null`.
+   rules, the 404 body, and nulls serialised as `null`. *Done after delivery,
+   in T-6.7.*
 4. **An automated accessibility pass** (axe in the component tests), to back
    the manual reasoning behind D-15 and the label and error wiring with a
    tool.
