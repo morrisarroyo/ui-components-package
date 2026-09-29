@@ -362,7 +362,7 @@ need unit tests of their own.
 
 ### T-6.4 Extending the library
 - **Depends on:** T-6.3
-- **Status:** Not started
+- **Status:** Done
 - **Done when:** `packages/ui/README.md` has an "Extending the library"
   section that starts from the scaffold command, walks through adding a
   component end to end, and explains which architectural choices make that

@@ -17,7 +17,7 @@ one stylesheet, no styling framework required.
 2. [A real screen: patient lookup](#a-real-screen-patient-lookup)
 3. [Styling](#styling)
 4. [Component reference](#component-reference)
-5. [Contributing](#contributing)
+5. [Contributing: extending the library](#contributing-extending-the-library)
 
 ---
 
@@ -387,7 +387,7 @@ Each component has one CSS Module beside it, and every value in it is a
 The token sheet has no border width, so hairline borders are a literal `1px`,
 and each literal in a component stylesheet carries a comment saying why no
 token fits. A new component that follows these rules matches the existing
-five by construction — see [Contributing](#contributing).
+five by construction — see [Contributing: extending the library](#contributing-extending-the-library).
 
 ---
 
@@ -710,27 +710,40 @@ edits (use [TextField](#textfield)).
 
 ---
 
-## Contributing
+## Contributing: extending the library
 
-How to add a sixth component so it fits with the existing five. The house
-style this summarises is `docs/CONVENTIONS.md` in the repository root.
+How to add a sixth component so it fits with the existing five. It starts
+from one command, walks through turning what that command generates into a
+real component (a `Badge`), and ends with why each step is short. The house
+style behind it is `docs/CONVENTIONS.md` in the repository root.
 
-### 1. Four files, one place
+### Start with the scaffold
+
+```bash
+npm run new-component --workspace ui -- Badge
+```
+
+This creates the four files every component has, next to each other, and
+exports the component from the entry point:
 
 ```
 src/components/Badge.tsx          the component
-src/components/Badge.module.css   its styles
+src/components/Badge.module.css   its styles, from tokens only
 src/components/Badge.test.tsx     its behaviour tests
 src/components/Badge.stories.tsx  its Storybook stories, one per variant and state
+src/index.ts                      + export { Badge } and type { BadgeProps }
 ```
 
-Run `npm run storybook` from the repository root to browse every component
-and state on http://localhost:6006. Stories are left out of the published
-build.
+What it generates already passes the type check, its own test, the
+entry-point test and the story test. So from here on you are changing working
+code, not wiring anything up. The name must be PascalCase and new; the script
+refuses anything else ([`scripts/new-component.mjs:24`](scripts/new-component.mjs#L24)).
 
 No subfolders and no barrel files inside `components/`.
 
-### 2. The component
+### 1. Write the component
+
+Replace the generated `Badge.tsx`:
 
 ```tsx
 // src/components/Badge.tsx
@@ -753,7 +766,7 @@ export function Badge({ tone = 'neutral', children }: BadgeProps) {
 
 - A **named function export**, not a default export and not `React.FC`.
 - Props in an **exported interface** named `<Component>Props`, and a **doc
-  comment on every prop** — the props table in this README is checked against
+  comment on every prop**. The props table in this README is checked against
   them.
 - **Union types, never `string`,** for anything with a fixed set of values, and
   export the union.
@@ -761,7 +774,9 @@ export function Badge({ tone = 'neutral', children }: BadgeProps) {
 - **No colour or pixel props, no `className`, no `style`, no `{...rest}`
   spread onto the DOM.** The documented props are the whole API.
 
-### 3. Styles, from tokens only
+### 2. Style it from tokens
+
+Replace the generated `Badge.module.css`:
 
 ```css
 /* src/components/Badge.module.css */
@@ -790,29 +805,25 @@ export function Badge({ tone = 'neutral', children }: BadgeProps) {
   token in `src/tokens.css`, not a literal repeated.
 - Class names are camelCase and name the part (`.header`, `.emptyValue`), not
   the look (`.blueBox`). No element selectors, no `:global`.
-- Keyboard focus uses `:focus-visible` and the `--ui-focus-ring-*` tokens.
+- Keyboard focus uses `:focus-visible` and the `--ui-focus-ring-*` tokens, as
+  Button does ([`src/components/Button.module.css:18`](src/components/Button.module.css#L18)).
 
-### 4. Accessible by default
+### 3. Make it accessible
 
-- Label every input, and associate it with `useId` — never a hand-written id.
+- Label every input, and associate it with `useId` — never a hand-written id
+  (TextField does this at [`src/components/TextField.tsx:30`](src/components/TextField.tsx#L30)).
 - Anything clickable works from the keyboard: reachable with Tab, activated
   with Enter (and Space where the role implies it).
 - Disabled means the native `disabled` attribute, not a grey style on
   something still clickable.
 - Decorative parts, such as spinners, are `aria-hidden`.
 
-### 5. Export it from the entry point
+A Badge is plain text, so it needs none of these; a component with an input or
+a click handler needs all of them.
 
-```ts
-// src/index.ts
-export { Badge } from './components/Badge';
-export type { BadgeProps, BadgeTone } from './components/Badge';
-```
+### 4. Test its behaviour
 
-`src/index.ts` is the only public entry point. A component that is not exported
-there does not exist for consumers.
-
-### 6. Test its behaviour
+Replace the generated `Badge.test.tsx`:
 
 ```tsx
 // src/components/Badge.test.tsx
@@ -825,6 +836,17 @@ describe('Badge', () => {
 
     expect(screen.getByText('Allergy')).toBeInTheDocument();
   });
+
+  it('renders the tones differently from each other', () => {
+    render(
+      <>
+        <Badge tone="neutral">Neutral</Badge>
+        <Badge tone="danger">Danger</Badge>
+      </>,
+    );
+
+    expect(screen.getByText('Neutral').className).not.toBe(screen.getByText('Danger').className);
+  });
 });
 ```
 
@@ -833,13 +855,58 @@ Vitest and Testing Library. Query the way a user finds things (`getByRole`,
 fire, an error replaces a hint — and never write snapshot tests. One behaviour
 per test, named as a sentence.
 
+### 5. Give it a story per state
+
+Replace the generated `Badge.stories.tsx`:
+
+```tsx
+// src/components/Badge.stories.tsx
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import { Badge } from './Badge';
+
+const meta = {
+  title: 'Components/Badge',
+  component: Badge,
+  args: { children: 'Allergy' },
+} satisfies Meta<typeof Badge>;
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Neutral: Story = {};
+
+export const Danger: Story = {
+  args: { tone: 'danger' },
+};
+```
+
+`npm run storybook` shows it under Components / Badge. The story test renders
+every story it finds, so a story that throws fails `npm test`.
+
+### 6. Export its types
+
+The scaffold exported `Badge` and `BadgeProps`. Add every other public type,
+here the `tone` union:
+
+```ts
+// src/index.ts
+export { Badge } from './components/Badge';
+export type { BadgeProps, BadgeTone } from './components/Badge';
+```
+
+`src/index.ts` is the only public entry point. A component that is not exported
+there does not exist for consumers, and the entry-point test fails.
+
 ### 7. Document it here
 
 Add a section under [Component reference](#component-reference): what it is
 for, a props table (name, type, default, description), one usage example that
-runs as written, and when to use it and when not to. Add it to the table at the
-top of this file and to the exported-types table in
-[Getting started](#getting-started).
+runs as written, a States table, and when to use it and when not to. Add its
+types to the exported-types table in [Getting started](#getting-started).
+
+For the States table's pictures, add a row per state to the `STATES` list in
+[`scripts/capture-states.mjs:21`](scripts/capture-states.mjs#L21) and run
+`npm run capture-states --workspace ui`.
 
 **A component that is not documented is not done.** An undocumented prop and a
 documented prop that does not exist are equally wrong, so a prop and its table
@@ -848,7 +915,25 @@ row change in the same commit.
 ### 8. Check it
 
 ```bash
-npm run test --workspace ui       # behaviour tests
-npm run typecheck --workspace ui  # types
-npm run build --workspace ui      # the package consumers get
+npm run typecheck --workspace ui        # types
+npm run test --workspace ui             # behaviour, entry point and story tests
+npm run build --workspace ui            # the package consumers get
+npm run build-storybook --workspace ui  # every story builds
 ```
+
+### Why adding a component is this short
+
+Most of the steps above are writing the component itself. The rest is short
+because of choices made once, for all components:
+
+| Choice | What it saves you | Where it lives |
+| --- | --- | --- |
+| **Every value is a token, defined once.** | You never pick a colour, a spacing or a font size; you name a role (`--ui-color-danger`). A new component matches the other five by construction, and a token change reaches it with no edit. | [`src/tokens.css:13`](src/tokens.css#L13) |
+| **CSS Modules with prefixed, hashed class names.** | Class names cannot collide with another component's or the app's, so `.badge` is a safe name and there is no naming scheme to follow. Consumers cannot target the internals either, so restyling a component never breaks an app. | [`vite.config.ts:11`](vite.config.ts#L11) |
+| **One entry point, enforced by the package's `exports` map.** | The public API is one file. Adding a component is adding two lines there; nothing else needs registering, and no consumer can depend on a file you later move. | [`src/index.ts:9`](src/index.ts#L9), [`package.json:9`](package.json#L9) |
+| **The tokens load with the entry point.** | A new component's stylesheet can use any token with no import of its own. | [`src/index.ts:7`](src/index.ts#L7) |
+| **The four files sit side by side.** | Everything about a component is in one place, and deleting a component is deleting four files and two lines. | `src/components/` |
+| **Tests find components; nobody lists them.** | The entry-point test checks every file in `components/` is exported, and the story test renders every story file. A new component is held to both without a test being edited. | [`src/index.test.ts:6`](src/index.test.ts#L6), [`src/stories.test.tsx:9`](src/stories.test.tsx#L9) |
+| **Storybook runs on the library's own Vite config.** | Stories render with the same CSS Modules naming and tokens a consumer gets, so what you see in Storybook is what ships. There is no second build to configure. | [`.storybook/main.ts:7`](.storybook/main.ts#L7), [`.storybook/preview.ts:4`](.storybook/preview.ts#L4) |
+| **React is external to the build.** | A new component adds its own code to the package and nothing else; the consumer's React is the one it runs on. | [`vite.config.ts:23`](vite.config.ts#L23) |
+| **The scaffold writes the conventions for you.** | The four files start in the house style and already pass every check. | [`scripts/new-component.mjs:27`](scripts/new-component.mjs#L27) |

@@ -42,6 +42,8 @@ api/Intrahealth.Api/          the ASP.NET Core project
 `components/Name.tsx`, `components/Name.module.css`, `components/Name.test.tsx`,
 `components/Name.stories.tsx`. Stories are usage examples for Storybook; they
 are excluded from the library build and are not documentation on their own.
+Start a new component with `npm run new-component --workspace ui -- Name`,
+which writes all four in this style and adds the export.
 No barrel files inside `components/` — `src/index.ts` is the only place that
 re-exports.
 
