@@ -53,25 +53,23 @@ export function Table({
               // Rows carry no guaranteed identity, so position is the key.
               key={rowIndex}
               className={isClickable ? styles.clickableRow : undefined}
-              // A clickable row has to be reachable and activatable from the
-              // keyboard, not just the mouse. It keeps its native row role:
-              // role="button" would hide its cells from table navigation.
-              tabIndex={isClickable ? 0 : undefined}
+              // The whole row is clickable with a mouse. A click on the first
+              // cell's button bubbles here too, so every activation, by mouse,
+              // Enter or Space, reaches onRowClick exactly once.
               onClick={isClickable ? () => onRowClick?.(row) : undefined}
-              onKeyDown={
-                isClickable
-                  ? (event) => {
-                      if (event.key === 'Enter' || event.key === ' ') {
-                        event.preventDefault();
-                        onRowClick?.(row);
-                      }
-                    }
-                  : undefined
-              }
             >
-              {columns.map((column) => (
+              {columns.map((column, columnIndex) => (
                 <td key={column.key} className={styles.cell}>
-                  {row[column.key]}
+                  {isClickable && columnIndex === 0 ? (
+                    // A real button, named by the cell, so the row is reachable
+                    // with Tab and announced as actionable, while the row keeps
+                    // its native role and the table stays navigable (D-15).
+                    <button type="button" className={styles.rowButton}>
+                      {row[column.key]}
+                    </button>
+                  ) : (
+                    row[column.key]
+                  )}
                 </td>
               ))}
             </tr>

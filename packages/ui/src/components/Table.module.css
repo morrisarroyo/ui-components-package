@@ -29,13 +29,26 @@
 }
 
 .clickableRow:hover,
-.clickableRow:focus-visible {
+.clickableRow:focus-within {
   background: var(--ui-color-surface-subtle);
 }
 
-.clickableRow:focus-visible {
+/* The first cell's button reads as the cell's text: the row, not the button,
+   carries the hover and focus look. */
+.rowButton {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: inherit;
+  cursor: pointer;
+}
+
+.rowButton:focus-visible {
   outline: var(--ui-focus-ring-width) solid var(--ui-color-focus);
-  outline-offset: calc(var(--ui-focus-ring-offset) * -1);
+  outline-offset: var(--ui-focus-ring-offset);
 }
 
 .empty {

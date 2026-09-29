@@ -234,6 +234,14 @@ which cell holds it).
 **What would change it.** A requirement for screen readers to announce the
 row as actionable, which would favour the in-cell control.
 
+**Amended 2026-09-29 (T-7.10).** That requirement arrived: a review against
+the brief found the focusable `<tr>` was never announced as clickable. The
+first cell of a clickable row is now a real `<button>` named by its content,
+and the row keeps its native role and stays clickable as a whole. The API
+objection above is met by convention rather than a prop: the button is always
+in the first column, and the README tells consumers to put the column that
+names the record first.
+
 ---
 
 ## D-16 — Birth dates display as "2 Mar 1984"

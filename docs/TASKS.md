@@ -483,7 +483,7 @@ accepted these fixes (grilling round 1, Q1–Q11).
 
 ### T-7.10 Clickable rows announce themselves
 - **Depends on:** T-1.5
-- **Status:** Not started
+- **Status:** Done
 - **Done when:** in a clickable Table, the first cell of each row is a real
   `<button>` named by that cell's content, so a screen reader announces the row
   as actionable; the whole row stays clickable; `onRowClick` fires once per

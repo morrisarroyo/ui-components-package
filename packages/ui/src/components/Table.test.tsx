@@ -113,6 +113,45 @@ describe('Table', () => {
     expect(onRowClick).not.toHaveBeenCalled();
   });
 
+  it('announces a clickable row by a button named after its first cell', () => {
+    render(<Table columns={columns} rows={rows} onRowClick={() => {}} />);
+
+    expect(screen.getAllByRole('button').map((button) => button.textContent)).toEqual([
+      'Ada Lovelace',
+      'Alan Turing',
+    ]);
+  });
+
+  it('has no buttons when rows are not clickable', () => {
+    render(<Table columns={columns} rows={rows} />);
+
+    expect(screen.queryByRole('button')).not.toBeInTheDocument();
+  });
+
+  it('calls onRowClick once for a click on the button and once for a click elsewhere in the row', async () => {
+    const onRowClick = vi.fn();
+    render(<Table columns={columns} rows={rows} onRowClick={onRowClick} />);
+
+    await userEvent.click(screen.getByRole('button', { name: 'Ada Lovelace' }));
+    expect(onRowClick).toHaveBeenCalledTimes(1);
+
+    await userEvent.click(screen.getByText('555-0102'));
+    expect(onRowClick).toHaveBeenCalledTimes(2);
+    expect(onRowClick).toHaveBeenLastCalledWith(rows[1]);
+  });
+
+  it('calls onRowClick once for Enter and once for Space on the button', async () => {
+    const onRowClick = vi.fn();
+    render(<Table columns={columns} rows={rows} onRowClick={onRowClick} />);
+
+    await userEvent.tab();
+    await userEvent.keyboard('{Enter}');
+    expect(onRowClick).toHaveBeenCalledTimes(1);
+
+    await userEvent.keyboard(' ');
+    expect(onRowClick).toHaveBeenCalledTimes(2);
+  });
+
   it('ignores keys other than Enter and Space on a clickable row', async () => {
     const onRowClick = vi.fn();
     render(<Table columns={columns} rows={rows} onRowClick={onRowClick} />);

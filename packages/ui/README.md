@@ -682,11 +682,13 @@ Types: `TableProps`, `TableColumn`, `TableRow`.
 
 #### Behaviour
 
-- With `onRowClick`, each row is a Tab stop
-  ([`src/components/Table.tsx:59`](src/components/Table.tsx#L59 "tabIndex={isClickable ? 0 : undefined}")) and
-  activates on Enter or Space
-  ([`src/components/Table.tsx:64`](src/components/Table.tsx#L64 "if (event.key === 'Enter' || event.key === ' ') {")), keeping
-  table semantics. For long lists, filter or paginate first.
+- With `onRowClick`, the first cell of each row becomes a button named by its
+  content ([`src/components/Table.tsx:67`](src/components/Table.tsx#L67 "className={styles.rowButton}>")), so
+  screen readers announce the row as actionable, and Tab, Enter and Space
+  work. The whole row is also clickable
+  ([`src/components/Table.tsx:59`](src/components/Table.tsx#L59 "onClick={isClickable ? () => onRowClick?.(row) : undefined}")); each
+  activation calls `onRowClick` once. Put the column that names the record
+  first. Each row is a Tab stop, so for long lists filter or paginate first.
 - Keys no column names (like `id` above) stay on the row, unshown, and reach
   `onRowClick`. Values are `ReactNode`: narrow with
   `typeof row.id === 'string'`.
@@ -699,7 +701,7 @@ Types: `TableProps`, `TableColumn`, `TableRow`.
 | --- | --- | --- | --- | --- |
 | Default | rows, no `onRowClick` | Grey header, hairline between rows; not focusable | Components / Table / Default | <img src="docs/states/table-default.png" alt="Table with three rows" width="280"> |
 | Row hover | `onRowClick`, pointer over a row | Light-grey row, hand cursor | Components / Table / Clickable Rows (hover) | <img src="docs/states/table-row-hover.png" alt="Table with a hovered row" width="280"> |
-| Row focus | `onRowClick`, Tab to a row | Light-grey row, ring inside it | Components / Table / Clickable Rows (tab) | <img src="docs/states/table-row-focus.png" alt="Table with a focused row" width="280"> |
+| Row focus | `onRowClick`, Tab to a row | Light-grey row, ring around the first cell's text | Components / Table / Clickable Rows (tab) | <img src="docs/states/table-row-focus.png" alt="Table with a focused row" width="280"> |
 | Empty | `rows={[]}` | `emptyMessage`, centred, grey; not clickable | Components / Table / Empty | <img src="docs/states/table-empty.png" alt="Empty table with message" width="280"> |
 
 #### Source
