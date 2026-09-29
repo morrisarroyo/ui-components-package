@@ -60,6 +60,7 @@ the intended behaviour, not a setup problem.
 | `ui` | `npm run test --workspace ui` | Component behaviour tests. |
 | `ui` | `npm run storybook --workspace ui` | Storybook on http://localhost:6006, every component in every state. The same as `npm run storybook`. |
 | `ui` | `npm run build-storybook --workspace ui` | Builds a static Storybook into `packages/ui/storybook-static/`. |
+| `ui` | `npm run new-component --workspace ui -- Badge` | Scaffolds a component's four files and its export; see the library README's Extending section. |
 | `app` | `npm run dev --workspace app` | The site's dev server alone. Needs `ui` built first; the root `npm run dev` does both. |
 | `app` | `npm run build --workspace app` | Type-checks and builds the site for production. Needs `ui` built. |
 | `app` | `npm run test --workspace app` | Mapping and page tests. Needs `ui` built. |

@@ -27,7 +27,8 @@
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "new-component": "node scripts/new-component.mjs"
   },
   "peerDependencies": {
     "react": "^19.0.0",

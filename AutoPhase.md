@@ -126,3 +126,19 @@ Baseline before this run: 36 ui tests passing (5 files), app 0 tests, workspace 
 ## End of run 2 — full pass
 - Baseline 36 ui / 0 app. End: **36 ui + 27 app = 63 tests, all passing**, both type-checks clean, library and site builds clean, API builds and serves; the same from a fresh clone.
 - **Stopped because the phase plan is complete:** all 26 tasks Done. The plan's close-out is T-4.4 itself (documents current, clean-checkout run, harness committed).
+
+---
+
+# Run 3 — Phase 6, full auto
+
+Baseline before this run: 76 ui + 27 app = 103 tests passing, api 0 tests; typecheck clean; workspace clean at `4ab9ce8` (untracked `.idea/`, `Summary.md` are the user's and stay out of every commit).
+
+Run of 2026-09-28, Phase 6, full auto (commits unreviewed — the user is asleep and said not to ask). Order: T-6.3 first (it unblocks T-6.4 → T-6.5 → T-6.6), then T-6.1, T-6.2, T-6.4, T-6.7, T-6.5, T-6.6. All the documentation tasks edit `packages/ui/README.md`, so they run strictly one after another.
+
+## T-6.3 Component scaffold
+- **What:** `packages/ui/scripts/new-component.mjs` behind `npm run new-component --workspace ui -- <Name>` writes the component, its token-only stylesheet, a behaviour test and a story, and appends the export to `src/index.ts`. `index.test.ts` and `stories.test.tsx` now discover components and story files with `import.meta.glob` instead of listing them.
+- **Verified:** scaffolded `Scratch`; with it present `npm run typecheck`, `npm test` (80 ui + 27 app), `npm run build --workspace ui` and `build-storybook` (Scratch in the index) all passed. The script refused a duplicate, `badge` and a missing name. `Scratch` removed; `npm test` 78 ui + 27 app, typecheck clean.
+- **Mutation check (both rewritten tests edit existing assertions):** with `Scratch` on disk but its export removed, `exports every component … and nothing else` failed; with Card throwing on a title, the WithTitle and WithTitleAndActions story tests failed. Both restored.
+- **Slip, caught:** restoring after a first, too-weak mutation (`<Story />` → `<div />`, which still passes because the container is not empty) used `git checkout` on the test file and silently reverted it to the committed, listed version. Caught by reading `git status`; the discovery version was rewritten and re-verified, and the weak mutation replaced with the Card one.
+- **Decision taken alone:** the template is a minimal `children`-only component, not a variant example, so it passes every check untouched; the README's Contributing Badge stays the worked example of variants.
+- **Plan discrepancy:** also touched `README.md` (the command table) — the task did not list it, but every command must be documented.

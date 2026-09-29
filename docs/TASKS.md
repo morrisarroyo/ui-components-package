@@ -349,7 +349,7 @@ need unit tests of their own.
 
 ### T-6.3 Component scaffold
 - **Depends on:** T-5.2
-- **Status:** Not started
+- **Status:** Done
 - **Done when:** `npm run new-component --workspace ui -- <Name>` creates the
   four files of a new component (component, styles from tokens, behaviour
   test, stories) and adds its export to `src/index.ts`; the story test and
