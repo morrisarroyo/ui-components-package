@@ -180,12 +180,6 @@ conventions put them.
 
 ## Time-boxes and known gaps
 
-- **A missing phone is a blank cell on the patient list.** The `—` rule is
-  specified for `DescriptionList` only, and D-13 keeps the dash out of the
-  mapping layer, so a Table cell whose value is `null` renders empty
-  (Samuel Okafor, p-0007). The right fix is in the library — Table rendering
-  a missing cell the way DescriptionList does — which is a spec change, not a
-  page patch, so it is left as a known gap rather than papered over in `app`.
 - **Headless browser checks.** Driving Brave with `--dump-dom` hung in the
   agent's sandbox, so the first in-browser check (Button width while
   loading) went to a human. Driving the same browser over the DevTools
@@ -200,18 +194,15 @@ conventions put them.
 
 ## What I would do with two more hours
 
-1. **Give Table the same missing-value rule as DescriptionList,** so a missing
-   phone shows `—` on the list page too. It is a small library change, but a
-   spec change, so it would go through the design document first.
-2. **Turn the browser walks into a test suite.** Every page state was walked
+1. **Turn the browser walks into a test suite.** Every page state was walked
    in a real browser against the real API, but by one-off scripts. Playwright
    running the same walks would make them repeatable, including the loading
    Button's width.
-3. **Integration tests for the API** with `WebApplicationFactory`: the search
+2. **Integration tests for the API** with `WebApplicationFactory`: the search
    rules, the 404 body, and nulls serialised as `null`. *Done after delivery,
    in T-6.7.*
-4. **An automated accessibility pass** (axe in the component tests), to back
+3. **An automated accessibility pass** (axe in the component tests), to back
    the manual reasoning behind D-15 and the label and error wiring with a
    tool.
-5. **Keep the search when coming Back** from a patient, by putting the search
+4. **Keep the search when coming Back** from a patient, by putting the search
    term in the list page's URL.

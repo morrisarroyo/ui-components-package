@@ -3,7 +3,7 @@ import type { FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Card, Table, TextField } from 'ui';
 import type { TableColumn, TableRow } from 'ui';
-import { fetchPatients } from '../api/patients';
+import { fetchPatients, toPatientRow } from '../api/patients';
 import type { PatientDisplay } from '../api/patients';
 import styles from './Page.module.css';
 
@@ -54,16 +54,7 @@ export function PatientListPage() {
     setSearching(false);
   }
 
-  const rows: TableRow[] =
-    state.status === 'ok'
-      ? state.patients.map((patient) => ({
-          id: patient.id,
-          name: patient.name,
-          gender: patient.gender,
-          birthDate: patient.birthDate,
-          phone: patient.phone,
-        }))
-      : [];
+  const rows: TableRow[] = state.status === 'ok' ? state.patients.map(toPatientRow) : [];
 
   return (
     <main className={styles.page}>

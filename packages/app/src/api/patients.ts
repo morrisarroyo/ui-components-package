@@ -110,6 +110,24 @@ export function toPatientDisplay(dto: PatientDto): PatientDisplay {
   };
 }
 
+/**
+ * The Table renders cells exactly as given, unlike DescriptionList, so a list
+ * row spells a missing value out. Kept here so this module stays the one place
+ * that decides how a missing value reaches the screen.
+ */
+export const MISSING_CELL = '—';
+
+/** One patient as a patient-list row: the display values, and the id for navigation. */
+export function toPatientRow(patient: PatientDisplay) {
+  return {
+    id: patient.id,
+    name: patient.name,
+    gender: patient.gender,
+    birthDate: patient.birthDate,
+    phone: patient.phone ?? MISSING_CELL,
+  };
+}
+
 // --- Calls ---------------------------------------------------------------------
 
 /**

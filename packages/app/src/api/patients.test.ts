@@ -1,4 +1,4 @@
-import { fetchPatient, fetchPatients, toPatientDisplay } from './patients';
+import { fetchPatient, fetchPatients, toPatientDisplay, toPatientRow } from './patients';
 import type { PatientDto } from './patients';
 
 const complete: PatientDto = {
@@ -221,5 +221,21 @@ describe('fetchPatient, more failures', () => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response('not json', { status: 200 })));
 
     expect(await fetchPatient('p-0001')).toEqual({ status: 'error' });
+  });
+});
+
+describe('toPatientRow', () => {
+  it('carries the id and the four list columns', () => {
+    expect(toPatientRow(toPatientDisplay(complete))).toEqual({
+      id: 'p-0001',
+      name: 'Amara Okonkwo',
+      gender: 'Female',
+      birthDate: '2 Mar 1984',
+      phone: '+1 416 555 0133',
+    });
+  });
+
+  it('spells a missing phone as "—", since the Table shows cells as given', () => {
+    expect(toPatientRow(toPatientDisplay({ ...complete, phone: null })).phone).toBe('—');
   });
 });

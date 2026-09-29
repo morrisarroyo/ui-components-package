@@ -423,7 +423,7 @@ accepted these fixes (grilling round 1, Q1–Q11).
 
 ### T-7.2 Page 1 shows "—" for a missing value
 - **Depends on:** T-3.3
-- **Status:** Not started
+- **Status:** Done
 - **Done when:** a patient with no phone shows `—` in the list's Phone column,
   mapped in `app` as the library README tells consumers to; INTERVIEW.md no
   longer lists the blank cell as a gap, and D-13 agrees.

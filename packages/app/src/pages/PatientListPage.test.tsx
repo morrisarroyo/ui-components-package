@@ -108,6 +108,20 @@ describe('PatientListPage', () => {
     expect(within(second).getByText('Daniel Tremblay')).toBeInTheDocument();
   });
 
+  it('shows "—" in the Phone column for a patient with no phone', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(json([patient({ phone: null })])));
+    renderPage();
+
+    const table = await screen.findByRole('table');
+    const [, row] = within(table).getAllByRole('row');
+    expect(within(row).getAllByRole('cell').map((cell) => cell.textContent)).toEqual([
+      'Amara Okonkwo',
+      'Female',
+      '2 Mar 1984',
+      '—',
+    ]);
+  });
+
   it('searches on the Search button, showing its loading state while the search runs', async () => {
     const search = deferred();
     const fetchMock = vi.fn().mockResolvedValueOnce(json([amara, daniel])).mockReturnValueOnce(search.promise);

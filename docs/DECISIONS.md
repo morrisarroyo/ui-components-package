@@ -193,6 +193,13 @@ mapping too would create two definitions of "missing" that could drift. The
 mapping's job is to decide *whether* a value is missing; the library's job is
 to decide what missing *looks like*.
 
+**Amended 2026-09-29 (T-7.2).** That split holds for `DescriptionList`, which
+draws the dash itself. `Table` renders cells exactly as given, so the list page
+showed a blank Phone cell for a patient with no phone. The mapping module now
+also builds the list row (`toPatientRow`) and spells a missing phone as `—`,
+as the library README tells Table consumers to. The mapping module is still
+the one place that decides how a missing value reaches the screen.
+
 ---
 
 ## D-14 — Package names `ui` and `app`
