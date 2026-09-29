@@ -494,7 +494,7 @@ accepted these fixes (grilling round 1, Q1–Q11).
 
 ### T-7.11 The empty message only follows a search
 - **Depends on:** T-3.3
-- **Status:** Not started
+- **Status:** Done
 - **Done when:** the list says "No patients match your search" only when a
   search has run; an empty unfiltered list says "No patients yet".
 - **Verify:** page tests for both.

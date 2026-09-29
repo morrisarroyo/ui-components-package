@@ -70,7 +70,8 @@ describe('PatientListPage', () => {
     renderPage();
 
     expect(screen.getByRole('heading', { level: 1, name: 'Patients' })).toBeInTheDocument();
-    await screen.findByText('No patients match your search');
+    // Let the list settle; an unfiltered empty list says "No patients yet".
+    await screen.findByText('No patients yet');
   });
 
   it('shows "Loading…" instead of the table until the list arrives', async () => {
@@ -153,6 +154,14 @@ describe('PatientListPage', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Search' }));
 
     expect(await screen.findByText('No patients match your search')).toBeInTheDocument();
+  });
+
+  it('says "No patients yet", not "No patients match your search", when the unfiltered list is empty', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(json([])));
+    renderPage();
+
+    expect(await screen.findByText('No patients yet')).toBeInTheDocument();
+    expect(screen.queryByText('No patients match your search')).not.toBeInTheDocument();
   });
 
   it('shows a "Something went wrong" card instead of the table when the API is unreachable', async () => {

@@ -16,7 +16,7 @@ const COLUMNS: TableColumn[] = [
 
 type ListState =
   | { status: 'loading' }
-  | { status: 'ok'; patients: PatientDisplay[] }
+  | { status: 'ok'; patients: PatientDisplay[]; searched: boolean }
   | { status: 'error' };
 
 /** Page 1 — every patient, searchable by name. */
@@ -35,7 +35,11 @@ export function PatientListPage() {
     if (request !== latestRequest.current) {
       return;
     }
-    setState(result.status === 'ok' ? { status: 'ok', patients: result.patients } : { status: 'error' });
+    setState(
+      result.status === 'ok'
+        ? { status: 'ok', patients: result.patients, searched: Boolean(term?.trim()) }
+        : { status: 'error' },
+    );
   }
 
   useEffect(() => {
@@ -89,7 +93,7 @@ export function PatientListPage() {
         <Table
           columns={COLUMNS}
           rows={rows}
-          emptyMessage="No patients match your search"
+          emptyMessage={state.searched ? 'No patients match your search' : 'No patients yet'}
           onRowClick={(row) => {
             if (typeof row.id === 'string') {
               navigate(`/patients/${encodeURIComponent(row.id)}`);
