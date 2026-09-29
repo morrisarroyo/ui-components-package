@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import type { FormEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { Button, Card, Table, TextField } from 'ui';
 import type { TableColumn, TableRow } from 'ui';
 import { fetchPatients, toPatientRow } from '../api/patients';
@@ -22,8 +22,13 @@ type ListState =
 /** Page 1 — every patient, searchable by name. */
 export function PatientListPage() {
   const navigate = useNavigate();
+  const location = useLocation();
+  // The search lives in the URL (/?search=oko), so Back from a patient, a
+  // reload or a shared link returns to the same results.
+  const [searchParams, setSearchParams] = useSearchParams();
+  const initialSearch = searchParams.get('search') ?? '';
   const [state, setState] = useState<ListState>({ status: 'loading' });
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState(initialSearch);
   const [searching, setSearching] = useState(false);
   // Only the most recent request may update the page, so a slow earlier
   // response can never overwrite a newer one.
@@ -43,7 +48,7 @@ export function PatientListPage() {
   }
 
   useEffect(() => {
-    void load();
+    void load(initialSearch);
     return () => {
       // Unmounting (or StrictMode's rehearsal unmount) retires any request
       // still in flight.
@@ -58,7 +63,9 @@ export function PatientListPage() {
   async function handleSearch(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setSearching(true);
-    await load(search);
+    const term = search.trim();
+    setSearchParams(term ? { search: term } : {}, { replace: true });
+    await load(term);
     setSearching(false);
   }
 
@@ -100,7 +107,9 @@ export function PatientListPage() {
           emptyMessage={state.searched ? 'No patients match your search' : 'No patients yet'}
           onRowClick={(row) => {
             if (typeof row.id === 'string') {
-              navigate(`/patients/${encodeURIComponent(row.id)}`);
+              navigate(`/patients/${encodeURIComponent(row.id)}`, {
+                state: { backTo: `/${location.search}` },
+              });
             }
           }}
         />

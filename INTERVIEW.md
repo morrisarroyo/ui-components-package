@@ -102,9 +102,10 @@ baseline at the end.
    was made true: `src/readme.test.ts` now compares every props table with
    its interface and defaults.
 8. **The review found more (Phase 7).** A missing phone showed as a blank cell
-   on the list; a loading Button dropped keyboard focus; the API port could
-   not be overridden; process documents (this one included) had stale counts.
-   Each is fixed in its own Phase 7 commit.
+   on the list; a loading Button dropped keyboard focus; clickable rows were
+   never announced as clickable; the API port could not be overridden;
+   process documents (this one included) had stale counts. Each is fixed in
+   its own Phase 7 commit.
 
 **Reading the history against the plan.** One commit per task, with the task
 id in the subject, except:
@@ -124,32 +125,26 @@ T-1.7 depended on them.
 
 | Suite | Tests | What they are |
 | --- | --- | --- |
-| `ui` components | 60 | Behaviour: roles, labels, keyboard, disabled, loading, error, empty, `—` |
+| `ui` components | 64 | Behaviour: roles, labels, keyboard, disabled, loading, error, empty, `—` |
 | `ui` worked example | 5 | 4 behaviour, 1 keeps the README listing identical to the source |
 | `ui` entry point | 2 | Every component is exported, nothing else |
 | `ui` stories | 19 | Smoke: every story renders |
 | `ui` README | 81 | Documentation checks: code links, contents, props tables |
-| `app` | 50 | The mapping module and both pages in every state |
+| `app` | 54 | The mapping module, both pages in every state, and moving between them |
 | `api` | 23 | Every endpoint, search rules, 404 body, wire shape |
 
 ## Known gaps
 
-- **Clickable rows aren't announced as clickable.** A focusable `<tr>` keeps
-  table navigation (D-15), but a screen reader doesn't say the row opens a
-  patient.
-- **An empty list on first load would say "No patients match your search"**
-  though nothing was searched. The seed data never triggers it.
-- **The detail page's browser tab still reads "Patients".** The page title
-  requirement is met by its `<h1>`.
-- **Back clears the search.**
+The review's four gaps (rows not announced as clickable, the empty message
+before any search, the tab title, Back losing the search) were fixed in
+T-7.10 to T-7.13. None is known to remain against the brief.
 
 ## What I would do with two more hours
 
-1. **Make clickable rows announce themselves:** a real link in the first cell,
-   the row still clickable around it.
-2. **Keep the search when coming Back,** by putting it in the list page's URL.
-3. **Turn the browser walks into Playwright tests,** including the loading
-   Button's width and focus.
-4. **An automated accessibility pass** (axe in the component tests).
-5. **A generic Table row type,** so `onRowClick` returns the consumer's own
+1. **Turn the browser walks into Playwright tests.** Every page state has been
+   walked in Chromium against the real API, but by one-off scripts.
+2. **An automated accessibility pass** (axe in the component tests).
+3. **A generic Table row type,** so `onRowClick` returns the consumer's own
    row type and the id needs no runtime check.
+4. **Page-level building blocks** (a page title and a status line): the app
+   styles its `<h1>` and "Loading…" itself, and a third page would copy that.

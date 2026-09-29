@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Button, Card, DescriptionList } from 'ui';
 import { fetchPatient } from '../api/patients';
 import type { PatientResult } from '../api/patients';
@@ -11,6 +11,11 @@ type DetailState = { status: 'loading' } | PatientResult;
 export function PatientDetailPage() {
   const { id = '' } = useParams();
   const navigate = useNavigate();
+  // Back returns to the list as it was (search included) when the list opened
+  // this page; from a directly opened link it goes to the full list.
+  const { state: locationState } = useLocation();
+  const backTo =
+    typeof locationState?.backTo === 'string' && locationState.backTo.startsWith('/') ? locationState.backTo : '/';
   const [state, setState] = useState<DetailState>({ status: 'loading' });
 
   useEffect(() => {
@@ -37,7 +42,7 @@ export function PatientDetailPage() {
     <main className={styles.page}>
       {/* Back is present in every state, including not-found and error. */}
       <div className={styles.backRow}>
-        <Button variant="secondary" size="sm" onClick={() => navigate('/')}>
+        <Button variant="secondary" size="sm" onClick={() => navigate(backTo)}>
           Back
         </Button>
       </div>

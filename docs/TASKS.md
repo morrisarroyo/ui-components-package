@@ -508,7 +508,7 @@ accepted these fixes (grilling round 1, Q1–Q11).
 
 ### T-7.13 Back keeps the search
 - **Depends on:** T-3.4
-- **Status:** Not started
+- **Status:** Done
 - **Done when:** the list page keeps its search in the URL (`/?search=…`),
   runs it on load, and the detail page's Back returns to it; Back from a
   directly opened patient still goes to `/`.
