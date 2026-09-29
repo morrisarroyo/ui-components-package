@@ -374,7 +374,7 @@ need unit tests of their own.
 
 ### T-6.5 Documentation layout and code references
 - **Depends on:** T-6.1, T-6.2, T-6.4
-- **Status:** Not started
+- **Status:** Done
 - **Done when:** `packages/ui/README.md` is reorganised into clearly
   separated sections with a contents list that matches its headings, and
   every claim about how the library works links to the code with a line
