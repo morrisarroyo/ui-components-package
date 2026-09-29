@@ -27,7 +27,8 @@ repository:
 | How does a consumer use the library? | `packages/ui/README.md` |
 
 `docs/DESIGNDOCUMENT.md` is the reconciled design input, derived from the
-candidate brief in the repository root. **The brief is the source of truth for
+candidate brief in the repository root (kept on disk, not committed: it is
+the employer's document). **The brief is the source of truth for
 requirements; do not contradict it.** If the design document and the brief ever
 disagree, the brief wins and the design document gets fixed.
 

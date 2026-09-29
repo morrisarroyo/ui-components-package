@@ -457,7 +457,7 @@ accepted these fixes (grilling round 1, Q1–Q11).
 
 ### T-7.6 Repository ready to share
 - **Depends on:** —
-- **Status:** Not started
+- **Status:** Done
 - **Done when:** `.idea/`, `Summary.md` and the two copies of the brief are
   ignored and untracked; the brief stays on disk for local work.
 - **Verify:** `git status` is clean; `git ls-files` lists no brief file.
