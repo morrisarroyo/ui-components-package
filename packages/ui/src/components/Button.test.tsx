@@ -69,7 +69,7 @@ describe('Button', () => {
     expect(onClick).not.toHaveBeenCalled();
   });
 
-  it('does not call onClick while loading', async () => {
+  it('does not call onClick while loading, by click, Enter or Space', async () => {
     const onClick = vi.fn();
     render(
       <Button loading onClick={onClick}>
@@ -78,8 +78,10 @@ describe('Button', () => {
     );
     const button = screen.getByRole('button', { name: 'Save' });
 
-    expect(button).toBeDisabled();
+    expect(button).toHaveAttribute('aria-disabled', 'true');
     await userEvent.click(button);
+    button.focus();
+    await userEvent.keyboard('{Enter} ');
 
     expect(onClick).not.toHaveBeenCalled();
   });
@@ -90,8 +92,21 @@ describe('Button', () => {
     expect(screen.getByRole('button', { name: 'Save' })).toHaveAttribute('aria-busy', 'true');
   });
 
-  it('cannot be reached with Tab while loading', async () => {
+  it('stays in the tab order while loading, so a keyboard user keeps their place', async () => {
+    // jsdom does not move focus off an element that becomes disabled, so the
+    // check is the one a browser does act on: a native-disabled button is
+    // skipped by Tab, and a loading button must not be.
     render(<Button loading>Save</Button>);
+    const button = screen.getByRole('button', { name: 'Save' });
+
+    await userEvent.tab();
+
+    expect(button).not.toBeDisabled();
+    expect(button).toHaveFocus();
+  });
+
+  it('leaves the tab order when disabled', async () => {
+    render(<Button disabled>Save</Button>);
 
     await userEvent.tab();
 
@@ -134,6 +149,22 @@ describe('Button', () => {
     );
 
     await userEvent.click(screen.getByRole('button', { name: 'Search' }));
+
+    expect(onSubmit).not.toHaveBeenCalled();
+  });
+
+  it('does not submit its form from Enter in a field while loading', async () => {
+    const onSubmit = vi.fn((event: FormEvent) => event.preventDefault());
+    render(
+      <form onSubmit={onSubmit}>
+        <input aria-label="Search" />
+        <Button type="submit" loading>
+          Search
+        </Button>
+      </form>,
+    );
+
+    await userEvent.type(screen.getByLabelText('Search'), 'amara{Enter}');
 
     expect(onSubmit).not.toHaveBeenCalled();
   });

@@ -432,7 +432,7 @@ accepted these fixes (grilling round 1, Q1–Q11).
 
 ### T-7.3 A loading Button keeps keyboard focus
 - **Depends on:** T-1.2
-- **Status:** Not started
+- **Status:** Done
 - **Done when:** while `loading`, Button stays focusable (`aria-disabled`) and
   ignores activation; `disabled` stays native `disabled`; the README says so.
 - **Verify:** a test that a focused Button keeps focus when it starts loading

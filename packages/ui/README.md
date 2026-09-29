@@ -426,13 +426,15 @@ Types: `ButtonProps`, `ButtonVariant`, `ButtonSize`.
 
 #### Behaviour
 
-- `loading` and `disabled` set native `disabled`
-  ([`src/components/Button.tsx:38`](src/components/Button.tsx#L38 "const isInteractive = !loading && !disabled;")): no click,
+- `disabled` sets native `disabled`
+  ([`src/components/Button.tsx:59`](src/components/Button.tsx#L59 "disabled={disabled}")): no click,
   no Tab, no keyboard activation.
-- Loading keeps the variant colours and accessible name and sets `aria-busy`
-  ([`src/components/Button.tsx:52`](src/components/Button.tsx#L52 "aria-busy={loading || undefined}")). A focused
-  button loses focus when loading starts; there is no `ref`, so move focus to
-  the result yourself.
+- `loading` keeps the button focusable
+  ([`src/components/Button.tsx:60`](src/components/Button.tsx#L60 "aria-disabled={loading || undefined}")) but
+  ignores every activation, including submitting its form, so a keyboard user
+  who pressed it keeps their place. It keeps the variant colours and
+  accessible name and sets `aria-busy`
+  ([`src/components/Button.tsx:61`](src/components/Button.tsx#L61 "aria-busy={loading || undefined}")).
 
 #### States
 

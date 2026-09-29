@@ -133,14 +133,15 @@ describe('PatientListPage', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Search' }));
 
     expect(fetchMock).toHaveBeenLastCalledWith('/api/patients?search=oko');
-    expect(screen.getByRole('button', { name: 'Search' })).toBeDisabled();
+    // Loading, not disabled: the button ignores activation but keeps focus.
+    expect(screen.getByRole('button', { name: 'Search' })).toHaveAttribute('aria-disabled', 'true');
     expect(screen.getByRole('button', { name: 'Search' })).toHaveAttribute('aria-busy', 'true');
 
     search.release(json([amara]));
 
     await waitFor(() => expect(screen.queryByText('Daniel Tremblay')).not.toBeInTheDocument());
     expect(screen.getByText('Amara Okonkwo')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Search' })).toBeEnabled();
+    expect(screen.getByRole('button', { name: 'Search' })).not.toHaveAttribute('aria-disabled');
   });
 
   it('says "No patients match your search" when the search matches nobody', async () => {

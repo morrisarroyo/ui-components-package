@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { MouseEvent, ReactNode } from 'react';
 import styles from './Button.module.css';
 
 export type ButtonVariant = 'primary' | 'secondary';
@@ -33,9 +33,17 @@ export function Button({
   type = 'button',
   'aria-label': ariaLabel,
 }: ButtonProps) {
-  // A loading button is genuinely disabled, not just styled as unavailable,
-  // so it cannot be clicked or activated from the keyboard.
-  const isInteractive = !loading && !disabled;
+  // `disabled` is native: the button leaves the tab order entirely. A loading
+  // button stays focusable (aria-disabled) so a keyboard user who pressed it
+  // keeps their place, but it ignores every activation, including submitting
+  // its form, until loading ends.
+  function handleClick(event: MouseEvent<HTMLButtonElement>) {
+    if (loading) {
+      event.preventDefault();
+      return;
+    }
+    onClick?.();
+  }
 
   return (
     <button
@@ -48,10 +56,11 @@ export function Button({
       ]
         .filter(Boolean)
         .join(' ')}
-      disabled={!isInteractive}
+      disabled={disabled}
+      aria-disabled={loading || undefined}
       aria-busy={loading || undefined}
       aria-label={ariaLabel}
-      onClick={isInteractive ? onClick : undefined}
+      onClick={disabled ? undefined : handleClick}
     >
       <span className={loading ? styles.hiddenLabel : undefined}>{children}</span>
       {loading ? <span className={styles.spinner} aria-hidden="true" /> : null}

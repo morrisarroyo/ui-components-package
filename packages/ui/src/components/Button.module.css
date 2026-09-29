@@ -36,7 +36,7 @@
   color: var(--ui-color-surface);
 }
 
-.primary:hover:not(:disabled) {
+.primary:hover:not(:disabled, [aria-disabled='true']) {
   background: var(--ui-color-primary-hover);
   border-color: var(--ui-color-primary-hover);
 }
@@ -47,13 +47,14 @@
   color: var(--ui-color-text);
 }
 
-.secondary:hover:not(:disabled) {
+.secondary:hover:not(:disabled, [aria-disabled='true']) {
   background: var(--ui-color-surface-subtle);
 }
 
 /* Disabled wins over both variants. A loading button is also disabled, but
    keeps its variant colours so it does not flicker grey mid-action. */
-.button:disabled {
+.button:disabled,
+.button[aria-disabled='true'] {
   cursor: default;
 }
 
