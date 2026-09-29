@@ -440,7 +440,7 @@ accepted these fixes (grilling round 1, Q1–Q11).
 
 ### T-7.4 API port from configuration
 - **Depends on:** T-2.2
-- **Status:** Not started
+- **Status:** Done
 - **Done when:** the API's port comes from configuration (default 5080) rather
   than a hard-coded `UseUrls`, so `--urls` and `ASPNETCORE_URLS` work.
 - **Verify:** `npm run api` serves on 5080; `dotnet run --project

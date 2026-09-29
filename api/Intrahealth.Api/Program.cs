@@ -4,10 +4,14 @@ using Intrahealth.Api;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Fixed port, matching the website's dev-server proxy (packages/app/vite.config.ts).
-// Set here as well as in launchSettings.json so `dotnet run` with any profile,
-// or none, still lands on it.
-builder.WebHost.UseUrls("http://localhost:5080");
+// Port 5080 by default, matching the website's dev-server proxy
+// (packages/app/vite.config.ts), whether or not a launch profile is used.
+// Anything that sets the URL explicitly (--urls, ASPNETCORE_URLS, the launch
+// profile) still wins.
+if (string.IsNullOrEmpty(builder.Configuration["urls"]))
+{
+    builder.WebHost.UseUrls("http://localhost:5080");
+}
 
 var app = builder.Build();
 
