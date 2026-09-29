@@ -130,6 +130,16 @@ triggered and what it looks like, the worked example renders and matches its
 listing, a scaffolded component passes every check untouched, every code
 reference in the docs resolves, and `npm test` and `npm run test:api` pass.
 
+### Phase 7 — Fixes from the review against the brief
+
+Fixes the owner accepted after a four-area review graded the project against
+the brief: concise docs, "—" on Page 1, a loading Button that keeps focus, a
+configurable API port, the harness explained, the repository ready to share,
+and a process record that matches the repository.
+
+**Done when:** every Phase 7 task in `docs/TASKS.md` is Done or blocked only
+on the owner.
+
 ## Working agreements
 
 - **Follow `docs/CONVENTIONS.md`** for file layout, naming, styling and tests.

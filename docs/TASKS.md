@@ -12,8 +12,9 @@ carries:
 One task, one commit. The commit history and this file must tell the same
 story.
 
-**Status summary:** All five phases complete; every task Done and verified by
-its own check. The run log with the evidence for each is `AutoPhase.md`.
+**Status summary:** Phases 0–6 complete. Phase 7 (fixes from the review
+against the brief) in progress. Phases 5–7 came after the original delivery
+(Phase 4). The run log with the evidence for each task is `AutoPhase.md`.
 
 ---
 
@@ -404,3 +405,85 @@ need unit tests of their own.
   `npm run test:api` runs it and the project README documents it.
 - **Verify:** `npm test` and `npm run test:api` pass; a deliberate break in
   the search filter and in the mapping each fail a test.
+
+---
+
+## Phase 7 — Fixes from the review against the brief
+
+A four-area review graded the project against the candidate brief. The owner
+accepted these fixes (grilling round 1, Q1–Q11).
+
+### T-7.1 Concise documentation
+- **Depends on:** T-6.6
+- **Status:** In progress
+- **Done when:** the library README and the project README say the same things
+  in substantially fewer words, with no fact, example or test-checked table lost.
+- **Verify:** word counts before and after; `npm test` passes, including the
+  README tests.
+
+### T-7.2 Page 1 shows "—" for a missing value
+- **Depends on:** T-3.3
+- **Status:** Not started
+- **Done when:** a patient with no phone shows `—` in the list's Phone column,
+  mapped in `app` as the library README tells consumers to; INTERVIEW.md no
+  longer lists the blank cell as a gap, and D-13 agrees.
+- **Verify:** a page test for a patient with a missing phone; the test fails
+  when the mapping is removed.
+
+### T-7.3 A loading Button keeps keyboard focus
+- **Depends on:** T-1.2
+- **Status:** Not started
+- **Done when:** while `loading`, Button stays focusable (`aria-disabled`) and
+  ignores activation; `disabled` stays native `disabled`; the README says so.
+- **Verify:** a test that a focused Button keeps focus when it starts loading
+  and still ignores clicks and Enter; the existing Button tests pass.
+
+### T-7.4 API port from configuration
+- **Depends on:** T-2.2
+- **Status:** Not started
+- **Done when:** the API's port comes from configuration (default 5080) rather
+  than a hard-coded `UseUrls`, so `--urls` and `ASPNETCORE_URLS` work.
+- **Verify:** `npm run api` serves on 5080; `dotnet run --project
+  api/Intrahealth.Api --urls http://localhost:5099` serves on 5099; API tests
+  pass.
+
+### T-7.5 The harness explained
+- **Depends on:** T-4.4
+- **Status:** Not started
+- **Done when:** `.claude/skills/` includes the `phase-tasks` skill the others
+  call, and `.claude/README.md` says these are reusable skills written for
+  other projects and maps their terms to this repository.
+- **Verify:** every skill named inside a committed skill is itself committed.
+
+### T-7.6 Repository ready to share
+- **Depends on:** —
+- **Status:** Not started
+- **Done when:** `.idea/`, `Summary.md` and the two copies of the brief are
+  ignored and untracked; the brief stays on disk for local work.
+- **Verify:** `git status` is clean; `git ls-files` lists no brief file.
+
+### T-7.7 Process record matches the repository
+- **Depends on:** T-7.1 … T-7.6
+- **Status:** Not started
+- **Done when:** INTERVIEW.md states the real phase and task counts, labels
+  Phases 5–7 as post-delivery work directed by the owner with the time it
+  took, discloses that Phase 1 was drafted before being committed task by
+  task, reports test counts split into behaviour and documentation tests,
+  corrects the `cecc901` note, and lists the review's deferred items under
+  "two more hours".
+- **Verify:** every count in INTERVIEW.md matches a command run on the final
+  tree.
+
+### T-7.8 What I reviewed myself
+- **Depends on:** T-7.7
+- **Status:** Blocked — needs the owner's own account
+- **Done when:** INTERVIEW.md has a first-person section listing only what the
+  owner personally reviewed or verified.
+- **Verify:** the owner confirms every sentence is true.
+
+### T-7.9 Submit
+- **Depends on:** T-7.1 … T-7.8
+- **Status:** Blocked — needs the owner's go-ahead
+- **Done when:** the repository is pushed to a private GitHub repository shared
+  with the reviewers.
+- **Verify:** a fresh clone from GitHub passes the documented commands.
