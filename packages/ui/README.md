@@ -280,6 +280,23 @@ export function SaveOrCancel() {
 activated from the keyboard. A loading button keeps its variant colours and its
 accessible name, and is announced as busy (`aria-busy`).
 
+#### States
+
+Every state below is produced by props or by the user; you never style one
+yourself. The story column names the Storybook story that shows it
+(`npm run storybook`); hover and focus are interactions on that story.
+
+| State | How you get it | What it looks like | Story | Picture |
+| --- | --- | --- | --- | --- |
+| Primary | `variant="primary"` (default) | `--ui-color-primary` fill and border, white (`--ui-color-surface`) label, `--ui-radius-sm` corners. | Button / Primary | <img src="docs/states/button-primary.png" alt="Primary button" height="40"> |
+| Primary, hover | Pointer over an enabled primary button | Fill and border darken to `--ui-color-primary-hover`. | Button / Primary, hovered | <img src="docs/states/button-primary-hover.png" alt="Primary button, hovered" height="40"> |
+| Focus | Tab to the button | A `--ui-focus-ring-width` ring in `--ui-color-focus`, offset `--ui-focus-ring-offset` outside the border. Keyboard focus only, not on click. | Button / Primary, tabbed to | <img src="docs/states/button-primary-focus.png" alt="Primary button with focus ring" height="40"> |
+| Secondary | `variant="secondary"` | `--ui-color-surface` fill, `--ui-color-border` border, `--ui-color-text` label. | Button / Secondary | <img src="docs/states/button-secondary.png" alt="Secondary button" height="40"> |
+| Secondary, hover | Pointer over an enabled secondary button | Fill changes to `--ui-color-surface-subtle`. | Button / Secondary, hovered | <img src="docs/states/button-secondary-hover.png" alt="Secondary button, hovered" height="40"> |
+| Small | `size="sm"` | Padding drops from `--ui-space-2` × `--ui-space-4` to `--ui-space-1` × `--ui-space-3`. Same type size. | Button / Small | <img src="docs/states/button-small.png" alt="Small button" height="40"> |
+| Loading | `loading` | Label turns transparent but keeps its space, so the width does not change; a spinner in the label colour sits on top. Variant colours stay. Not clickable, not tabbable, announced busy. | Button / Loading | <img src="docs/states/button-loading.png" alt="Loading button with spinner" height="40"> |
+| Disabled | `disabled` | `--ui-color-disabled-bg` fill and border, `--ui-color-disabled-text` label, default cursor, no hover change. Not clickable, not tabbable. | Button / Disabled | <img src="docs/states/button-disabled.png" alt="Disabled button" height="40"> |
+
 **When to use it.** For an action: save, search, submit, open a dialog. Use one
 `primary` button per screen or section, for the action the user most likely
 wants; make the rest `secondary`. Show `loading` for the duration of an
@@ -333,6 +350,16 @@ share an id. In the error state the border turns `color.danger`, the message
 replaces the helper text rather than stacking under it, it is announced
 (`role="alert"`), and the input is marked invalid and described by it.
 
+#### States
+
+| State | How you get it | What it looks like | Story | Picture |
+| --- | --- | --- | --- | --- |
+| Default | No `errorMessage`, not `disabled` | Label in `--ui-color-text-muted` at label size above a `--ui-color-surface` input with a `--ui-color-border` border; placeholder in `--ui-color-text-muted`. | TextField / Default | <img src="docs/states/textfield-default.png" alt="Text field, empty with placeholder" width="280"> |
+| Focus | Click or Tab into the input | Border turns `--ui-color-primary`, plus a `--ui-focus-ring-width` ring in `--ui-color-focus`. | TextField / Default, tabbed to | <img src="docs/states/textfield-focus.png" alt="Text field with focus ring" width="280"> |
+| With hint | `helperText="…"` | The hint sits under the input in `--ui-color-text-muted` at label size, and is read out as the input's description. | TextField / With Helper Text | <img src="docs/states/textfield-helper.png" alt="Text field with helper text" width="280"> |
+| Error | A non-empty `errorMessage` | Border turns `--ui-color-danger`, also while focused. The message replaces the hint, in `--ui-color-danger`, is announced (`role="alert"`) and the input is marked `aria-invalid`. An empty string is not an error. | TextField / With Error | <img src="docs/states/textfield-error.png" alt="Text field in error state" width="280"> |
+| Disabled | `disabled` | `--ui-color-disabled-bg` fill, `--ui-color-disabled-text` text. The input cannot be focused or typed in, and Tab skips it. | TextField / Disabled | <img src="docs/states/textfield-disabled.png" alt="Disabled text field" width="280"> |
+
 **When to use it.** For short free text: a name, a search term, an email, a
 phone number. Pass an `errorMessage` once you know the value is wrong — on
 submit, or on blur — and clear it when the user fixes it.
@@ -379,6 +406,17 @@ export function AllergiesCard() {
 **Layout.** The title renders as an `h2` in `font.heading`. The title row is
 left out entirely when there is neither a `title` nor `actions`, so an untitled
 card has no stray space above its body.
+
+#### States
+
+A Card has no interactive states; its header row is the only thing that
+changes, and it is driven by which props you pass.
+
+| State | How you get it | What it looks like | Story | Picture |
+| --- | --- | --- | --- | --- |
+| Body only | No `title`, no `actions` | A `--ui-color-surface` box with a `--ui-color-border` hairline, `--ui-radius-md` corners and `--ui-space-6` padding. No header row at all. | Card / Default | <img src="docs/states/card-body-only.png" alt="Card with body only" width="280"> |
+| With title | `title="…"` | A level-2 heading at heading size above the body, `--ui-space-4` below it. | Card / With Title | <img src="docs/states/card-title.png" alt="Card with a title" width="280"> |
+| With title and actions | `title` and `actions` | The actions sit hard right on the title's row, `--ui-space-2` apart. With `actions` but no `title`, they still sit right. | Card / With Title And Actions | <img src="docs/states/card-title-actions.png" alt="Card with title and an Edit button" width="280"> |
 
 **When to use it.** To group a section of a page that belongs together — a
 search form, a record's demographics, an error message that replaces a
@@ -441,6 +479,15 @@ move through the table by row and column.
 empty; the Table does not substitute a dash. If a column can be missing, decide
 what it should show before building the row.
 
+#### States
+
+| State | How you get it | What it looks like | Story | Picture |
+| --- | --- | --- | --- | --- |
+| Default | `rows` with entries, no `onRowClick` | Header row on `--ui-color-surface-subtle` in `--ui-color-text-muted` at label size; body cells at body size; a `--ui-color-border` hairline under every row. Rows are not focusable. | Table / Default | <img src="docs/states/table-default.png" alt="Table with three rows" width="280"> |
+| Row hover | `onRowClick` set, pointer over a row | The row fills with `--ui-color-surface-subtle` and the cursor becomes a pointer. | Table / Clickable Rows, hovered | <img src="docs/states/table-row-hover.png" alt="Table with a hovered row" width="280"> |
+| Row focus | `onRowClick` set, Tab to a row | Same fill, plus a `--ui-color-focus` ring drawn inside the row. Enter or Space calls `onRowClick`. | Table / Clickable Rows, tabbed to | <img src="docs/states/table-row-focus.png" alt="Table with a focused row" width="280"> |
+| Empty | `rows={[]}` | One full-width cell, centred, in `--ui-color-text-muted`, with `--ui-space-8` above and below. Shows `emptyMessage` (default "No results"). Never clickable. | Table / Empty | <img src="docs/states/table-empty.png" alt="Empty table with message" width="280"> |
+
 **When to use it.** For many records of the same shape that a user scans,
 compares, or picks one of — a patient list, a medication list, a results
 list.
@@ -483,6 +530,13 @@ as `0`.
 **Layout.** Labels sit in a fixed 160px column in `font.label`, values to their
 right in `font.body`, and rows are divided by a border except after the last.
 Labels are the row keys, so keep them unique within one list.
+
+#### States
+
+| State | How you get it | What it looks like | Story | Picture |
+| --- | --- | --- | --- | --- |
+| Default | Every `value` present | Label in a fixed 160px column in `--ui-color-text-muted` at label size; value in `--ui-color-text` at body size; a `--ui-color-border` hairline between rows. | DescriptionList / Default | <img src="docs/states/descriptionlist-default.png" alt="Description list with three rows" width="280"> |
+| Missing value | A `value` of `null`, `undefined` or `''` | The value shows an em dash (`—`) in `--ui-color-text-muted`. `0` is a value and shows as `0`. | DescriptionList / Missing Values | <img src="docs/states/descriptionlist-missing.png" alt="Description list with em dashes for missing values" width="280"> |
 
 **When to use it.** To show one record's fields: demographics, contact
 details, an encounter summary. It usually sits inside a [Card](#card).

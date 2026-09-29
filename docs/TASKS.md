@@ -322,7 +322,7 @@ need unit tests of their own.
 
 ### T-6.1 Component state reference
 - **Depends on:** T-5.1
-- **Status:** Not started
+- **Status:** Done
 - **Done when:** `packages/ui/README.md` has, for every component, a table of
   its states — default, hover, focus, error, loading, disabled, empty, as they
   apply — saying how each is triggered (prop or interaction), what it looks

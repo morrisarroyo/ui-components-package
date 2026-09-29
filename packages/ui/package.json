@@ -28,7 +28,8 @@
     "typecheck": "tsc --noEmit",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "new-component": "node scripts/new-component.mjs"
+    "new-component": "node scripts/new-component.mjs",
+    "capture-states": "storybook build --quiet && node scripts/capture-states.mjs"
   },
   "peerDependencies": {
     "react": "^19.0.0",
@@ -44,6 +45,7 @@
     "@types/react-dom": "^19.0.0",
     "@vitejs/plugin-react": "^4.3.4",
     "jsdom": "^25.0.1",
+    "playwright": "^1.63.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "storybook": "^10.6.0",
