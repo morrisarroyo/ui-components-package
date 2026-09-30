@@ -575,3 +575,11 @@ accepted these fixes (grilling round 1, Q1–Q11).
   README's state tables point at docs page sections instead of stories.
 - **Verify:** the sidebar in the built site lists only docs pages; the example
   works from its page; the state screenshots still capture; `npm test` passes.
+
+### T-8.5 No WAI references on the docs pages
+- **Depends on:** T-8.3
+- **Status:** Done
+- **Done when:** the docs pages carry no WAI links (the owner's request):
+  the WAI-ARIA pills on Button and Table and the WAI forms pill on TextField
+  are removed, leaving Design tokens and API.
+- **Verify:** the built pages contain no "WAI" text.
