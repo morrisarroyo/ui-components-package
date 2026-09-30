@@ -593,3 +593,11 @@ accepted these fixes (grilling round 1, Q1–Q11).
   and the root npm package name (`ui-components-package`).
 - **Verify:** no "EHR Design System" left outside quoted brief text and file
   names; the built docs show the new name; `npm test` passes.
+
+### T-8.7 Lead with the components
+- **Depends on:** T-8.6
+- **Status:** Done
+- **Done when:** the Overview page and the library README open with what the
+  package is (reusable React UI components) rather than a count and the
+  product suite.
+- **Verify:** the served Overview page shows the new lead; `npm test` passes.

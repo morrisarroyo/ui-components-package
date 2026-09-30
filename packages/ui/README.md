@@ -1,7 +1,8 @@
 # `ui`
 
-React components for the EHR product suite. You pick a component and a
-variant; the library owns how it looks and behaves.
+Reusable React UI components for building consistent, accessible screens.
+You pick a component and a variant; the library owns how it looks and
+behaves.
 
 | Component | Use it for |
 | --- | --- |
