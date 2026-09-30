@@ -566,3 +566,12 @@ accepted these fixes (grilling round 1, Q1–Q11).
   requirements.
 - **Verify:** screenshots of each page compared with the reference; no console
   errors; `npm test` passes.
+
+### T-8.4 Docs pages only in the sidebar
+- **Depends on:** T-8.3
+- **Status:** Done
+- **Done when:** the Storybook sidebar lists docs pages only; every demo is on
+  its component's docs page; the worked example has a docs page; the library
+  README's state tables point at docs page sections instead of stories.
+- **Verify:** the sidebar in the built site lists only docs pages; the example
+  works from its page; the state screenshots still capture; `npm test` passes.

@@ -26,11 +26,11 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build",
+    "storybook": "storybook dev -p 6006 --docs",
+    "build-storybook": "storybook build --docs",
     "new-component": "node scripts/new-component.mjs",
-    "capture-states": "storybook build --quiet && node scripts/capture-states.mjs",
-    "docs": "storybook build --quiet && vite preview --outDir storybook-static --port 6007 --strictPort"
+    "capture-states": "storybook build --docs --quiet && node scripts/capture-states.mjs",
+    "docs": "storybook build --docs --quiet && vite preview --outDir storybook-static --port 6007 --strictPort"
   },
   "peerDependencies": {
     "react": "^19.0.0",

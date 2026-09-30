@@ -131,7 +131,7 @@ export function App() {
 ## A real screen: patient lookup
 
 All five components in one screen: search in a `Card`, results in a `Table`,
-the chosen record in a `DescriptionList`. Run `npm run storybook` at the
+the chosen record in a `DescriptionList`. Run `npm run docs` at the
 repository root and open **Examples / Patient lookup**. Search `lo` for
 results, `zz` for none, `error` for a failure, or one letter for the
 validation error; then click a row.
@@ -356,8 +356,9 @@ border, a table row just inside the row.
 
 Each component has: When to use it, Example, Props, Behaviour, States, Source.
 Examples run as written in an app that imports `ui/styles.css`; a test checks
-each props table against the code. To see a state live, open its story with
-`npm run storybook` (hover or tab to it for hover and focus states). Links
+each props table against the code. To see a state live, run `npm run docs`
+and open the component's page; the Demo column names the section that shows
+it (hover or tab to it for hover and focus states). Links
 like `src/components/Button.tsx:38` point at the line that does what the
 sentence says.
 
@@ -442,16 +443,16 @@ Types: `ButtonProps`, `ButtonVariant`, `ButtonSize`.
 
 #### States
 
-| State | How | Looks like | Story | Picture |
+| State | How | Looks like | Demo | Picture |
 | --- | --- | --- | --- | --- |
-| Primary | default | Blue fill, white label | Components / Button / Primary | <img src="docs/states/button-primary.png" alt="Primary button" height="40"> |
-| Primary, hover | pointer over it | Darker blue | Components / Button / Primary (hover) | <img src="docs/states/button-primary-hover.png" alt="Primary button, hovered" height="40"> |
-| Focus | Tab to it | Light-blue ring outside the border; not on mouse click | Components / Button / Primary (tab) | <img src="docs/states/button-primary-focus.png" alt="Primary button with focus ring" height="40"> |
-| Secondary | `variant="secondary"` | White, grey border, dark label | Components / Button / Secondary | <img src="docs/states/button-secondary.png" alt="Secondary button" height="40"> |
-| Secondary, hover | pointer over it | Light-grey fill | Components / Button / Secondary (hover) | <img src="docs/states/button-secondary-hover.png" alt="Secondary button, hovered" height="40"> |
-| Small | `size="sm"` | Less padding | Components / Button / Small | <img src="docs/states/button-small.png" alt="Small button" height="40"> |
-| Loading | `loading` | Spinner, same width and colours | Components / Button / Loading | <img src="docs/states/button-loading.png" alt="Loading button with spinner" height="40"> |
-| Disabled | `disabled` | Grey fill, grey label, no hover | Components / Button / Disabled | <img src="docs/states/button-disabled.png" alt="Disabled button" height="40"> |
+| Primary | default | Blue fill, white label | Basic button | <img src="docs/states/button-primary.png" alt="Primary button" height="40"> |
+| Primary, hover | pointer over it | Darker blue | Basic button (hover it) | <img src="docs/states/button-primary-hover.png" alt="Primary button, hovered" height="40"> |
+| Focus | Tab to it | Light-blue ring outside the border; not on mouse click | Basic button (tab to it) | <img src="docs/states/button-primary-focus.png" alt="Primary button with focus ring" height="40"> |
+| Secondary | `variant="secondary"` | White, grey border, dark label | Variants | <img src="docs/states/button-secondary.png" alt="Secondary button" height="40"> |
+| Secondary, hover | pointer over it | Light-grey fill | Variants (hover Cancel) | <img src="docs/states/button-secondary-hover.png" alt="Secondary button, hovered" height="40"> |
+| Small | `size="sm"` | Less padding | Sizes | <img src="docs/states/button-small.png" alt="Small button" height="40"> |
+| Loading | `loading` | Spinner, same width and colours | Loading | <img src="docs/states/button-loading.png" alt="Loading button with spinner" height="40"> |
+| Disabled | `disabled` | Grey fill, grey label, no hover | Disabled | <img src="docs/states/button-disabled.png" alt="Disabled button" height="40"> |
 
 #### Source
 
@@ -542,13 +543,13 @@ Types: `TextFieldProps`.
 
 #### States
 
-| State | How | Looks like | Story | Picture |
+| State | How | Looks like | Demo | Picture |
 | --- | --- | --- | --- | --- |
-| Default | — | Grey label, white input, grey border | Components / TextField / Default | <img src="docs/states/textfield-default.png" alt="Text field, empty with placeholder" width="280"> |
-| Focus | click or Tab in | Blue border and light-blue ring | Components / TextField / Default (tab) | <img src="docs/states/textfield-focus.png" alt="Text field with focus ring" width="280"> |
-| With hint | `helperText` | Small grey text below | Components / TextField / With Helper Text | <img src="docs/states/textfield-helper.png" alt="Text field with helper text" width="280"> |
-| Error | non-empty `errorMessage` | Red border (also when focused), red message instead of the hint | Components / TextField / With Error | <img src="docs/states/textfield-error.png" alt="Text field in error state" width="280"> |
-| Disabled | `disabled` | Grey fill, grey text | Components / TextField / Disabled | <img src="docs/states/textfield-disabled.png" alt="Disabled text field" width="280"> |
+| Default | — | Grey label, white input, grey border | Basic text field | <img src="docs/states/textfield-default.png" alt="Text field, empty with placeholder" width="280"> |
+| Focus | click or Tab in | Blue border and light-blue ring | Basic text field (tab to it) | <img src="docs/states/textfield-focus.png" alt="Text field with focus ring" width="280"> |
+| With hint | `helperText` | Small grey text below | Helper text | <img src="docs/states/textfield-helper.png" alt="Text field with helper text" width="280"> |
+| Error | non-empty `errorMessage` | Red border (also when focused), red message instead of the hint | Error | <img src="docs/states/textfield-error.png" alt="Text field in error state" width="280"> |
+| Disabled | `disabled` | Grey fill, grey text | Disabled | <img src="docs/states/textfield-disabled.png" alt="Disabled text field" width="280"> |
 
 #### Source
 
@@ -616,11 +617,11 @@ Types: `CardProps`.
 
 #### States
 
-| State | How | Looks like | Story | Picture |
+| State | How | Looks like | Demo | Picture |
 | --- | --- | --- | --- | --- |
-| Body only | no `title` or `actions` | White box, grey border, rounded, padded | Components / Card / Default | <img src="docs/states/card-body-only.png" alt="Card with body only" width="280"> |
-| With title | `title` | Heading above the body | Components / Card / With Title | <img src="docs/states/card-title.png" alt="Card with a title" width="280"> |
-| With actions | `title` and `actions` | Actions on the right of the title row | Components / Card / With Title And Actions | <img src="docs/states/card-title-actions.png" alt="Card with title and an Edit button" width="280"> |
+| Body only | no `title` or `actions` | White box, grey border, rounded, padded | Basic card | <img src="docs/states/card-body-only.png" alt="Card with body only" width="280"> |
+| With title | `title` | Heading above the body | With a title | <img src="docs/states/card-title.png" alt="Card with a title" width="280"> |
+| With actions | `title` and `actions` | Actions on the right of the title row | With actions | <img src="docs/states/card-title-actions.png" alt="Card with title and an Edit button" width="280"> |
 
 #### Source
 
@@ -701,12 +702,12 @@ Types: `TableProps`, `TableColumn`, `TableRow`.
 
 #### States
 
-| State | How | Looks like | Story | Picture |
+| State | How | Looks like | Demo | Picture |
 | --- | --- | --- | --- | --- |
-| Default | rows, no `onRowClick` | Grey header, hairline between rows; not focusable | Components / Table / Default | <img src="docs/states/table-default.png" alt="Table with three rows" width="280"> |
-| Row hover | `onRowClick`, pointer over a row | Light-grey row, hand cursor | Components / Table / Clickable Rows (hover) | <img src="docs/states/table-row-hover.png" alt="Table with a hovered row" width="280"> |
-| Row focus | `onRowClick`, Tab to a row | Light-grey row, ring around the first cell's text | Components / Table / Clickable Rows (tab) | <img src="docs/states/table-row-focus.png" alt="Table with a focused row" width="280"> |
-| Empty | `rows={[]}` | `emptyMessage`, centred, grey; not clickable | Components / Table / Empty | <img src="docs/states/table-empty.png" alt="Empty table with message" width="280"> |
+| Default | rows, no `onRowClick` | Grey header, hairline between rows; not focusable | Basic table | <img src="docs/states/table-default.png" alt="Table with three rows" width="280"> |
+| Row hover | `onRowClick`, pointer over a row | Light-grey row, hand cursor | Clickable rows (hover a row) | <img src="docs/states/table-row-hover.png" alt="Table with a hovered row" width="280"> |
+| Row focus | `onRowClick`, Tab to a row | Light-grey row, ring around the first cell's text | Clickable rows (tab to a row) | <img src="docs/states/table-row-focus.png" alt="Table with a focused row" width="280"> |
+| Empty | `rows={[]}` | `emptyMessage`, centred, grey; not clickable | Empty state | <img src="docs/states/table-empty.png" alt="Empty table with message" width="280"> |
 
 #### Source
 
@@ -764,10 +765,10 @@ Types: `DescriptionListProps`, `DescriptionListItem`.
 
 #### States
 
-| State | How | Looks like | Story | Picture |
+| State | How | Looks like | Demo | Picture |
 | --- | --- | --- | --- | --- |
-| Default | all values present | Grey labels left, dark values right, hairlines between | Components / DescriptionList / Default | <img src="docs/states/descriptionlist-default.png" alt="Description list with three rows" width="280"> |
-| Missing value | `null`, `undefined` or `''` | Grey `—` | Components / DescriptionList / Missing Values | <img src="docs/states/descriptionlist-missing.png" alt="Description list with em dashes for missing values" width="280"> |
+| Default | all values present | Grey labels left, dark values right, hairlines between | Basic list | <img src="docs/states/descriptionlist-default.png" alt="Description list with three rows" width="280"> |
+| Missing value | `null`, `undefined` or `''` | Grey `—` | Missing values | <img src="docs/states/descriptionlist-missing.png" alt="Description list with em dashes for missing values" width="280"> |
 
 #### Source
 
@@ -940,6 +941,12 @@ export const Danger: Story = {
 
 The story test renders every story, so one that throws fails the tests.
 
+Stories are the demos, not pages: Storybook runs in docs-only mode, so a
+component appears in the sidebar only once it has a docs page. Add
+`src/docs/Badge.mdx`, modelled on `src/docs/Button.mdx`: a title and one-line
+description, a `<Canvas of={BadgeStories.Neutral} />` per state, the
+design-token table, and `<ArgTypes of={BadgeStories} />` for the API.
+
 #### 6. Export its types
 
 Change the scaffold's second line in `src/index.ts` so the two read:
@@ -984,7 +991,7 @@ What it does for you, and its limits.
 
 #### States
 
-| State | How | Looks like | Story | Picture |
+| State | How | Looks like | Demo | Picture |
 | --- | --- | --- | --- | --- |
 
 #### Source
