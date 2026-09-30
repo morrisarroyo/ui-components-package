@@ -53,6 +53,14 @@ API stopped, the site shows "Something went wrong"; that is intended.
 
 ## Hosting
 
+Live, on a free Render service:
+
+| Site | Address |
+| --- | --- |
+| Website | <https://ui-components-package.onrender.com> |
+| Component docs | <https://ui-components-package.onrender.com/docs/> |
+| API | <https://ui-components-package.onrender.com/api/patients> |
+
 The `Dockerfile` builds one image that serves the website at `/`, the API at
 `/api` and the component docs at `/docs`. `render.yaml` deploys it as a free
 Render web service: push the repository to GitHub, then in Render choose

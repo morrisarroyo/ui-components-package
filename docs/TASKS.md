@@ -650,8 +650,7 @@ The owner asked for the components to meet the W3C accessibility standard
 
 ### T-10.2 Deployed on Render
 - **Depends on:** T-10.1
-- **Status:** Blocked (owner: push the repository to GitHub and create the
-  Render Blueprint from it)
+- **Status:** Done
 - **Done when:** the public address serves all three, and the project README
   gives the links.
 - **Verify:** the T-10.1 checks pass against the public address.
