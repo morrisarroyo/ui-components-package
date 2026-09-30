@@ -597,7 +597,8 @@ accepted these fixes (grilling round 1, Q1–Q11).
 ### T-8.7 Lead with the components
 - **Depends on:** T-8.6
 - **Status:** Done
-- **Done when:** the Overview page and the library README open with what the
-  package is (reusable React UI components) rather than a count and the
-  product suite.
+- **Done when:** the Overview page and the library README open with the
+  project's purpose as the brief frames it: UI components that developers use
+  to build applications for the healthcare setting (the screens of an EHR
+  system), assembled by product teams into their own apps.
 - **Verify:** the served Overview page shows the new lead; `npm test` passes.

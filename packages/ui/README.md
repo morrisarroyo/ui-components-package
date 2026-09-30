@@ -1,8 +1,11 @@
 # `ui`
 
-Reusable React UI components for building consistent, accessible screens.
-You pick a component and a variant; the library owns how it looks and
-behaves.
+React UI components that developers use to build applications for the
+healthcare setting: the screens of an Electronic Health Record (EHR) system,
+such as a clinic's patient list and a patient's record. Product teams assemble
+them into their own apps, so every screen looks and behaves the same and is
+accessible by default. You pick a component and a variant; the library owns
+how it looks and behaves.
 
 | Component | Use it for |
 | --- | --- |
