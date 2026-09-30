@@ -1,4 +1,4 @@
-# Design Document — EHR Design System
+# Design Document — UI Components Package
 
 **Status:** authoritative design input for this project
 **Last updated:** 2026-09-25

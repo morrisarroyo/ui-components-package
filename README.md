@@ -1,8 +1,8 @@
-# EHR Design System
+# UI Components Package
 
-A React design system for an Electronic Health Record product suite, a small
-website built only from it, and a mock API that feeds the website invented
-patient data.
+A React UI components package for an Electronic Health Record product
+suite, a small website built only from it, and a mock API that feeds the
+website invented patient data.
 
 | Package | Path | What it is |
 | --- | --- | --- |

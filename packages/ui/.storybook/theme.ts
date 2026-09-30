@@ -3,7 +3,7 @@ import { create } from 'storybook/theming';
 /** A dark theme for the docs site, after Material UI's documentation. */
 export const theme = create({
   base: 'dark',
-  brandTitle: 'EHR Design System',
+  brandTitle: 'UI Components Package',
   fontBase: "'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif",
   fontCode: "'IBM Plex Mono', ui-monospace, Menlo, monospace",
   colorPrimary: '#58A6FF',

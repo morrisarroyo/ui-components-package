@@ -1,7 +1,7 @@
 {
   "name": "ui",
   "version": "0.1.0",
-  "description": "React design system components for the EHR product suite.",
+  "description": "React UI components package for the EHR product suite.",
   "type": "module",
   "main": "./dist/ui.js",
   "module": "./dist/ui.js",

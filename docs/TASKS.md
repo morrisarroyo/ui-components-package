@@ -583,3 +583,13 @@ accepted these fixes (grilling round 1, Q1–Q11).
   the WAI-ARIA pills on Button and Table and the WAI forms pill on TextField
   are removed, leaving Design tokens and API.
 - **Verify:** the built pages contain no "WAI" text.
+
+### T-8.6 Rename to "UI Components Package"
+- **Depends on:** —
+- **Status:** Done
+- **Done when:** the project is called "UI Components Package" wherever it was
+  called "EHR Design System": the READMEs, CLAUDE.md, the design document's
+  title, the Storybook brand and Overview page, the `ui` package description
+  and the root npm package name (`ui-components-package`).
+- **Verify:** no "EHR Design System" left outside quoted brief text and file
+  names; the built docs show the new name; `npm test` passes.

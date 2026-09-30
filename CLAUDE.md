@@ -1,12 +1,12 @@
-# CLAUDE.md — EHR Design System
+# CLAUDE.md — UI Components Package
 
 Working context for agents and humans. Read this first, then the document it
 points at for whatever you are about to touch.
 
 ## What this project is
 
-A React + TypeScript design system for an EHR product suite, proven by a small
-website that consumes it and a C# mock API that feeds it. Three packages in one
+A React + TypeScript UI components package for an EHR product suite, proven
+by a small website that consumes it and a C# mock API that feeds it. Three packages in one
 repository:
 
 | Package | Path | What it is |
