@@ -317,30 +317,6 @@ swap the data source for a test one.
 
 ---
 
-## D-19 — Hosted as one container on Render's free tier
-
-**Decided:** 2026-09-29 · **Status:** settled
-
-A single Docker image: the API serves the built website at `/`, its own
-endpoints at `/api` and the Storybook docs at `/docs`. It runs as one free
-Render web service, described in `render.yaml`.
-
-**Why.** The owner asked for a free host for all three. The website calls
-`/api` on its own address, so serving both from one process needs no CORS
-and no change to the client. Render runs Docker images for free; the API
-needs .NET, which free static hosts cannot run.
-
-**Considered.** A static host (Netlify, Cloudflare Pages) for the site and
-docs, forwarding `/api` to an API hosted elsewhere: two services to run.
-Azure App Service: more setup, and billing. Fly.io and Railway: no longer
-free.
-
-**What would change it.** Needing the API awake at all times. The free
-service sleeps after 15 minutes idle, and the next visit takes about a
-minute to wake it.
-
----
-
 ## D-19 — Three colours depart from the brief to meet WCAG 2.2 AA
 
 **Decided:** 2026-09-29 · **Status:** settled (owner's choice, grilling Q16)
@@ -363,3 +339,27 @@ brief's most explicit table and moves every component), and keeping the brief
 exactly with the three documented as exceptions (does not meet the standard).
 
 **What would change it.** A revised token sheet whose values pass on their own.
+
+---
+
+## D-20 — Hosted as one container on Render's free tier
+
+**Decided:** 2026-09-29 · **Status:** settled
+
+A single Docker image: the API serves the built website at `/`, its own
+endpoints at `/api` and the Storybook docs at `/docs`. It runs as one free
+Render web service, described in `render.yaml`.
+
+**Why.** The owner asked for a free host for all three. The website calls
+`/api` on its own address, so serving both from one process needs no CORS
+and no change to the client. Render runs Docker images for free; the API
+needs .NET, which free static hosts cannot run.
+
+**Considered.** A static host (Netlify, Cloudflare Pages) for the site and
+docs, forwarding `/api` to an API hosted elsewhere: two services to run.
+Azure App Service: more setup, and billing. Fly.io and Railway: no longer
+free.
+
+**What would change it.** Needing the API awake at all times. The free
+service sleeps after 15 minutes idle, and the next visit takes about a
+minute to wake it.

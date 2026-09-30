@@ -634,9 +634,9 @@ The owner asked for the components to meet the W3C accessibility standard
 
 ---
 
-## Phase 9 — Hosting
+## Phase 10 — Hosting
 
-### T-9.1 One container serves the site, the API and the docs
+### T-10.1 One container serves the site, the API and the docs
 - **Depends on:** —
 - **Status:** Done
 - **Done when:** a `Dockerfile` builds one image in which the API serves the
@@ -648,10 +648,10 @@ The owner asked for the components to meet the W3C accessibility standard
   deep link such as `/patients/p-0003` loads, unknown `/api` paths are 404,
   every docs page renders, and `npm run test:api` passes.
 
-### T-9.2 Deployed on Render
-- **Depends on:** T-9.1
+### T-10.2 Deployed on Render
+- **Depends on:** T-10.1
 - **Status:** Blocked (owner: push the repository to GitHub and create the
   Render Blueprint from it)
 - **Done when:** the public address serves all three, and the project README
   gives the links.
-- **Verify:** the T-9.1 checks pass against the public address.
+- **Verify:** the T-10.1 checks pass against the public address.

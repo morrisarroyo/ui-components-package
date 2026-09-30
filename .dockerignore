@@ -1,0 +1,10 @@
+.git
+.idea
+.claude
+**/node_modules
+**/dist
+**/storybook-static
+**/bin
+**/obj
+*.pdf
+Interview Task 006*

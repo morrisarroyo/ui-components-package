@@ -15,6 +15,14 @@ if (string.IsNullOrEmpty(builder.Configuration["urls"]))
 
 var app = builder.Build();
 
+// In the hosted container, wwwroot holds the built website and, under docs/,
+// the component docs site (see Dockerfile). Locally there is no wwwroot and
+// these do nothing. Routing comes after them so the fallback below cannot
+// claim /docs/ before it is mapped to docs/index.html.
+app.UseDefaultFiles();
+app.UseStaticFiles();
+app.UseRouting();
+
 app.MapGet("/health", () => "ok");
 
 // All patients, or those whose given name, family name, or the two joined as
@@ -43,6 +51,11 @@ app.MapGet("/api/patients/{id}", (string id) =>
         ? Results.Problem(statusCode: StatusCodes.Status404NotFound, detail: $"No patient with id '{id}'.")
         : Results.Ok(patient);
 });
+
+// The website's own routes, such as /patients/p-0003, load its index.html so
+// the client router can take over. Unknown /api paths stay a 404 instead.
+app.MapFallback("/api/{**path}", () => Results.NotFound());
+app.MapFallbackToFile("index.html");
 
 app.Run();
 

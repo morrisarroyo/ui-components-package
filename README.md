@@ -51,6 +51,14 @@ API stopped, the site shows "Something went wrong"; that is intended.
 | `api` | `dotnet run --project api/Intrahealth.Api` | The API (same as `npm run api`). |
 | `api` | `dotnet test api/Intrahealth.Api.Tests` | API tests (same as `npm run test:api`). |
 
+## Hosting
+
+The `Dockerfile` builds one image that serves the website at `/`, the API at
+`/api` and the component docs at `/docs`. `render.yaml` deploys it as a free
+Render web service: push the repository to GitHub, then in Render choose
+**New → Blueprint** and pick the repository. The free service sleeps when
+idle, so the first visit after a while takes about a minute.
+
 ## Component docs
 
 A local website documenting every component: live demos with their code, the

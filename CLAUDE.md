@@ -149,6 +149,21 @@ of Material UI's component pages and limited to the design requirements.
 **Done when:** `npm run build-storybook --workspace ui` produces them as a
 static HTML site.
 
+### Phase 9 — Accessibility to WCAG 2.2 AA
+
+The components meet the W3C accessibility standard (WCAG 2.2, level AA), and
+the docs say so.
+
+**Done when:** every Phase 9 task in `docs/TASKS.md` is Done.
+
+### Phase 10 — Hosting
+
+The website, the API and the component docs hosted for free at one public
+address, so a reviewer can use them without cloning the repository.
+
+**Done when:** the public address serves the website at `/`, the API at
+`/api` and the docs at `/docs`.
+
 ## Working agreements
 
 - **Follow `docs/CONVENTIONS.md`** for file layout, naming, styling and tests.
