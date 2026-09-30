@@ -1,0 +1,59 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import * as ButtonStories from '../components/Button.stories';
+
+<Meta of={ButtonStories} />
+
+# Button
+
+A clickable button that triggers an action. It comes in two visual styles and
+two sizes, and can show that it is busy or unavailable.
+
+## Basic button
+
+<Canvas of={ButtonStories.Primary} />
+
+## Variants
+
+Use **primary** for the main action on a screen, and **secondary** for
+everything else.
+
+<Canvas of={ButtonStories.Variants} />
+
+| Variant | Background | Text | Border | Hover |
+| --- | --- | --- | --- | --- |
+| `primary` | color.primary | white | — | color.primary.hover |
+| `secondary` | color.surface | color.text | color.border | color.surface.subtle |
+
+## Sizes
+
+<Canvas of={ButtonStories.Sizes} />
+
+| Size | Vertical padding | Horizontal padding |
+| --- | --- | --- |
+| `sm` | space.1 | space.3 |
+| `md` (default) | space.2 | space.4 |
+
+Both sizes use radius.sm and font.button.
+
+## Loading
+
+A spinner replaces the label and the button is non-interactive. Its width does
+not change.
+
+<Canvas of={ButtonStories.Loading} />
+
+## Disabled
+
+color.disabled.bg background, color.disabled.text text, and non-interactive.
+
+<Canvas of={ButtonStories.Disabled} />
+
+## Accessibility
+
+- Works from the keyboard: Tab to it, activate with Enter or Space.
+- Keyboard focus shows a 2px outline in color.focus with a 2px offset.
+- Disabled is the native `disabled` attribute, so it is actually disabled.
+
+## API
+
+<ArgTypes of={ButtonStories} />

@@ -40,8 +40,8 @@ API stopped, the site shows "Something went wrong"; that is intended.
 | --- | --- | --- |
 | `ui` | `npm run build --workspace ui` | Builds `dist/` (JS, CSS, type declarations). |
 | `ui` | `npm run test --workspace ui` | Library tests. |
-| `ui` | `npm run storybook` | Storybook on http://localhost:6006. |
-| `ui` | `npm run build-storybook --workspace ui` | Static Storybook in `packages/ui/storybook-static/`. |
+| `ui` | `npm run storybook` | The component docs and demos on http://localhost:6006. |
+| `ui` | `npm run build-storybook --workspace ui` | The component docs as a static HTML site in `packages/ui/storybook-static/`. |
 | `ui` | `npm run new-component --workspace ui -- Badge` | Scaffolds a component; see the library README's Contributing section. |
 | `ui` | `npm run capture-states --workspace ui` | Re-captures the state screenshots. Needs `npx playwright install chromium` once. |
 | `app` | `npm run dev --workspace app` | The site alone. Needs `ui` built. |

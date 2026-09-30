@@ -1,0 +1,63 @@
+import { Meta, ColorPalette, ColorItem, Typeset } from '@storybook/addon-docs/blocks';
+
+<Meta title="Foundations/Tokens" />
+
+# Design tokens
+
+Every value in the token sheet is defined once, as a CSS custom property on
+`:root`, and components reference it by name. Use the custom property in CSS;
+the dotted name is the token sheet's name for it.
+
+## Colour
+
+<ColorPalette>
+  <ColorItem title="color.primary" subtitle="--ui-color-primary" colors={['#1F6FEB']} />
+  <ColorItem title="color.primary.hover" subtitle="--ui-color-primary-hover" colors={['#185CC4']} />
+  <ColorItem title="color.danger" subtitle="--ui-color-danger" colors={['#C93C37']} />
+  <ColorItem title="color.text" subtitle="--ui-color-text" colors={['#1A1A1A']} />
+  <ColorItem title="color.text.muted" subtitle="--ui-color-text-muted" colors={['#6B7280']} />
+  <ColorItem title="color.border" subtitle="--ui-color-border" colors={['#D1D5DB']} />
+  <ColorItem title="color.focus" subtitle="--ui-color-focus" colors={['#93C5FD']} />
+  <ColorItem title="color.surface" subtitle="--ui-color-surface" colors={['#FFFFFF']} />
+  <ColorItem title="color.surface.subtle" subtitle="--ui-color-surface-subtle" colors={['#F3F4F6']} />
+  <ColorItem title="color.disabled.bg" subtitle="--ui-color-disabled-bg" colors={['#E5E7EB']} />
+  <ColorItem title="color.disabled.text" subtitle="--ui-color-disabled-text" colors={['#9CA3AF']} />
+</ColorPalette>
+
+## Spacing
+
+| Token | Custom property | Value | |
+| --- | --- | --- | --- |
+| space.1 | `--ui-space-1` | 4px | <div style={{ width: 4, height: 12, background: '#1F6FEB' }} /> |
+| space.2 | `--ui-space-2` | 8px | <div style={{ width: 8, height: 12, background: '#1F6FEB' }} /> |
+| space.3 | `--ui-space-3` | 12px | <div style={{ width: 12, height: 12, background: '#1F6FEB' }} /> |
+| space.4 | `--ui-space-4` | 16px | <div style={{ width: 16, height: 12, background: '#1F6FEB' }} /> |
+| space.6 | `--ui-space-6` | 24px | <div style={{ width: 24, height: 12, background: '#1F6FEB' }} /> |
+| space.8 | `--ui-space-8` | 32px | <div style={{ width: 32, height: 12, background: '#1F6FEB' }} /> |
+
+## Radius
+
+| Token | Custom property | Value | |
+| --- | --- | --- | --- |
+| radius.sm | `--ui-radius-sm` | 4px | <div style={{ width: 48, height: 24, border: '1px solid #D1D5DB', borderRadius: 4 }} /> |
+| radius.md | `--ui-radius-md` | 8px | <div style={{ width: 48, height: 24, border: '1px solid #D1D5DB', borderRadius: 8 }} /> |
+
+## Typography
+
+Each role is a size, a line height and a weight
+(`--ui-font-<role>-size`, `-line`, `-weight`).
+
+| Token | Size / line height | Weight |
+| --- | --- | --- |
+| font.body | 14px / 20px | 400 |
+| font.label | 12px / 16px | 400 |
+| font.button | 14px / 20px | 600 |
+| font.heading | 20px / 28px | 600 |
+| font.title | 24px / 32px | 600 |
+
+<Typeset
+  fontFamily="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif"
+  fontSizes={[12, 14, 20, 24]}
+  fontWeight={400}
+  sampleText="Amara Okonkwo, born 2 Mar 1984"
+/>

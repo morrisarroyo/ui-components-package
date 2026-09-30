@@ -4,9 +4,13 @@ import type { Preview } from '@storybook/react-vite';
 import '../src/tokens.css';
 
 const preview: Preview = {
-  tags: ['autodocs'],
   parameters: {
     controls: { expanded: true },
+    options: {
+      storySort: {
+        order: ['Overview', 'Foundations', 'Components', ['Button', 'TextField', 'Card', 'Table', 'DescriptionList'], 'Examples'],
+      },
+    },
   },
 };
 

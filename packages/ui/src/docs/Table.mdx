@@ -1,0 +1,46 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import * as TableStories from '../components/Table.stories';
+
+<Meta of={TableStories} />
+
+# Table
+
+A data table: a header row of column names and one body row per record. Rows
+can be clickable, and it shows a message when there are no rows.
+
+## Basic table
+
+<Canvas of={TableStories.Default} />
+
+## Clickable rows
+
+Set `onRowClick` to make rows clickable. A row highlights in
+color.surface.subtle on hover, with a pointer cursor, and works from the
+keyboard.
+
+<Canvas of={TableStories.ClickableRows} />
+
+## Empty state
+
+With no rows, `emptyMessage` shows centred in color.text.muted with space.8
+vertical padding. It defaults to "No results".
+
+<Canvas of={TableStories.Empty} />
+
+## Anatomy
+
+| Part | Style |
+| --- | --- |
+| Header row | font.label, color.text.muted, color.surface.subtle background |
+| Body rows | font.body, space.3 vertical and space.4 horizontal padding, color.border bottom border |
+
+## Accessibility
+
+- Clickable rows can be reached with Tab and activated with Enter or Space,
+  and are announced as actionable.
+- The table keeps its rows and cells, so screen readers can move through it by
+  row and column.
+
+## API
+
+<ArgTypes of={TableStories} />

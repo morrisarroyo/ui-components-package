@@ -1,0 +1,37 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import * as CardStories from '../components/Card.stories';
+
+<Meta of={CardStories} />
+
+# Card
+
+A bordered container that groups related content on a page. It has an optional
+title at the top and an optional slot on the same row for buttons; whatever
+you place inside it becomes the body.
+
+## Basic card
+
+<Canvas of={CardStories.Default} />
+
+## With a title
+
+<Canvas of={CardStories.WithTitle} />
+
+## With actions
+
+Actions sit right-aligned on the title's row.
+
+<Canvas of={CardStories.WithTitleAndActions} />
+
+## Anatomy
+
+| Part | Style |
+| --- | --- |
+| Container | color.surface background, color.border border, radius.md, space.6 padding |
+| Title | font.heading, at the top |
+| Actions | right-aligned on the title row |
+| Title row | space.4 gap below it |
+
+## API
+
+<ArgTypes of={CardStories} />

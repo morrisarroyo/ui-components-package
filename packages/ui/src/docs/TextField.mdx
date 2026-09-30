@@ -1,0 +1,53 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import * as TextFieldStories from '../components/TextField.stories';
+
+<Meta of={TextFieldStories} />
+
+# TextField
+
+A single-line text input with a label above it. It can show a short hint below
+the input, or an error message when the value is invalid.
+
+## Basic text field
+
+<Canvas of={TextFieldStories.Default} />
+
+## Helper text
+
+A hint below the input in font.label and color.text.muted, space.1 from the
+input.
+
+<Canvas of={TextFieldStories.WithHelperText} />
+
+## Error
+
+The field is in its error state when `errorMessage` is provided and not empty.
+The border becomes color.danger, and the message shows below the input in
+color.danger, replacing the helper text. Otherwise the helper text, if
+provided, shows.
+
+<Canvas of={TextFieldStories.WithError} />
+
+## Disabled
+
+color.disabled.bg background and color.disabled.text text.
+
+<Canvas of={TextFieldStories.Disabled} />
+
+## Anatomy
+
+| Part | Style |
+| --- | --- |
+| Label | font.label, color.text.muted, space.1 above the input |
+| Input | space.2 vertical and space.3 horizontal padding, color.border border, radius.sm, font.body |
+| Focus | border becomes color.primary, 2px outline in color.focus |
+
+## Accessibility
+
+- The label is associated with the input: clicking it focuses the input, and
+  screen readers announce it.
+- An error message is announced and marks the input invalid.
+
+## API
+
+<ArgTypes of={TextFieldStories} />

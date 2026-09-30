@@ -141,6 +141,14 @@ and a process record that matches the repository.
 **Done when:** every Phase 7 task in `docs/TASKS.md` is Done or blocked only
 on the owner.
 
+### Phase 8 — Component documentation site
+
+Storybook docs pages, one per component plus the design tokens, in the style
+of Material UI's component pages and limited to the design requirements.
+
+**Done when:** `npm run build-storybook --workspace ui` produces them as a
+static HTML site.
+
 ## Working agreements
 
 - **Follow `docs/CONVENTIONS.md`** for file layout, naming, styling and tests.

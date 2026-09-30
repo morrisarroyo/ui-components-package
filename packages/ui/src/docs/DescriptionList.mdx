@@ -1,0 +1,33 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import * as DescriptionListStories from '../components/DescriptionList.stories';
+
+<Meta of={DescriptionListStories} />
+
+# DescriptionList
+
+A read-only list of label and value pairs, one per row, for the details of a
+single record, such as a patient's name, date of birth and phone. It is the
+read-only counterpart to a form.
+
+## Basic list
+
+<Canvas of={DescriptionListStories.Default} />
+
+## Missing values
+
+An item whose value is empty, `null` or `undefined` renders as "—" in
+color.text.muted.
+
+<Canvas of={DescriptionListStories.MissingValues} />
+
+## Anatomy
+
+| Part | Style |
+| --- | --- |
+| Label | font.label, color.text.muted, fixed width 160px |
+| Value | font.body, color.text, to the right of the label |
+| Rows | space.3 vertical gap, color.border bottom border on every row except the last |
+
+## API
+
+<ArgTypes of={DescriptionListStories} />

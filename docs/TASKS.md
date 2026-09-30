@@ -528,3 +528,20 @@ accepted these fixes (grilling round 1, Q1–Q11).
 - **Done when:** the repository is pushed to a private GitHub repository shared
   with the reviewers.
 - **Verify:** a fresh clone from GitHub passes the documented commands.
+
+---
+
+## Phase 8 — Component documentation site
+
+### T-8.1 Storybook docs pages for the components
+- **Depends on:** T-5.1
+- **Status:** Done
+- **Done when:** Storybook has a documentation page per component and one
+  for the design tokens, in the style of Material UI's component pages (a
+  short introduction, live demos with their code, then the props API). The
+  content is limited to the design requirements: props, token-level
+  appearance, states and accessibility. `npm run build-storybook --workspace
+  ui` produces them as a static HTML site.
+- **Verify:** the built index lists a docs page for each component and for
+  the tokens; each page renders in a browser with its demos; every token and
+  value on the pages matches the token sheet; the props tables match the code.
