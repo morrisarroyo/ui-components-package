@@ -15,7 +15,10 @@
 /* 1px hairline border: the token sheet defines no border width. */
 .input {
   padding: var(--ui-space-2) var(--ui-space-3);
-  border: 1px solid var(--ui-color-border);
+  /* color.text.muted, not the brief's color.border: the border is what shows
+     where the field is, and color.border is 1.5:1 against white, under WCAG
+     AA's 3:1 for a component's boundary (D-19). */
+  border: 1px solid var(--ui-color-text-muted);
   border-radius: var(--ui-radius-sm);
   background: var(--ui-color-surface);
   color: var(--ui-color-text);

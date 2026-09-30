@@ -9,7 +9,9 @@
 
 .headerCell {
   background: var(--ui-color-surface-subtle);
-  color: var(--ui-color-text-muted);
+  /* color.text, not the brief's color.text.muted: muted is 4.4:1 on this
+     background, under WCAG AA's 4.5:1 for text (D-19). */
+  color: var(--ui-color-text);
   font-size: var(--ui-font-label-size);
   line-height: var(--ui-font-label-line);
   font-weight: var(--ui-font-label-weight);
@@ -47,8 +49,17 @@
 }
 
 .rowButton:focus-visible {
-  outline: var(--ui-focus-ring-width) solid var(--ui-color-focus);
+  /* The brief's ring: 2px of color.focus, 2px out. On its own it is 1.8:1
+     against white, under WCAG AA's 3:1 for a focus indicator (D-19), so a
+     2px ring of color.primary (4.6:1) is drawn outside it. Shadows draw the
+     rings; the transparent outline keeps a visible ring in forced-colors
+     mode, which drops shadows. */
+  outline: var(--ui-focus-ring-width) solid transparent;
   outline-offset: var(--ui-focus-ring-offset);
+  box-shadow:
+    0 0 0 var(--ui-focus-ring-offset) var(--ui-color-surface),
+    0 0 0 calc(var(--ui-focus-ring-offset) + var(--ui-focus-ring-width)) var(--ui-color-focus),
+    0 0 0 calc(var(--ui-focus-ring-offset) + var(--ui-focus-ring-width) * 2) var(--ui-color-primary);
 }
 
 .empty {

@@ -314,3 +314,52 @@ query binding and serialisation), and tests against a running server on
 
 **What would change it.** A real database, at which point the factory would
 swap the data source for a test one.
+
+---
+
+## D-19 — Hosted as one container on Render's free tier
+
+**Decided:** 2026-09-29 · **Status:** settled
+
+A single Docker image: the API serves the built website at `/`, its own
+endpoints at `/api` and the Storybook docs at `/docs`. It runs as one free
+Render web service, described in `render.yaml`.
+
+**Why.** The owner asked for a free host for all three. The website calls
+`/api` on its own address, so serving both from one process needs no CORS
+and no change to the client. Render runs Docker images for free; the API
+needs .NET, which free static hosts cannot run.
+
+**Considered.** A static host (Netlify, Cloudflare Pages) for the site and
+docs, forwarding `/api` to an API hosted elsewhere: two services to run.
+Azure App Service: more setup, and billing. Fly.io and Railway: no longer
+free.
+
+**What would change it.** Needing the API awake at all times. The free
+service sleeps after 15 minutes idle, and the next visit takes about a
+minute to wake it.
+
+---
+
+## D-19 — Three colours depart from the brief to meet WCAG 2.2 AA
+
+**Decided:** 2026-09-29 · **Status:** settled (owner's choice, grilling Q16)
+
+The owner asked for the components to meet WCAG 2.2 AA. Three of the brief's
+colour pairings fail its contrast rules, so the components use other colours
+the brief already defines. The token values are unchanged.
+
+| Part | Brief | Measured | Now | Measured |
+| --- | --- | --- | --- | --- |
+| Table header text | color.text.muted on color.surface.subtle | 4.39:1 (text needs 4.5) | color.text | 15.8:1 |
+| Text input border | color.border on white | 1.47:1 (needs 3) | color.text.muted | 4.83:1 |
+| Focus ring (Button, table rows) | 2px color.focus, 2px offset | 1.80:1 (needs 3) | the same ring, plus a 2px color.primary ring outside it | 4.63:1 |
+
+**Why.** It meets the standard without changing the token sheet, which the
+brief defines exactly, and each change is small and visible in one place.
+
+**Considered.** Changing the token values (compliant, but it rewrites the
+brief's most explicit table and moves every component), and keeping the brief
+exactly with the three documented as exceptions (does not meet the standard).
+
+**What would change it.** A revised token sheet whose values pass on their own.
