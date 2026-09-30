@@ -545,3 +545,13 @@ accepted these fixes (grilling round 1, Q1–Q11).
 - **Verify:** the built index lists a docs page for each component and for
   the tokens; each page renders in a browser with its demos; every token and
   value on the pages matches the token sheet; the props tables match the code.
+
+### T-8.2 The docs site as a local website
+- **Depends on:** T-8.1
+- **Status:** Done
+- **Done when:** one command builds the Storybook docs as a static site and
+  serves it at a fixed local address; the project and library READMEs say how
+  to open it and how to hand the built site to another developer.
+- **Verify:** from the root, the command serves the site; every docs page loads
+  from that address; the built folder also works under a different static
+  server.

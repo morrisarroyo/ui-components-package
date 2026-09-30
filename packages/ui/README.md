@@ -14,8 +14,9 @@ variant; the library owns how it looks and behaves.
 Read this file in the repository: its pictures, `src/` links and Storybook
 commands don't work from the installed package.
 
-For a browsable version, `npm run storybook` opens the component docs: one
-page per component with live demos and its props, plus the design tokens.
+For a browsable version, run `npm run docs` at the repository root and open
+<http://localhost:6007>: one page per component with live demos and its
+props, plus the design tokens. The project README says how to share it.
 
 ## Contents
 

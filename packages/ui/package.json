@@ -29,7 +29,8 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "new-component": "node scripts/new-component.mjs",
-    "capture-states": "storybook build --quiet && node scripts/capture-states.mjs"
+    "capture-states": "storybook build --quiet && node scripts/capture-states.mjs",
+    "docs": "storybook build --quiet && vite preview --outDir storybook-static --port 6007 --strictPort"
   },
   "peerDependencies": {
     "react": "^19.0.0",

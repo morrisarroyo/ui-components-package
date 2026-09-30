@@ -40,7 +40,8 @@ API stopped, the site shows "Something went wrong"; that is intended.
 | --- | --- | --- |
 | `ui` | `npm run build --workspace ui` | Builds `dist/` (JS, CSS, type declarations). |
 | `ui` | `npm run test --workspace ui` | Library tests. |
-| `ui` | `npm run storybook` | The component docs and demos on http://localhost:6006. |
+| `ui` | `npm run docs` | Builds the component docs site and serves it on http://localhost:6007. |
+| `ui` | `npm run storybook` | The same docs in development mode on http://localhost:6006, reloading on save. |
 | `ui` | `npm run build-storybook --workspace ui` | The component docs as a static HTML site in `packages/ui/storybook-static/`. |
 | `ui` | `npm run new-component --workspace ui -- Badge` | Scaffolds a component; see the library README's Contributing section. |
 | `ui` | `npm run capture-states --workspace ui` | Re-captures the state screenshots. Needs `npx playwright install chromium` once. |
@@ -49,6 +50,36 @@ API stopped, the site shows "Something went wrong"; that is intended.
 | `app` | `npm run test --workspace app` | Mapping and page tests. Needs `ui` built. |
 | `api` | `dotnet run --project api/Intrahealth.Api` | The API (same as `npm run api`). |
 | `api` | `dotnet test api/Intrahealth.Api.Tests` | API tests (same as `npm run test:api`). |
+
+## Component docs
+
+A local website documenting every component: live demos with their code, the
+props, the states, and the design tokens.
+
+```bash
+npm install        # once
+npm run docs       # builds the site and serves it on http://localhost:6007
+```
+
+Open <http://localhost:6007>. Start from **Overview**, then **Foundations →
+Tokens** and **Components**; each component's **Docs** page has its demos and
+props. Stop the server with Ctrl+C.
+
+**Sharing it with another developer:** `npm run docs` leaves the built site in
+`packages/ui/storybook-static/`. Zip that folder and send it, or host it on
+any static web server. To open it on their machine, serve the folder over
+HTTP; opening `index.html` directly from disk doesn't work.
+
+```bash
+cd storybook-static
+python3 -m http.server 8080 --bind 127.0.0.1
+```
+
+Then open <http://127.0.0.1:8080>. They need nothing else from this
+repository.
+
+While working on the library, `npm run storybook` runs the same site in
+development mode on :6006 and reloads on save.
 
 ## Tests
 
