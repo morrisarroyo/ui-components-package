@@ -654,3 +654,11 @@ The owner asked for the components to meet the W3C accessibility standard
 - **Done when:** the public address serves all three, and the project README
   gives the links.
 - **Verify:** the T-10.1 checks pass against the public address.
+
+### T-10.3 Live links on the docs Overview
+- **Depends on:** T-10.2
+- **Status:** Done
+- **Done when:** the docs site's Overview page links to the live example
+  website and mock API, opening in a new tab.
+- **Verify:** the built Overview page shows both links with the live
+  addresses; after the redeploy, the hosted Overview shows them too.
