@@ -1,0 +1,152 @@
+/*
+ * Storybook's own docs styles set heading and block margins through
+ * high-specificity selectors, so the margins below are !important.
+ *
+ * The docs pages, styled after Material UI's component pages: a dark page,
+ * a large title with a lead paragraph, pill links, demos in a rounded panel
+ * with their code beneath. Scoped to .sbdocs so the component stories, and
+ * the components themselves, are untouched. The demo stage stays white: the
+ * design system defines light surfaces only.
+ */
+.sbdocs.sbdocs-wrapper {
+  background: #101418;
+  padding: 56px 48px 120px;
+}
+
+.sbdocs.sbdocs-content {
+  max-width: 960px;
+  font-family: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  color: #c7d0dd;
+}
+
+.sbdocs-content > h1 {
+  margin: 0 0 16px !important;
+  font-size: 48px;
+  line-height: 1.15;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+}
+
+.sbdocs-content > h1 + p {
+  margin: 0 0 24px !important;
+  font-size: 20px;
+  line-height: 1.6;
+  color: #b2bac2;
+}
+
+.sbdocs-content > h2 {
+  margin: 64px 0 12px !important;
+  padding: 0;
+  border: 0;
+  font-size: 30px;
+  line-height: 1.25;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #ffffff;
+}
+
+.sbdocs-content > p,
+.sbdocs-content > ul li {
+  font-size: 16px;
+  line-height: 1.7;
+  color: #c7d0dd;
+}
+
+.sbdocs-content > p code,
+.sbdocs-content > ul code,
+.sbdocs-content table code {
+  padding: 2px 6px;
+  border: 1px solid #303740;
+  border-radius: 6px;
+  background: #1c2025;
+  color: #e7ebf0;
+  font-family: 'IBM Plex Mono', ui-monospace, Menlo, monospace;
+  font-size: 0.875em;
+}
+
+/* Demo panel: white stage on top, code beneath, one rounded border. */
+.sbdocs-content .sbdocs-preview {
+  margin: 20px 0 32px !important;
+  border: 1px solid #1f262e;
+  border-radius: 12px;
+  box-shadow: none;
+  overflow: hidden;
+  background: #0c1016;
+}
+
+.sbdocs-content .docs-story {
+  background: #ffffff;
+}
+
+.sbdocs-content .docs-story > div {
+  padding: 48px 32px;
+}
+
+.sbdocs-content .sbdocs-preview pre,
+.sbdocs-content .docblock-source {
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  background: #0c1016;
+  font-family: 'IBM Plex Mono', ui-monospace, Menlo, monospace;
+  font-size: 14px;
+}
+
+/* Markdown tables: quiet dark rules, no zebra. */
+.sbdocs-content > table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.sbdocs-content > table th,
+.sbdocs-content > table td {
+  padding: 10px 14px;
+  border: 0;
+  border-bottom: 1px solid #1f262e;
+  background: transparent;
+  color: #c7d0dd;
+  text-align: left;
+}
+
+.sbdocs-content > table th {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.sbdocs-content > table tr {
+  background: transparent !important;
+  border: 0;
+}
+
+/* The pill links under each page's lead paragraph. */
+.doc-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0 0 16px !important;
+}
+
+.doc-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border: 1px solid #303740;
+  border-radius: 999px;
+  background: #1c2025;
+  color: #e7ebf0;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.doc-links a:hover {
+  border-color: #58a6ff;
+  color: #ffffff;
+}
+
+.doc-links a span {
+  color: #58a6ff;
+}

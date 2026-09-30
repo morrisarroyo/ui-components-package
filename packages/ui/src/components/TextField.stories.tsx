@@ -17,9 +17,14 @@ function ControlledTextField(props: TextFieldProps) {
   );
 }
 
+// It renders exactly <TextField> with the story's props, so the docs' code
+// sample names it that way rather than by the wrapper's minified name.
+ControlledTextField.displayName = 'TextField';
+
 const meta = {
   title: 'Components/TextField',
   component: TextField,
+  parameters: { layout: 'centered' },
   render: (args) => <ControlledTextField {...args} />,
   args: { label: 'Search patients', value: '', onChange: () => {} },
 } satisfies Meta<typeof TextField>;

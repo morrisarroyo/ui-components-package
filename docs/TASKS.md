@@ -555,3 +555,14 @@ accepted these fixes (grilling round 1, Q1–Q11).
 - **Verify:** from the root, the command serves the site; every docs page loads
   from that address; the built folder also works under a different static
   server.
+
+### T-8.3 Docs site styled like Material UI's
+- **Depends on:** T-8.2
+- **Status:** Done
+- **Done when:** the docs pages follow the owner's reference (the Material UI
+  Checkbox page): a dark page, a large bold title and a larger lead paragraph,
+  a row of pill links under it, demos in a rounded panel with their code shown
+  beneath, and large section headings. The content stays limited to the design
+  requirements.
+- **Verify:** screenshots of each page compared with the reference; no console
+  errors; `npm test` passes.

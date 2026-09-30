@@ -1,4 +1,5 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { DocLinks } from './DocLinks';
 import * as CardStories from '../components/Card.stories';
 
 <Meta of={CardStories} />
@@ -8,6 +9,13 @@ import * as CardStories from '../components/Card.stories';
 A bordered container that groups related content on a page. It has an optional
 title at the top and an optional slot on the same row for buttons; whatever
 you place inside it becomes the body.
+
+<DocLinks
+  links={[
+    { label: 'Design tokens', href: '?path=/docs/foundations-tokens--docs', icon: '◆' },
+    { label: 'API', href: '#api', icon: '{ }' },
+  ]}
+/>
 
 ## Basic card
 

@@ -1,4 +1,5 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { DocLinks } from './DocLinks';
 import * as TextFieldStories from '../components/TextField.stories';
 
 <Meta of={TextFieldStories} />
@@ -7,6 +8,14 @@ import * as TextFieldStories from '../components/TextField.stories';
 
 A single-line text input with a label above it. It can show a short hint below
 the input, or an error message when the value is invalid.
+
+<DocLinks
+  links={[
+    { label: 'Design tokens', href: '?path=/docs/foundations-tokens--docs', icon: '◆' },
+    { label: 'API', href: '#api', icon: '{ }' },
+    { label: 'WAI forms', href: 'https://www.w3.org/WAI/tutorials/forms/labels/', icon: 'W3C' },
+  ]}
+/>
 
 ## Basic text field
 

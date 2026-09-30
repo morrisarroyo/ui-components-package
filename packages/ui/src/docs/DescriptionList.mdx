@@ -1,4 +1,5 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { DocLinks } from './DocLinks';
 import * as DescriptionListStories from '../components/DescriptionList.stories';
 
 <Meta of={DescriptionListStories} />
@@ -8,6 +9,13 @@ import * as DescriptionListStories from '../components/DescriptionList.stories';
 A read-only list of label and value pairs, one per row, for the details of a
 single record, such as a patient's name, date of birth and phone. It is the
 read-only counterpart to a form.
+
+<DocLinks
+  links={[
+    { label: 'Design tokens', href: '?path=/docs/foundations-tokens--docs', icon: '◆' },
+    { label: 'API', href: '#api', icon: '{ }' },
+  ]}
+/>
 
 ## Basic list
 

@@ -1,4 +1,5 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { DocLinks } from './DocLinks';
 import * as ButtonStories from '../components/Button.stories';
 
 <Meta of={ButtonStories} />
@@ -7,6 +8,14 @@ import * as ButtonStories from '../components/Button.stories';
 
 A clickable button that triggers an action. It comes in two visual styles and
 two sizes, and can show that it is busy or unavailable.
+
+<DocLinks
+  links={[
+    { label: 'Design tokens', href: '?path=/docs/foundations-tokens--docs', icon: '◆' },
+    { label: 'API', href: '#api', icon: '{ }' },
+    { label: 'WAI-ARIA', href: 'https://www.w3.org/WAI/ARIA/apg/patterns/button/', icon: 'W3C' },
+  ]}
+/>
 
 ## Basic button
 
