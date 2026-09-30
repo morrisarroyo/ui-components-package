@@ -80,7 +80,7 @@ describe('PatientListPage', () => {
     vi.stubGlobal('fetch', vi.fn().mockReturnValue(response.promise));
     renderPage();
 
-    expect(screen.getByText('Loading…')).toBeInTheDocument();
+    expect(screen.getByRole('status')).toHaveTextContent('Loading…');
     expect(screen.queryByRole('table')).not.toBeInTheDocument();
 
     response.release(json([amara]));
@@ -170,6 +170,7 @@ describe('PatientListPage', () => {
     renderPage();
 
     expect(await screen.findByRole('heading', { name: 'Something went wrong' })).toBeInTheDocument();
+    expect(screen.getByRole('alert')).toHaveTextContent('Something went wrong');
     expect(screen.queryByRole('table')).not.toBeInTheDocument();
     expect(screen.queryByText('Loading…')).not.toBeInTheDocument();
   });

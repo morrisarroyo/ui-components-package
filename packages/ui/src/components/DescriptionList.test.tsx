@@ -63,4 +63,13 @@ describe('DescriptionList', () => {
 
     expect(container.querySelector('dl')).toBeEmptyDOMElement();
   });
+
+  it('shows a dash for a missing value but reads it out as "Not provided"', () => {
+    render(<DescriptionList items={[{ label: 'Email', value: null }]} />);
+
+    const value = screen.getByRole('definition');
+    expect(value).toHaveTextContent('—');
+    expect(screen.getByText('—')).toHaveAttribute('aria-hidden', 'true');
+    expect(screen.getByText('Not provided')).toBeInTheDocument();
+  });
 });

@@ -616,7 +616,7 @@ Types: `CardProps`.
 - A `<section>` whose title is always an `<h2>`; place Cards under your
   page's `<h1>`.
 - With neither `title` nor `actions`, the title row is omitted
-  ([`src/components/Card.tsx:14`](src/components/Card.tsx#L14 "const hasHeader = Boolean(title) || Boolean(actions);")). Actions sit
+  ([`src/components/Card.tsx:15`](src/components/Card.tsx#L15 "const hasHeader = Boolean(title) || Boolean(actions);")). Actions sit
   right even without a title.
 
 #### States
@@ -629,8 +629,8 @@ Types: `CardProps`.
 
 #### Source
 
-[`src/components/Card.tsx:13`](src/components/Card.tsx#L13 "export function Card({ title, actions, children }: CardProps") ·
-props [`src/components/Card.tsx:4`](src/components/Card.tsx#L4 "export interface CardProps {") ·
+[`src/components/Card.tsx:14`](src/components/Card.tsx#L14 "export function Card({ title, actions, children }: CardProps") ·
+props [`src/components/Card.tsx:5`](src/components/Card.tsx#L5 "export interface CardProps {") ·
 [`Card.module.css`](src/components/Card.module.css) ·
 [`Card.test.tsx`](src/components/Card.test.tsx) ·
 [`Card.stories.tsx`](src/components/Card.stories.tsx)
@@ -762,7 +762,7 @@ Types: `DescriptionListProps`, `DescriptionListItem`.
 #### Behaviour
 
 - `null`, `undefined` and `''` render as a muted `—`
-  ([`src/components/DescriptionList.tsx:19`](src/components/DescriptionList.tsx#L19 "function isEmpty(value: ReactNode): boolean {")).
+  ([`src/components/DescriptionList.tsx:21`](src/components/DescriptionList.tsx#L21 "function isEmpty(value: ReactNode): boolean {")).
   Pass values as they are; `0` shows, `false` and whitespace show blank.
 - Labels are row keys, so keep them unique. Labels sit in a fixed 160px
   column.
@@ -776,8 +776,8 @@ Types: `DescriptionListProps`, `DescriptionListItem`.
 
 #### Source
 
-[`src/components/DescriptionList.tsx:23`](src/components/DescriptionList.tsx#L23 "export function DescriptionList({ items }: DescriptionListPr") ·
-props [`src/components/DescriptionList.tsx:14`](src/components/DescriptionList.tsx#L14 "export interface DescriptionListProps {") ·
+[`src/components/DescriptionList.tsx:25`](src/components/DescriptionList.tsx#L25 "export function DescriptionList({ items }: DescriptionListPr") ·
+props [`src/components/DescriptionList.tsx:16`](src/components/DescriptionList.tsx#L16 "export interface DescriptionListProps {") ·
 [`DescriptionList.module.css`](src/components/DescriptionList.module.css) ·
 [`DescriptionList.test.tsx`](src/components/DescriptionList.test.tsx) ·
 [`DescriptionList.stories.tsx`](src/components/DescriptionList.stories.tsx)

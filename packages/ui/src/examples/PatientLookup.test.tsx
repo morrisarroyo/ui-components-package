@@ -36,7 +36,8 @@ describe('PatientLookup example', () => {
     expect(screen.getByRole('heading', { name: 'Alan Turing' })).toBeInTheDocument();
     expect(screen.getAllByRole('definition').map((value) => value.textContent)).toEqual([
       '23 Jun 1972',
-      '—',
+      // The dash is shown; "Not provided" is what a screen reader hears.
+      '—Not provided',
       '555-0102',
     ]);
   });

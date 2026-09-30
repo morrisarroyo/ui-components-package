@@ -65,4 +65,16 @@ describe('Card', () => {
 
     expect(onEdit).toHaveBeenCalledTimes(1);
   });
+
+  it('is a region named by its title, so screen-reader users can jump to it', () => {
+    render(<Card title="Demographics">Body</Card>);
+
+    expect(screen.getByRole('region', { name: 'Demographics' })).toBeInTheDocument();
+  });
+
+  it('is not a named region without a title', () => {
+    render(<Card>Body</Card>);
+
+    expect(screen.queryByRole('region')).not.toBeInTheDocument();
+  });
 });

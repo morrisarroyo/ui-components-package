@@ -92,12 +92,19 @@ export function PatientListPage() {
         </form>
       </Card>
 
-      {state.status === 'loading' ? <p className={styles.status}>Loading…</p> : null}
+      {state.status === 'loading' ? (
+        <p className={styles.status} role="status">
+          Loading…
+        </p>
+      ) : null}
 
       {state.status === 'error' ? (
-        <Card title="Something went wrong">
-          <p className={styles.status}>The patient list could not be loaded. Check the connection and try again.</p>
-        </Card>
+        // An alert, so a screen reader announces the failure when it appears.
+        <div role="alert">
+          <Card title="Something went wrong">
+            <p className={styles.status}>The patient list could not be loaded. Check the connection and try again.</p>
+          </Card>
+        </div>
       ) : null}
 
       {state.status === 'ok' ? (

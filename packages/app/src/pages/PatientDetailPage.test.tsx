@@ -47,7 +47,7 @@ describe('PatientDetailPage', () => {
     vi.stubGlobal('fetch', vi.fn().mockReturnValue(new Promise(() => {})));
     renderPage();
 
-    expect(screen.getByText('Loading…')).toBeInTheDocument();
+    expect(screen.getByRole('status')).toHaveTextContent('Loading…');
     expect(screen.getByRole('button', { name: 'Back' })).toBeInTheDocument();
   });
 
@@ -63,7 +63,8 @@ describe('PatientDetailPage', () => {
       Gender: 'Female',
       'Birth date': '8 Jul 1992',
       Phone: '+1 604 555 0118',
-      Email: '—',
+      // The dash is shown; "Not provided" is what a screen reader hears.
+      Email: '—Not provided',
       Address: '1550 W 8th Ave, Vancouver, BC, V6J 1T5',
     });
     expect(fetch).toHaveBeenCalledWith('/api/patients/p-0003');
@@ -74,6 +75,7 @@ describe('PatientDetailPage', () => {
     renderPage('p-9999');
 
     expect(await screen.findByRole('heading', { name: 'Patient not found' })).toBeInTheDocument();
+    expect(screen.getByRole('alert')).toHaveTextContent('Patient not found');
     expect(screen.getByRole('button', { name: 'Back' })).toBeInTheDocument();
     expect(screen.queryByRole('heading', { name: 'Demographics' })).not.toBeInTheDocument();
   });
@@ -83,6 +85,7 @@ describe('PatientDetailPage', () => {
     renderPage();
 
     expect(await screen.findByRole('heading', { name: 'Something went wrong' })).toBeInTheDocument();
+    expect(screen.getByRole('alert')).toHaveTextContent('Something went wrong');
     expect(screen.queryByRole('heading', { name: 'Patient not found' })).not.toBeInTheDocument();
   });
 

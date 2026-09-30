@@ -1,8 +1,10 @@
 import type { ReactNode } from 'react';
 import styles from './DescriptionList.module.css';
 
-/** Rendered in place of a value that is missing. */
+/** Shown in place of a value that is missing. */
 const EMPTY_VALUE = '—';
+/** Read out in place of the dash, which screen readers announce as "em dash" or skip. */
+const EMPTY_VALUE_SPOKEN = 'Not provided';
 
 export interface DescriptionListItem {
   /** Row label, shown in the fixed-width left column. */
@@ -33,7 +35,14 @@ export function DescriptionList({ items }: DescriptionListProps) {
                 .filter(Boolean)
                 .join(' ')}
             >
-              {empty ? EMPTY_VALUE : item.value}
+              {empty ? (
+                <>
+                  <span aria-hidden="true">{EMPTY_VALUE}</span>
+                  <span className={styles.visuallyHidden}>{EMPTY_VALUE_SPOKEN}</span>
+                </>
+              ) : (
+                item.value
+              )}
             </dd>
           </div>
         );

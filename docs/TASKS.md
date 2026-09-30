@@ -602,3 +602,33 @@ accepted these fixes (grilling round 1, Q1–Q11).
   to build applications for the healthcare setting (the screens of an EHR
   system), assembled by product teams into their own apps.
 - **Verify:** the served Overview page shows the new lead; `npm test` passes.
+
+---
+
+## Phase 9 — Accessibility to WCAG 2.2 AA
+
+The owner asked for the components to meet the W3C accessibility standard
+(WCAG 2.2, level AA) and for the docs to say so.
+
+### T-9.1 Screen-reader fixes
+- **Depends on:** —
+- **Status:** Done
+- **Done when:** DescriptionList's missing-value dash is read as "Not
+  provided"; a titled Card is a region named by its title; the app's
+  "Loading…" is a status message and its failure cards are alerts.
+- **Verify:** tests for each; mutation checks.
+
+### T-9.2 Colour contrast
+- **Depends on:** T-9.1
+- **Status:** Blocked — the brief's token values fail three WCAG AA contrast
+  checks; the owner decides how to resolve them
+- **Done when:** the table header text, the text input border and the focus
+  ring meet WCAG AA contrast, or are documented as exceptions.
+- **Verify:** a contrast check of every colour pair the components use.
+
+### T-9.3 Accessibility in the docs
+- **Depends on:** T-9.2
+- **Status:** Not started
+- **Done when:** the library README and the docs site state the standard the
+  components meet and what each component does for it.
+- **Verify:** every claim matches a test or a measured contrast ratio.
