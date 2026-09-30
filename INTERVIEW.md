@@ -29,6 +29,7 @@ The full log, with alternatives and what would change each answer, is
 | D-16 | Birth dates | "2 Mar 1984", from the string's parts | Unambiguous across locales, no timezone day-shift. |
 | D-17 | Stories | Storybook 10, `@storybook/react-vite` | Every state visible without the API; same Vite config as the build. |
 | D-18 | API tests | xUnit, real `Program` in memory via `WebApplicationFactory` | Tests the wire shape, not the C# record. |
+| D-19 | Accessibility | WCAG 2.2 AA; three brief colours swapped for other brief tokens | The brief's table header text, input border and focus ring fail AA contrast; the token values stay. |
 
 Smaller choices taken inside tasks are in `AutoPhase.md`: the search is a form,
 so Enter also searches; Back goes to `/`, so it works from a directly opened

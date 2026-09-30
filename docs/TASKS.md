@@ -620,15 +620,38 @@ The owner asked for the components to meet the W3C accessibility standard
 
 ### T-9.2 Colour contrast
 - **Depends on:** T-9.1
-- **Status:** Blocked — the brief's token values fail three WCAG AA contrast
-  checks; the owner decides how to resolve them
+- **Status:** Done (owner chose option (a), grilling Q16; D-19)
 - **Done when:** the table header text, the text input border and the focus
   ring meet WCAG AA contrast, or are documented as exceptions.
 - **Verify:** a contrast check of every colour pair the components use.
 
 ### T-9.3 Accessibility in the docs
 - **Depends on:** T-9.2
-- **Status:** Not started
+- **Status:** Done
 - **Done when:** the library README and the docs site state the standard the
   components meet and what each component does for it.
 - **Verify:** every claim matches a test or a measured contrast ratio.
+
+---
+
+## Phase 9 — Hosting
+
+### T-9.1 One container serves the site, the API and the docs
+- **Depends on:** —
+- **Status:** Done
+- **Done when:** a `Dockerfile` builds one image in which the API serves the
+  website at `/`, its endpoints at `/api` and the component docs at `/docs`,
+  listening on the port the host passes in `PORT`; `render.yaml` describes it
+  as one free Render web service.
+- **Verify:** with the image's layout assembled by hand (Docker is not
+  installed locally): the website lists patients and opens a detail page, a
+  deep link such as `/patients/p-0003` loads, unknown `/api` paths are 404,
+  every docs page renders, and `npm run test:api` passes.
+
+### T-9.2 Deployed on Render
+- **Depends on:** T-9.1
+- **Status:** Blocked (owner: push the repository to GitHub and create the
+  Render Blueprint from it)
+- **Done when:** the public address serves all three, and the project README
+  gives the links.
+- **Verify:** the T-9.1 checks pass against the public address.

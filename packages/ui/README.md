@@ -31,14 +31,15 @@ props, plus the design tokens. The project README says how to share it.
 3. [Styling](#styling)
    - [The contract](#the-contract)
    - [Tokens](#tokens)
-4. [Component reference](#component-reference)
+4. [Accessibility](#accessibility)
+5. [Component reference](#component-reference)
    - [Missing values: who draws the dash](#missing-values-who-draws-the-dash)
    - [Button](#button)
    - [TextField](#textfield)
    - [Card](#card)
    - [Table](#table)
    - [DescriptionList](#descriptionlist)
-5. [Contributing: extending the library](#contributing-extending-the-library)
+6. [Contributing: extending the library](#contributing-extending-the-library)
    - [Scaffold](#scaffold)
    - [Steps](#steps)
    - [Why it's short](#why-its-short)
@@ -325,11 +326,11 @@ document's name for it and is not valid CSS.
 
 | Custom property | Spec name | Value | Used for |
 | --- | --- | --- | --- |
-| `--ui-color-primary` | color.primary | `#1F6FEB` | Primary button, focused input border |
+| `--ui-color-primary` | color.primary | `#1F6FEB` | Primary button, focused input border, outer focus ring |
 | `--ui-color-primary-hover` | color.primary.hover | `#185CC4` | Primary button hover |
 | `--ui-color-danger` | color.danger | `#C93C37` | Error border and message |
-| `--ui-color-text` | color.text | `#1A1A1A` | Body text |
-| `--ui-color-text-muted` | color.text.muted | `#6B7280` | Labels, hints, placeholders, table headers, empty values |
+| `--ui-color-text` | color.text | `#1A1A1A` | Body text, table header text |
+| `--ui-color-text-muted` | color.text.muted | `#6B7280` | Labels, hints, placeholders, empty values, text input border |
 | `--ui-color-border` | color.border | `#D1D5DB` | Borders, row dividers |
 | `--ui-color-focus` | color.focus | `#93C5FD` | Focus ring |
 | `--ui-color-surface` | color.surface | `#FFFFFF` | Card, input and secondary button background; primary button label |
@@ -350,9 +351,39 @@ Typography: each role has `-size`, `-line` and `-weight`, such as
 | `--ui-font-heading-*` | 20px / 28px | 600 | Card titles |
 | `--ui-font-title-*` | 24px / 32px | 600 | Your page's `<h1>` |
 
-Focus ring: `--ui-focus-ring-width` (2px) in `--ui-color-focus`. Button draws
-it `--ui-focus-ring-offset` (2px) outside its border, TextField flush with its
-border, a table row just inside the row.
+Focus ring: a 2px ring in `--ui-color-focus`, with a 2px ring in
+`--ui-color-primary` outside it, drawn `--ui-focus-ring-offset` (2px) out from
+Button and a table row's button. TextField shows focus with a
+`--ui-color-primary` border and a `--ui-color-focus` ring flush with it.
+
+---
+
+## Accessibility
+
+The components meet the Web Content Accessibility Guidelines (WCAG) 2.2 at
+level AA, the W3C's accessibility standard.
+
+| Need | What the components do |
+| --- | --- |
+| Keyboard | Everything clickable works with Tab, Enter and Space. |
+| Visible focus | Keyboard focus shows a light-blue ring with a blue ring outside it. |
+| Contrast | Text is at least 4.5:1 against its background; borders and focus rings at least 3:1. |
+| Labels | A TextField's label is tied to its input. An error is announced and marks the input invalid. |
+| Screen readers | A loading Button is announced as busy and keeps focus. A clickable Table row is announced as a button. A missing value is read as "Not provided". A titled Card is a named region. |
+| Disabled | Disabled controls are natively disabled: they can't be focused or used. |
+
+Three colours differ from the design brief, to meet the contrast rule:
+
+- table header text uses `--ui-color-text`;
+- the text input border uses `--ui-color-text-muted`;
+- focus adds the outer `--ui-color-primary` ring.
+
+Your part, on each page:
+
+- Give the page one `<h1>`, and place Cards under it.
+- Announce loading and errors: `role="status"` on a loading message and
+  `role="alert"` around an error, as the patient pages do.
+- Don't show meaning by colour alone.
 
 ---
 
@@ -451,7 +482,7 @@ Types: `ButtonProps`, `ButtonVariant`, `ButtonSize`.
 | --- | --- | --- | --- | --- |
 | Primary | default | Blue fill, white label | Basic button | <img src="docs/states/button-primary.png" alt="Primary button" height="40"> |
 | Primary, hover | pointer over it | Darker blue | Basic button (hover it) | <img src="docs/states/button-primary-hover.png" alt="Primary button, hovered" height="40"> |
-| Focus | Tab to it | Light-blue ring outside the border; not on mouse click | Basic button (tab to it) | <img src="docs/states/button-primary-focus.png" alt="Primary button with focus ring" height="40"> |
+| Focus | Tab to it | Light-blue ring with a blue ring outside it; not on mouse click | Basic button (tab to it) | <img src="docs/states/button-primary-focus.png" alt="Primary button with focus ring" height="40"> |
 | Secondary | `variant="secondary"` | White, grey border, dark label | Variants | <img src="docs/states/button-secondary.png" alt="Secondary button" height="40"> |
 | Secondary, hover | pointer over it | Light-grey fill | Variants (hover Cancel) | <img src="docs/states/button-secondary-hover.png" alt="Secondary button, hovered" height="40"> |
 | Small | `size="sm"` | Less padding | Sizes | <img src="docs/states/button-small.png" alt="Small button" height="40"> |
@@ -708,7 +739,7 @@ Types: `TableProps`, `TableColumn`, `TableRow`.
 
 | State | How | Looks like | Demo | Picture |
 | --- | --- | --- | --- | --- |
-| Default | rows, no `onRowClick` | Grey header, hairline between rows; not focusable | Basic table | <img src="docs/states/table-default.png" alt="Table with three rows" width="280"> |
+| Default | rows, no `onRowClick` | Light-grey header with dark text, hairline between rows; not focusable | Basic table | <img src="docs/states/table-default.png" alt="Table with three rows" width="280"> |
 | Row hover | `onRowClick`, pointer over a row | Light-grey row, hand cursor | Clickable rows (hover a row) | <img src="docs/states/table-row-hover.png" alt="Table with a hovered row" width="280"> |
 | Row focus | `onRowClick`, Tab to a row | Light-grey row, ring around the first cell's text | Clickable rows (tab to a row) | <img src="docs/states/table-row-focus.png" alt="Table with a focused row" width="280"> |
 | Empty | `rows={[]}` | `emptyMessage`, centred, grey; not clickable | Empty state | <img src="docs/states/table-empty.png" alt="Empty table with message" width="280"> |
@@ -772,7 +803,7 @@ Types: `DescriptionListProps`, `DescriptionListItem`.
 | State | How | Looks like | Demo | Picture |
 | --- | --- | --- | --- | --- |
 | Default | all values present | Grey labels left, dark values right, hairlines between | Basic list | <img src="docs/states/descriptionlist-default.png" alt="Description list with three rows" width="280"> |
-| Missing value | `null`, `undefined` or `''` | Grey `—` | Missing values | <img src="docs/states/descriptionlist-missing.png" alt="Description list with em dashes for missing values" width="280"> |
+| Missing value | `null`, `undefined` or `''` | Grey `—`, read out as "Not provided" | Missing values | <img src="docs/states/descriptionlist-missing.png" alt="Description list with em dashes for missing values" width="280"> |
 
 #### Source
 
