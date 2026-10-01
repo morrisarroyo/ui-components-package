@@ -60,6 +60,7 @@ changed, a mutation check: break the code, watch the test fail, restore it.
 | 7 | 29 Sep | Fixes from a graded review against the brief |
 | 8–10 | 29 Sep | Docs site, WCAG 2.2 AA, free hosting on Render |
 | 11 | 1 Oct | A README per part, Swagger for the API, a Contributing page |
+| 12 | 1 Oct | End-to-end tests of both pages in a real browser |
 
 Phases 5 onwards came after the submission, at my direction.
 
@@ -92,7 +93,8 @@ task, and two record a pause for a manual browser check.
 ## Tests
 
 `npm test` and `npm run test:api` run 255 tests across the library, the
-website and the API. What each suite covers: [TESTING.md](./TESTING.md).
+website and the API. `npm run test:e2e` runs 14 more: both pages in Chromium
+against the real API. What each suite covers: [TESTING.md](./TESTING.md).
 
 ## Known gaps
 
@@ -101,10 +103,8 @@ to T-7.13.
 
 ## With two more hours
 
-1. **Playwright tests** for the page walks, which were checked in a browser
-   by one-off scripts.
-2. **Automated accessibility checks** (axe) in the component tests.
-3. **A generic Table row type,** so `onRowClick` returns the consumer's own
+1. **Automated accessibility checks** (axe) in the component tests.
+2. **A generic Table row type,** so `onRowClick` returns the consumer's own
    type.
-4. **Page-level building blocks** (a page title, a status line), which a
+3. **Page-level building blocks** (a page title, a status line), which a
    third page would otherwise copy from the app.

@@ -18,3 +18,7 @@ AutoPhase.md
 # The employer's candidate brief: kept on disk for local work, never published.
 Interview Task 006*Candidate Brief*.md
 EKB-Interview Task 006*.pdf
+
+# Playwright
+test-results/
+playwright-report/

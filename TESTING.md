@@ -13,7 +13,12 @@ npm install                    # once
 npm test                       # builds ui, then runs the ui and app tests
 npm run test:api               # the API's tests
 npm run typecheck              # builds ui, then type-checks ui and app
+npm run test:e2e               # both pages in Chromium against the real API
 ```
+
+`npm run test:e2e` starts the API and the site itself, or reuses them if
+they are already running. Before its first run, install the browser with
+`npx playwright install chromium`.
 
 `app` uses the built `ui`, so `npm test` and `npm run typecheck` build it
 first.
@@ -29,10 +34,12 @@ first.
 | `ui` README | 81 | `packages/ui/src/readme.test.ts` | The library README's code links, contents and props tables match the code. |
 | `app` | 54 | `packages/app/src/**/*.test.ts(x)` | The mapping from API data to display values, and both pages in every state. |
 | `api` | 25 | `api/Intrahealth.Api.Tests/` | Every endpoint, the search rules, the 404 body, the JSON shape and the Swagger docs. |
+| End to end | 14 | `e2e/patients.spec.ts` | Every behaviour in the page spec, in Chromium against the real API. |
 
 The `ui` and `app` tests use Vitest and Testing Library. They query the page
 as a user would and use no snapshots. The `api` tests use xUnit and run the
-real API in memory.
+real API in memory. The end-to-end tests use Playwright; only the failure
+test stubs the network, to make the API unreachable.
 
 ## One package at a time
 

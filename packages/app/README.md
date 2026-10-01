@@ -55,6 +55,7 @@ Run from the repository root. Each needs `ui` built first
 | `npm run dev --workspace app` | The site alone on :5173. |
 | `npm run build --workspace app` | Type-checks and builds the site into `dist/`. |
 | `npm run test --workspace app` | The mapping tests, and both pages in every state against mocked responses. |
+| `npm run test:e2e` | Both pages in Chromium against the real API, from the repository root. |
 
 ## Files
 

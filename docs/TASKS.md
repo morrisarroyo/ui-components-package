@@ -705,3 +705,18 @@ Contributing page on the docs site about adding a new component.
   through Phase 11, corrections, tests, gaps and next steps.
 - **Verify:** the document checker's word count drops; its test total matches
   `npm test` and `npm run test:api`.
+
+---
+
+## Phase 12 — End-to-end tests
+
+### T-12.1 Behaviour tests of both pages in a real browser
+- **Depends on:** —
+- **Status:** Done
+- **Done when:** `npm run test:e2e` runs Playwright tests covering every
+  behaviour in section 5 of the design document, against the running API:
+  loading, search and its loading Button, empty results, API failure, row
+  navigation by mouse and keyboard, missing values, patient not found and
+  Back (D-22).
+- **Verify:** `npm run test:e2e` passes; blanking the missing-phone cell or
+  making Back ignore the search fails the test aimed at it.

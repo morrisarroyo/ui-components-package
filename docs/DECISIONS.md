@@ -386,6 +386,25 @@ caught by the hosted website's fallback).
 **What would change it.** Real patient data, where the docs would be
 development-only.
 
+## D-22 — End-to-end tests with Playwright, against the real API
+
+**Decided:** 2026-10-01 · **Status:** settled
+
+Playwright drives both pages in Chromium. Its config starts the API and the
+site, so the tests read the real seed data through the real proxy. Only the
+failure test stubs the network, by refusing the list request. The tests run
+with `npm run test:e2e`, not `npm test`.
+
+**Why.** The owner asked for behaviour tests of the pages; the `app` tests
+already cover them against mocked responses in jsdom. These close the gap
+between the two: real routing, real fetches, a real browser. Kept out of
+`npm test` because they need the .NET SDK and a browser download.
+
+**Considered.** Cypress (a second test runner with its own assertion style)
+and Vitest browser mode (no built-in way to start the API).
+
+**What would change it.** A CI pipeline, where they would run on every push.
+
 ## D-23 — A third page: Register patient, tracked as GitHub issues
 
 **Decided:** 2026-10-01 · **Status:** settled

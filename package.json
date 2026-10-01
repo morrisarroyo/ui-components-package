@@ -15,9 +15,13 @@
     "api": "dotnet run --project api/Intrahealth.Api",
     "storybook": "npm run storybook --workspace ui",
     "test:api": "dotnet test api/Intrahealth.Api.Tests",
-    "docs": "npm run docs --workspace ui"
+    "docs": "npm run docs --workspace ui",
+    "test:e2e": "playwright test"
   },
   "engines": {
     "node": ">=20"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0"
   }
 }

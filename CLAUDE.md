@@ -172,6 +172,12 @@ the docs site about adding a new component.
 
 **Done when:** every Phase 11 task in `docs/TASKS.md` is Done.
 
+### Phase 12 — End-to-end tests
+
+Behaviour tests of both pages in a real browser, against the running API.
+
+**Done when:** every Phase 12 task in `docs/TASKS.md` is Done.
+
 ### Phase 13 — Register patient page
 
 A third page: a form that registers a patient through a new
@@ -210,6 +216,7 @@ npm run dev                          # build ui, then start the website on :5173
 npm run api                          # start the mock API on :5080 (Swagger at /api/swagger)
 npm run storybook                    # browse the ui components on :6006
 npm run test:api                     # the mock API's xUnit tests
+npm run test:e2e                     # both pages in Chromium against the real API
 ```
 
 The website's dev server proxies `/api` to the mock API, so both need to be
