@@ -13,7 +13,21 @@ if (string.IsNullOrEmpty(builder.Configuration["urls"]))
     builder.WebHost.UseUrls("http://localhost:5080");
 }
 
+// Swagger: the OpenAPI description at /api/swagger/v1/swagger.json and a
+// page to read and try every endpoint at /api/swagger. Under /api so the
+// website's dev proxy and the hosted container both reach it.
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(options =>
+    options.SwaggerDoc("v1", new() { Title = "Mock patient API", Version = "v1" }));
+
 var app = builder.Build();
+
+app.UseSwagger(options => options.RouteTemplate = "api/swagger/{documentName}/swagger.json");
+app.UseSwaggerUI(options =>
+{
+    options.RoutePrefix = "api/swagger";
+    options.SwaggerEndpoint("v1/swagger.json", "Mock patient API v1");
+});
 
 // In the hosted container, wwwroot holds the built website and, under docs/,
 // the component docs site (see Dockerfile). Locally there is no wwwroot and
@@ -23,7 +37,7 @@ app.UseDefaultFiles();
 app.UseStaticFiles();
 app.UseRouting();
 
-app.MapGet("/health", () => "ok");
+app.MapGet("/health", () => "ok").ExcludeFromDescription();
 
 // All patients, or those whose given name, family name, or the two joined as
 // "given family" contain the search text, ignoring case. An absent, empty or
@@ -41,7 +55,9 @@ app.MapGet("/api/patients", (string? search) =>
         .Where(patient => Matches(patient, term))
         .ToList();
     return Results.Ok(matches);
-});
+})
+.WithSummary("List patients, optionally filtered by name")
+.Produces<List<Patient>>();
 
 // One patient by id, or 404 with the standard ProblemDetails body.
 app.MapGet("/api/patients/{id}", (string id) =>
@@ -50,7 +66,10 @@ app.MapGet("/api/patients/{id}", (string id) =>
     return patient is null
         ? Results.Problem(statusCode: StatusCodes.Status404NotFound, detail: $"No patient with id '{id}'.")
         : Results.Ok(patient);
-});
+})
+.WithSummary("Get one patient by id")
+.Produces<Patient>()
+.ProducesProblem(StatusCodes.Status404NotFound);
 
 // The website's own routes, such as /patients/p-0003, load its index.html so
 // the client router can take over. Unknown /api paths stay a 404 instead.

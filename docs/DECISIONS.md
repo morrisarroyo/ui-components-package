@@ -363,3 +363,25 @@ free.
 **What would change it.** Needing the API awake at all times. The free
 service sleeps after 15 minutes idle, and the next visit takes about a
 minute to wake it.
+
+---
+
+## D-21 — Swagger docs for the API, under `/api/swagger`
+
+**Decided:** 2026-10-01 · **Status:** settled
+
+The API describes itself with Swashbuckle: an OpenAPI document at
+`/api/swagger/v1/swagger.json` and a Swagger page at `/api/swagger` to read
+and try each endpoint. It is on in every environment, the hosted one
+included.
+
+**Why.** The owner asked for Swagger docs. Under `/api`, the page reaches the
+browser through the website's dev proxy and the hosted container with no new
+routes. The API is a mock with invented data, so there is nothing to hide.
+
+**Considered.** .NET's built-in OpenAPI document alone (no page to try
+endpoints), and Swagger at `/swagger` (outside the proxied `/api` path, and
+caught by the hosted website's fallback).
+
+**What would change it.** Real patient data, where the docs would be
+development-only.
