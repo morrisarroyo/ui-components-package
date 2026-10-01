@@ -1,5 +1,7 @@
 # Tests
 
+## Summary
+
 How to run and write tests for the components developers use to build
 healthcare apps, plus the example website and mock API. A good test fails when
 a user would notice something wrong, and only then.
@@ -28,6 +30,16 @@ npm run test:e2e               # the website in Chromium against the real API
 | `npm run test --workspace app` | The `app` tests. Build `ui` first. |
 | `npm run test:watch --workspace ui` | The `ui` tests, again on every save. |
 | `npx vitest run src/components/Button` | One component's tests, from `packages/ui`. |
+
+## Tech stack
+
+| Suites | Built with |
+| --- | --- |
+| `ui` and `app` | Vitest and Testing Library |
+| `api` | xUnit, running the real API in memory |
+| End to end | Playwright, in Chromium |
+| Lint | ESLint, Stylelint, dotnet format |
+| CI | GitHub Actions running Docker builds; gitleaks for secrets |
 
 ## Lint
 
@@ -73,8 +85,7 @@ npm run ci:docker              # same as: docker build -f Dockerfile.ci .
 | `api` | 38 | `api/Intrahealth.Api.Tests/` | Every endpoint, search, registration and its validation, not-found, JSON shape, Swagger. |
 | End to end | 15 | `e2e/` | Every behaviour of the list and detail pages, and one journey across all three pages. |
 
-Tools: Vitest and Testing Library for `ui` and `app`, xUnit for `api`, and
-Playwright end to end. Only the end-to-end failure test fakes the network.
+Only the end-to-end failure test fakes the network.
 
 ## Writing tests
 
