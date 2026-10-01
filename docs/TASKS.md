@@ -680,3 +680,12 @@ Contributing page on the docs site about adding a new component.
 - **Verify:** `npm run test:api` passes, including tests for both; with
   Swagger disabled a test fails.
 
+### T-11.2 Contributing page on the docs site
+- **Depends on:** —
+- **Status:** Done
+- **Done when:** the docs site has a Contributing page on adding a new
+  component (a sixth or more): the scaffold, a checklist, and the checks to
+  run, linking to the library README's full walkthrough.
+- **Verify:** the built site lists the page last in the sidebar; it renders
+  with no console errors.
+

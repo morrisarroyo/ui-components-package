@@ -25,7 +25,7 @@ const preview: Preview = {
     },
     options: {
       storySort: {
-        order: ['Overview', 'Foundations', 'Components', ['Button', 'TextField', 'Card', 'Table', 'DescriptionList'], 'Examples'],
+        order: ['Overview', 'Foundations', 'Components', ['Button', 'TextField', 'Card', 'Table', 'DescriptionList'], 'Examples', 'Contributing'],
       },
     },
   },
