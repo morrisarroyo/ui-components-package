@@ -186,6 +186,14 @@ lists the tasks.
 
 **Done when:** issue #1 and its tasks are closed.
 
+### Phase 14 — CI, secrets, testing guide and clean-up
+
+Continuous integration in Docker, run by one command; a check that no secret
+is in the repository; a guide to writing effective tests; and a tidy
+repository.
+
+**Done when:** every Phase 14 task in `docs/TASKS.md` is Done.
+
 ## Working agreements
 
 - **Follow `docs/CONVENTIONS.md`** for file layout, naming, styling and tests.
@@ -217,6 +225,8 @@ npm run api                          # start the mock API on :5080 (Swagger at /
 npm run storybook                    # browse the ui components on :6006
 npm run test:api                     # the mock API's xUnit tests
 npm run test:e2e                     # both pages in Chromium against the real API
+npm run ci                           # every check and build, as CI runs it
+npm run ci:docker                    # the same, inside Docker (Dockerfile.ci)
 ```
 
 The website's dev server proxies `/api` to the mock API, so both need to be

@@ -1,0 +1,27 @@
+# Continuous integration in one image: building it runs every check the
+# project has. `npm run ci:docker` locally, and the CI workflow on GitHub,
+# both run `docker build -f Dockerfile.ci .`; the build fails if any check does.
+
+# Playwright's image brings Node and Chromium; its tag must match
+# @playwright/test in package-lock.json.
+FROM mcr.microsoft.com/playwright:v1.63.0-noble
+
+# The .NET 10 SDK, for the API and its tests.
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends curl ca-certificates libicu74 \
+ && rm -rf /var/lib/apt/lists/* \
+ && curl -fsSL https://dot.net/v1/dotnet-install.sh -o /tmp/dotnet-install.sh \
+ && bash /tmp/dotnet-install.sh --channel 10.0 --install-dir /usr/share/dotnet \
+ && ln -s /usr/share/dotnet/dotnet /usr/local/bin/dotnet \
+ && rm /tmp/dotnet-install.sh
+ENV DOTNET_CLI_TELEMETRY_OPTOUT=1 \
+    DOTNET_NOLOGO=1 \
+    CI=true
+
+WORKDIR /src
+COPY package.json package-lock.json ./
+COPY packages/ui/package.json packages/ui/
+COPY packages/app/package.json packages/app/
+RUN npm ci
+COPY . .
+RUN npm run ci

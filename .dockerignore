@@ -8,3 +8,5 @@
 **/obj
 *.pdf
 Interview Task 006*
+test-results
+playwright-report

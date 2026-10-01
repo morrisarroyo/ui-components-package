@@ -10,6 +10,7 @@ Needs Node 20+ and the .NET 10 SDK. From the repository root:
 
 ```bash
 npm install                    # once
+npm run ci                     # everything below, plus both builds, in one command
 npm test                       # builds ui, then runs the ui and app tests
 npm run test:api               # the API's tests
 npm run typecheck              # builds ui, then type-checks ui and app
@@ -22,6 +23,25 @@ they are already running. Before its first run, install the browser with
 
 `app` uses the built `ui`, so `npm test` and `npm run typecheck` build it
 first.
+
+## Continuous integration
+
+GitHub Actions runs on every push and pull request to `main`
+([`.github/workflows/ci.yml`](./.github/workflows/ci.yml)). Each job is a
+Docker build or run:
+
+| Job | What it runs |
+| --- | --- |
+| Tests and builds | Builds `Dockerfile.ci`, which runs `npm run ci`: type checks, every test suite, and the website and docs builds. |
+| Hosted image | Builds `Dockerfile`, the image Render deploys. |
+| Secrets | Scans every commit for passwords, keys and tokens with gitleaks. |
+
+To run the same checks as CI on any machine with Docker, and no Node or .NET
+installed:
+
+```bash
+npm run ci:docker              # same as: docker build -f Dockerfile.ci .
+```
 
 ## What each suite covers
 
@@ -56,3 +76,6 @@ Put a component's tests beside it, as `<Component>.test.tsx`. Test one
 behaviour per test, and query by role, label or text. A new component's
 export, stories and README section are checked without new tests; see
 [Contributing](./packages/ui/README.md#contributing-extending-the-library).
+
+How to write tests that catch real breakage:
+[docs/TESTING-GUIDE.md](./docs/TESTING-GUIDE.md).

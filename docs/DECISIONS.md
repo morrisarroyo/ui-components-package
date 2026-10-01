@@ -431,3 +431,29 @@ states) and a summary dashboard (no API change, but only Cards).
 
 **What would change it.** A select component in `ui`, which gender should
 then use.
+
+---
+
+## D-24 — CI as Docker builds on GitHub Actions, one command locally
+
+**Decided:** 2026-10-01 · **Status:** settled
+
+`npm run ci` runs every check in one command: type checks, the `ui`, `app`
+and API tests, the website and docs builds, and the end-to-end tests.
+`Dockerfile.ci` runs that command while it builds, on Playwright's image with
+the .NET 10 SDK added, so `docker build -f Dockerfile.ci .` (`npm run
+ci:docker`) is the whole CI on any machine with Docker. GitHub Actions builds
+it on every push and pull request to `main`, builds the hosted `Dockerfile`,
+and scans the history for secrets with gitleaks, also run as a container.
+
+**Why.** The owner asked for CI with Docker, run by one command. A build
+that fails when a check fails needs no CI-specific scripting, and the same
+image runs locally and on GitHub. A separate file keeps the hosted image
+small and lets Render build `Dockerfile` without the test stage.
+
+**Considered.** Installing Node, .NET and Chromium with GitHub's setup actions
+(faster with caching, but CI would differ from a local run), and a test stage
+in the hosted `Dockerfile` (Render would build it on every deploy).
+
+**What would change it.** CI time becoming a problem; the jobs would then
+split by suite and run in parallel.

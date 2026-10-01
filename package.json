@@ -16,7 +16,9 @@
     "storybook": "npm run storybook --workspace ui",
     "test:api": "dotnet test api/Intrahealth.Api.Tests",
     "docs": "npm run docs --workspace ui",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "ci": "npm run typecheck && npm test && npm run test:api && npm run build --workspace app && npm run build-storybook --workspace ui -- --quiet && npm run test:e2e",
+    "ci:docker": "docker build -f Dockerfile.ci ."
   },
   "engines": {
     "node": ">=20"

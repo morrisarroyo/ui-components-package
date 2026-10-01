@@ -37,7 +37,8 @@ The site's dev server forwards `/api` to the API, so both must run.
 | Docs site | Storybook 10 with MDX pages |
 | Example website (`app`) | React 19, React Router 7, Vite |
 | Mock API (`api`) | ASP.NET Core on .NET 10, Swagger (Swashbuckle) |
-| Tests | Vitest and Testing Library; xUnit for the API |
+| Tests | Vitest and Testing Library; xUnit for the API; Playwright end to end |
+| CI | GitHub Actions running Docker builds; gitleaks for secrets |
 | Hosting | One Docker image on Render |
 
 ## READMEs
@@ -50,7 +51,7 @@ Each part of the project has its own README, starting with a quick start.
 | Storybook docs | A page per component with live demos, the tokens, a worked example and how to contribute. | [packages/ui/src/docs/README.md](./packages/ui/src/docs/README.md) |
 | Example website | A searchable patient list, a patient's record and a register form, built from the components. | [packages/app/README.md](./packages/app/README.md) |
 | Mock API | ASP.NET Core, in-memory patient data, Swagger docs. | [api/README.md](./api/README.md) |
-| Tests | What each test suite covers and how to run it. | [TESTING.md](./TESTING.md) |
+| Tests | What each test suite covers, how to run them, and CI. | [TESTING.md](./TESTING.md) |
 | Harness | The Claude Code skills the project was built with. | [.claude/README.md](./.claude/README.md) |
 
 ## Layout
@@ -59,7 +60,8 @@ Each part of the project has its own README, starting with a quick start.
 packages/ui     the component library, and its Storybook docs in src/docs
 packages/app    the example website
 api/            the mock API, and its tests in api/Intrahealth.Api.Tests
-docs/           design document, API contract, tasks, decisions, conventions
+e2e/            end-to-end tests
+docs/           design document, API contract, tasks, decisions, conventions, testing guide
 ```
 
 `app` imports `ui` by package name only, as any other app would.
@@ -80,6 +82,7 @@ Render web service: push the repository to GitHub, then in Render choose
 | `docs/TASKS.md` | The work, as tasks with a check for each. |
 | `docs/DECISIONS.md` | Why things are the way they are. |
 | `docs/CONVENTIONS.md` | How code here is written. |
+| [`docs/TESTING-GUIDE.md`](./docs/TESTING-GUIDE.md) | How to write unit and behaviour tests that catch real breakage. |
 
 ## Contributing
 
@@ -87,7 +90,7 @@ To add a component, run the scaffold and follow the steps in the library
 README's [Contributing](./packages/ui/README.md#contributing-extending-the-library)
 section, or the **Contributing** page on the
 [docs site](https://ui-components-package.onrender.com/docs/). House style is
-in `docs/CONVENTIONS.md`; run `npm test` before you commit.
+in `docs/CONVENTIONS.md`; run `npm run ci` before you commit.
 
 ---
 
