@@ -1,5 +1,7 @@
 # Component docs site
 
+## Summary
+
 A website for developers building healthcare apps, such as the screens of an
 Electronic Health Record (EHR) system, with the `ui` components. It has one
 page per component with live demos and props, plus the design tokens and a
@@ -18,6 +20,11 @@ Open <http://localhost:6007> and start from **Overview**. Or read the live
 copy: <https://ui-components-package.onrender.com/docs/>. It sleeps when
 idle, so the first visit can take about a minute.
 
+## Tech stack
+
+Storybook 10 in docs-only mode, with pages written in MDX (Markdown with
+React components). The demos are the components' own stories.
+
 ## Pages
 
 | Page | File |
@@ -29,11 +36,7 @@ idle, so the first visit can take about a minute.
 | Contributing: adding a new component | `Contributing.mdx` |
 
 The demos on each page are the component's stories
-(`src/components/<Component>.stories.tsx`). Storybook runs in docs-only mode,
-so a component appears in the sidebar only once it has a page here. To add a
-component, follow the **Contributing** page, or the library README's
-[Contributing](../../README.md#contributing-extending-the-library) section for
-the full walkthrough.
+(`src/components/<Component>.stories.tsx`).
 
 ## Commands
 
@@ -53,3 +56,10 @@ work.
 cd packages/ui/storybook-static
 python3 -m http.server 8080 --bind 127.0.0.1   # then open http://127.0.0.1:8080
 ```
+
+## Contributing
+
+A component appears in the sidebar only once it has a page here. To add a
+component, follow the **Contributing** page, or the library README's
+[Contributing](../../README.md#contributing-extending-the-library) section for
+the full walkthrough; both include writing its page here.

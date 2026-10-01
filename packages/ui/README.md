@@ -1,5 +1,7 @@
 # `ui`
 
+## Summary
+
 React UI components that developers use to build applications for the
 healthcare setting: the screens of an Electronic Health Record (EHR) system,
 such as a clinic's patient list and a patient's record. Product teams assemble
@@ -45,6 +47,16 @@ For a browsable version, run `npm run docs` at the repository root and open
 <http://localhost:6007>: one page per component with live demos and its
 props, plus the design tokens. The [docs site README](./src/docs/README.md)
 says how to share it.
+
+## Tech stack
+
+| Area | Built with |
+| --- | --- |
+| Components | React 19 (a peer dependency, not bundled) and TypeScript |
+| Styling | CSS Modules; every value comes from a [token](#tokens) (a CSS custom property) |
+| Build | Vite in library mode, plus `tsc` for the type declarations |
+| Tests | Vitest and Testing Library |
+| Docs | Storybook 10 |
 
 ## Contents
 
