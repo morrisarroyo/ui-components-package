@@ -698,3 +698,10 @@ Contributing page on the docs site about adding a new component.
 - **Verify:** every README has a Quick start section; every link in the
   project README resolves; `npm test` passes.
 
+### T-11.4 Concise interview notes
+- **Depends on:** T-11.3
+- **Status:** Done
+- **Done when:** `INTERVIEW.md` is shorter and current: decisions, process
+  through Phase 11, corrections, tests, gaps and next steps.
+- **Verify:** the document checker's word count drops; its test total matches
+  `npm test` and `npm run test:api`.
