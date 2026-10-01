@@ -34,6 +34,7 @@ Alternatives for each are in [`docs/DECISIONS.md`](./docs/DECISIONS.md).
 | D-22 | Playwright end-to-end tests against the real API | Real routing, fetches and browser. |
 | D-23 | A Register patient page, tracked as GitHub issues | Shows the TextField error and Button loading states. |
 | D-24 | CI as Docker builds on GitHub Actions | A failing check fails the build; the same image runs locally. |
+| D-25 | Lint that enforces the brief's rules | Raw colours, deep imports and accessibility mistakes fail the build. |
 
 ## Process
 
@@ -57,7 +58,7 @@ Alternatives for each are in [`docs/DECISIONS.md`](./docs/DECISIONS.md).
 | 11 | 1 Oct | A README per part, Swagger, a Contributing page |
 | 12 | 1 Oct | End-to-end tests in a real browser |
 | 13 | 1 Oct | A Register patient page, tracked as GitHub issues |
-| 14 | 1 Oct | CI in Docker, a secrets scan, a testing guide |
+| 14 | 1 Oct | CI in Docker, a secrets scan, a testing guide, clean-up, lint |
 
 Phases 5 onwards came after submission, at my direction.
 

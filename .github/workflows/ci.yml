@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - uses: docker/setup-buildx-action@v4
-      - name: Typecheck, unit, API and end-to-end tests, builds
+      - name: Lint, typecheck, tests and builds
         uses: docker/build-push-action@v7
         with:
           context: .

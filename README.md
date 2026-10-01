@@ -37,6 +37,7 @@ The site forwards `/api` to the API, so both must run.
 | Example website (`app`) | React 19, React Router 7, Vite |
 | Mock API (`api`) | ASP.NET Core on .NET 10, Swagger (Swashbuckle) |
 | Tests | Vitest and Testing Library; xUnit for the API; Playwright end to end |
+| Lint | ESLint, Stylelint, dotnet format |
 | CI | GitHub Actions running Docker builds; gitleaks for secrets |
 | Hosting | One Docker image on Render |
 
@@ -65,6 +66,9 @@ The site forwards `/api` to the API, so both must run.
 CLAUDE.md                     working context, phases
 README.md                     this file (deliverable)
 INTERVIEW.md                  interview notes (deliverable)
+package.json                  npm workspaces and every root command
+eslint.config.js              lint for the TypeScript
+stylelint.config.js           lint for the CSS: tokens only
 Dockerfile                    the hosted image: site, API and docs
 Dockerfile.ci                 every check, run by building it
 render.yaml                   the free Render service
@@ -91,6 +95,7 @@ packages/app/
     pages/                    one file per page
 api/Intrahealth.Api/          the ASP.NET Core project
 api/Intrahealth.Api.Tests/    its xUnit tests
+api/Intrahealth.slnx          both API projects, for dotnet format
 ```
 
 ## Hosting

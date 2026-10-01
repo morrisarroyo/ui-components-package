@@ -29,7 +29,7 @@ C# on .NET 10, Swagger docs and xUnit tests.
 | `GET /api/patients/{id}` | One patient, or `404`. |
 | `POST /api/patients` | `201` with the new patient, or `400` with an error per field. Lost on restart. |
 | `GET /health` | `ok`. |
-| `GET /api/swagger` | The Swagger page. |
+| `GET /api/swagger` | The Swagger page. The OpenAPI description is at `/api/swagger/v1/swagger.json`. |
 
 Some seed patients have no email, phone or address, so the website's "—" shows.
 Payload shapes: [`docs/API-CONTRACT.md`](../docs/API-CONTRACT.md).

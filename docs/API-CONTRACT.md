@@ -115,6 +115,8 @@ free id (`p-0013`, …) and keeps the patient until it stops.
 | Situation | API | Website |
 | --- | --- | --- |
 | Search matches nothing | `200` with `[]` | The table says "No patients match your search". |
+| No patients at all, before any search | `200` with `[]` | The table says "No patients yet". |
+| Unknown path under `/api` | `404`, empty body | Not called by the website. |
 | Unknown patient id | `404` | A card titled "Patient not found", with Back. |
 | API down, network failure, or another error on a read | No response or `5xx` | A card titled "Something went wrong" instead of the content. |
 | Registering with invalid input | `400` | Each error shows on its field. |

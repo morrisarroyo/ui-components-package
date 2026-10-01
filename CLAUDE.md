@@ -169,8 +169,8 @@ GitHub issue #1, not `docs/TASKS.md`.
 
 ### Phase 14 — CI, secrets, testing guide and clean-up
 
-Continuous integration (CI) in Docker, a secrets scan, a testing guide, and a
-tidy repository.
+Continuous integration (CI) in Docker, a secrets scan, a testing guide, a
+tidy repository, and lint.
 
 **Done when:** every Phase 14 task in `docs/TASKS.md` is Done.
 
@@ -201,7 +201,7 @@ npm run api                          # start the mock API on :5080 (Swagger at /
 npm run storybook                    # browse the ui components on :6006
 npm run test:api                     # the mock API's xUnit tests
 npm run lint                         # ESLint, Stylelint and dotnet format
-npm run test:e2e                     # both pages in Chromium against the real API
+npm run test:e2e                     # the pages in Chromium against the real API
 npm run ci                           # every check and build, as CI runs it
 npm run ci:docker                    # the same, inside Docker (Dockerfile.ci)
 ```

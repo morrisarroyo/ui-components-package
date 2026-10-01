@@ -26,8 +26,10 @@ is a small slice of it:
 1. **`ui`**: a React + TypeScript library of five components.
 2. **Documentation** in `ui` that lets a newcomer build a page without reading
    the source.
-3. **`app`**: a React + TypeScript website of two pages (patient list, patient
-   detail), built *only* from `ui` components and plain layout markup.
+3. **`app`**: a React + TypeScript website of three pages (patient list,
+   patient detail, register patient), built *only* from `ui` components and
+   plain layout markup. The brief asks for the first two; the third came later
+   (D-23).
 4. **`api`**: a mock API in ASP.NET Core (the C# web framework) serving
    invented patient data.
 

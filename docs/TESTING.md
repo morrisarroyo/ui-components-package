@@ -71,7 +71,7 @@ npm run ci:docker              # same as: docker build -f Dockerfile.ci .
 | `ui` README | 81 | `packages/ui/src/readme.test.ts` | The library README's links, contents and props tables match the code. |
 | `app` | 81 | `packages/app/src/**/*.test.ts(x)` | The display mapping, and all three pages in every state. |
 | `api` | 38 | `api/Intrahealth.Api.Tests/` | Every endpoint, search, registration and its validation, not-found, JSON shape, Swagger. |
-| End to end | 15 | `e2e/` | Every behaviour in the page spec, and one journey across all three pages. |
+| End to end | 15 | `e2e/` | Every behaviour of the list and detail pages, and one journey across all three pages. |
 
 Tools: Vitest and Testing Library for `ui` and `app`, xUnit for `api`, and
 Playwright end to end. Only the end-to-end failure test fakes the network.

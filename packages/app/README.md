@@ -26,9 +26,9 @@ React 19, TypeScript, React Router 7, Vite and Vitest.
 
 | Route | Page |
 | --- | --- |
-| `/` | Patient list. Search by name; click a row or press Enter to open it. |
+| `/` | Patient list. Search by name; click a row or press Enter to open it. The search stays in the address, so Back from a patient keeps it. |
 | `/patients/:id` | One patient's details, or "Patient not found". |
-| `/patients/new` | Register a patient. Errors show on their fields; success opens the record. |
+| `/patients/new` | Register a patient. Errors show on their fields; the form is disabled while saving; success opens the record. |
 
 Every page shows loading, empty and API-down messages where they apply. A
 missing phone, email or address shows as "—".

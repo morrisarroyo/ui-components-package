@@ -10,9 +10,9 @@ has:
 
 One task, one commit: the history and this file must tell the same story.
 
-**Status summary:** Phases 0–6 complete. Phase 7 (fixes from the review
-against the brief) in progress. Phases 5–7 came after the original delivery
-(Phase 4).
+**Status summary:** Phases 0–6 and 8–14 are complete. Phase 7 waits only on
+the owner (T-7.8, T-7.9). Phase 13 is tracked in GitHub issue #1. Phases 5
+onwards came after the original delivery (Phase 4).
 
 ---
 
@@ -634,7 +634,7 @@ repository, and lint.
 - **Status:** Done
 - **Done when:** `npm run ci` runs every check and build. `npm run ci:docker`
   runs it inside a Docker build. GitHub Actions runs that, and builds the
-  hosted image, on every push and pull request to `main` (D-24). `TESTING.md`
+  hosted image, on every push and pull request to `main` (D-24). `docs/TESTING.md`
   explains it.
 - **Verify:** `npm run ci` passes locally and on GitHub.
 
@@ -649,9 +649,9 @@ repository, and lint.
 ### T-14.3 A guide to effective tests
 - **Depends on:** —
 - **Status:** Done
-- **Done when:** `docs/TESTING-GUIDE.md` shows how to write tests that catch
-  real breakage, using this repository's tests. `TESTING.md`, the project
-  README and the conventions link to it.
+- **Done when:** a guide shows how to write tests that catch real breakage,
+  using this repository's tests. It is now the "Writing tests" section of
+  `docs/TESTING.md`, which the project README and the conventions link to.
 - **Verify:** every example matches a real test; the document checker passes.
 
 ### T-14.4 Clean up the repository

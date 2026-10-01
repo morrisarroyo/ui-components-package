@@ -371,7 +371,7 @@ Each text role has `-size`, `-line` and `-weight` tokens, such as
 | `--ui-font-title-*` | 24px / 32px | 600 | Your page's `<h1>` |
 
 Focus ring: a light-blue ring (`--ui-color-focus`) inside a blue one
-(`--ui-color-primary`), 2px out from Buttons and table rows
+(`--ui-color-primary`), 2px out from Buttons and a clickable row's first cell
 (`--ui-focus-ring-offset`). A focused TextField gets a blue border and a
 light-blue ring.
 
@@ -386,7 +386,7 @@ level AA.
 | --- | --- |
 | Keyboard | Everything clickable works with Tab, Enter and Space. |
 | Visible focus | Keyboard focus shows a two-tone ring ([details](#tokens)). |
-| Contrast | Text is at least 4.5:1 against its background; borders and focus rings at least 3:1. |
+| Contrast | Text is at least 4.5:1 against its background; borders and focus indicators at least 3:1. |
 | Labels | A TextField's label belongs to its input. Errors are read aloud. |
 | Screen readers | A loading Button reads as busy. A clickable row reads as a button. A missing value reads as "Not provided". A titled Card is a named region. |
 | Disabled | Disabled controls can't be focused or used. |
@@ -395,7 +395,8 @@ Three colours differ from the design brief, for contrast:
 
 - table header text uses `--ui-color-text`;
 - the text input border uses `--ui-color-text-muted`;
-- focus adds the outer `--ui-color-primary` ring.
+- Button and clickable-row focus adds the outer `--ui-color-primary` ring;
+  a focused TextField's border turns `--ui-color-primary`.
 
 On each page, you:
 
@@ -985,7 +986,9 @@ A test renders every story, so a story that crashes fails.
 To list Badge in the docs site, add `src/docs/Badge.mdx`, copying
 `src/docs/Button.mdx`: a title and one-line description, a
 `<Canvas of={BadgeStories.Neutral} />` per state, the token table, and
-`<ArgTypes of={BadgeStories} />` for the props.
+`<ArgTypes of={BadgeStories} />` for the props. To place it among the
+components rather than after them, add it to the sidebar order in
+`.storybook/preview.ts`.
 
 #### 6. Export its types
 

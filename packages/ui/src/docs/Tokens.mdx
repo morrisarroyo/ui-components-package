@@ -43,8 +43,9 @@ Each value is defined once, as a CSS variable. In CSS, use the variable
 
 ## Typography
 
-Each role has a size, line height and weight
-(`--ui-font-<role>-size`, `-line`, `-weight`).
+Every role uses one font stack, `--ui-font-family` (the system UI font). Each
+role has a size, line height and weight (`--ui-font-<role>-size`, `-line`,
+`-weight`).
 
 | Token | Size / line height | Weight |
 | --- | --- | --- |
@@ -60,3 +61,12 @@ Each role has a size, line height and weight
   fontWeight={400}
   sampleText="Amara Okonkwo, born 2 Mar 1984"
 />
+
+## Focus ring
+
+Shared by every focusable component.
+
+| Custom property | Value |
+| --- | --- |
+| `--ui-focus-ring-width` | 2px |
+| `--ui-focus-ring-offset` | 2px |

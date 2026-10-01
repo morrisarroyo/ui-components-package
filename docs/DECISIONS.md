@@ -110,6 +110,9 @@ Two routes: the patient list, and a patient by id.
 **Why.** The detail page needs its own address, and Back must work like the
 browser's. Hand-writing that is time spent on something not assessed.
 
+**Amended 2026-10-01 (D-23).** A third route, `/patients/new`, holds the
+Register patient page.
+
 ---
 
 ## D-10 — Dev-server proxy instead of a configurable API base URL
@@ -181,8 +184,9 @@ expects. A real product would use a scoped name like `@intrahealth/ui`.
 
 **Decided:** 2026-09-25 · **Status:** settled
 
-A clickable row is a focusable `<tr>` that responds to Enter and Space, not a
-`role="button"`.
+A clickable row keeps its native row role rather than becoming a
+`role="button"`. (First built as a focusable `<tr>` answering Enter and Space;
+since T-7.10 a button in the first cell does that. See the amendment below.)
 
 **Why.** Making a row a button stops screen readers moving through the table
 by row and column. The row still works from the keyboard, as the spec
@@ -341,6 +345,9 @@ start the API).
 
 **What would change it.** A CI pipeline, which would run them on every push.
 
+**Amended 2026-10-01 (D-24).** That pipeline exists: `npm run ci` ends with
+them, and CI runs it on every push.
+
 ## D-23 — A third page: Register patient, tracked as GitHub issues
 
 **Decided:** 2026-10-01 · **Status:** settled
@@ -396,11 +403,14 @@ into parallel jobs.
 `npm run lint` runs ESLint on the TypeScript, Stylelint on the CSS and
 `dotnet format` on the API, and `npm run ci` runs it first. Warnings fail it.
 
-**Why.** The owner asked for lint that makes sense here. So the rules are the
-brief's rules, not a style guide: hard-coded colour, spacing or font size
-fails Stylelint (rule 3), a deep import from `app` into `ui` fails ESLint
-(rule 1), and jsx-a11y catches the accessibility mistakes a reviewer would
-(rule 5). The rest is the recommended bug-finding sets. Only the C#, where
+**Why.** The owner asked for lint that makes sense here, so it enforces the
+brief's rules, not a style guide:
+
+- a hard-coded colour, spacing or font size fails Stylelint (rule 3);
+- a deep import from `app` into `ui` fails ESLint (rule 1);
+- jsx-a11y catches the accessibility mistakes a reviewer would (rule 5).
+
+The rest is the recommended bug-finding sets. Only the C#, where
 `dotnet format` is the standard tool, has its formatting checked.
 
 **Considered.** Stylistic presets such as `stylelint-config-standard`
