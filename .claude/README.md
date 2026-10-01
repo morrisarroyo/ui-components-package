@@ -24,7 +24,7 @@ generic `Tasks.md`.
 | `status: todo` / `in-progress` / `done` / `blocked` | **Status:** Not started / In progress / Done / Blocked |
 | `after:` | **Depends on:** |
 | `verify:` / `goal:` | **Verify:** / **Done when:** |
-| Run log / changeset manifest | `AutoPhase.md` |
+| Run log / changeset manifest | `AutoPhase.md`, kept locally and not committed |
 | Changeset (`cm`) | A git commit |
 | Unity, Plastic SCM, EditMode/PlayMode | Not applicable |
 

@@ -10,12 +10,21 @@ like one person wrote it.
 CLAUDE.md                     working context, phases
 README.md                     project README (deliverable)
 INTERVIEW.md                  interview notes (deliverable)
+TESTING.md                    what each test suite covers, how to run it
+Dockerfile                    the hosted image: site, API and docs
+Dockerfile.ci                 every check, run by building it
+render.yaml                   the free Render service
+playwright.config.ts          end-to-end test setup
+.github/workflows/ci.yml      CI on every push and pull request
+.claude/                      the harness: skills and their README
 docs/
   DESIGNDOCUMENT.md           the reconciled spec
   TASKS.md                    the work order
   API-CONTRACT.md             endpoints and payloads
   DECISIONS.md                why things are the way they are
   CONVENTIONS.md              this file
+  TESTING-GUIDE.md            how to write effective tests
+e2e/                          end-to-end tests, in Chromium
 packages/ui/
   src/
     tokens.css                every token-sheet value, defined once
@@ -25,6 +34,10 @@ packages/ui/
       Button.module.css
       Button.test.tsx
       Button.stories.tsx
+    docs/                     the Storybook docs pages (MDX)
+    examples/                 the worked example
+  scripts/                    component scaffold, state screenshots
+  docs/                       state screenshots used by the README
   .storybook/                 Storybook config (dev-only, not published)
   README.md                   the library documentation (deliverable)
 packages/app/
@@ -33,6 +46,7 @@ packages/app/
     api/                      typed API calls and the display mapping
     pages/                    one file per page
 api/Intrahealth.Api/          the ASP.NET Core project
+api/Intrahealth.Api.Tests/    its xUnit tests
 ```
 
 ## The `ui` package
@@ -104,6 +118,8 @@ Not a polish pass; it is part of "done".
   and never a snapshot.
 - One behaviour per test, named as a sentence about the component:
   `it('does not call onClick while loading')`.
+- More on writing tests that catch real breakage:
+  [`docs/TESTING-GUIDE.md`](./TESTING-GUIDE.md).
 
 ### Adding a component
 
