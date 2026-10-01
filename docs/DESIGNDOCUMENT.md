@@ -298,6 +298,24 @@ A clinic staff member opens the site and sees a list of patients.
 - Patient does not exist: a `Card` titled **"Patient not found"** and the Back
   button.
 
+### 5.3 Page 3 — Register patient
+
+Added after delivery at the owner's request; not in the brief. It exercises
+TextField's error and helper states and Button's loading state, which the
+first two pages barely use.
+
+- Opened from a **"Register patient"** button on Page 1. Route
+  `/patients/new`, titled **"Register patient"**.
+- Two `Card`s of `TextField`s: **Patient** (given name, family name, gender,
+  birth date) and **Contact** (phone, email, street address, city, province
+  or state, postal code — all optional). **Register** and **Cancel** buttons.
+- Register checks the form first. Each invalid field shows its own error and
+  nothing is sent. Editing a field clears its error.
+- While saving, Register shows its loading state and keeps focus.
+- Success opens Page 2 for the new patient. An API failure shows a `Card`
+  titled **"Something went wrong"** and keeps what was typed.
+- Cancel returns to Page 1.
+
 Layout, routing, and how the pages talk to the API are open choices — see
 `docs/DECISIONS.md`.
 

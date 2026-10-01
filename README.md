@@ -48,7 +48,7 @@ Each part of the project has its own README, starting with a quick start.
 | --- | --- | --- |
 | UI components | The library: Button, TextField, Card, Table, DescriptionList. | [packages/ui/README.md](./packages/ui/README.md) |
 | Storybook docs | A page per component with live demos, the tokens, a worked example and how to contribute. | [packages/ui/src/docs/README.md](./packages/ui/src/docs/README.md) |
-| Example website | A searchable patient list and a patient's record, built from the components. | [packages/app/README.md](./packages/app/README.md) |
+| Example website | A searchable patient list, a patient's record and a register form, built from the components. | [packages/app/README.md](./packages/app/README.md) |
 | Mock API | ASP.NET Core, in-memory patient data, Swagger docs. | [api/README.md](./api/README.md) |
 | Tests | What each test suite covers and how to run it. | [TESTING.md](./TESTING.md) |
 | Harness | The Claude Code skills the project was built with. | [.claude/README.md](./.claude/README.md) |

@@ -31,6 +31,7 @@ tests that run the real app in memory.
 | `GET /api/patients` | Every patient. |
 | `GET /api/patients?search=oko` | Patients whose name contains the text, ignoring case; `[]` if none. |
 | `GET /api/patients/{id}` | One patient, or `404` with a `ProblemDetails` body. |
+| `POST /api/patients` | Registers a patient: `201` with it, or `400` with an error per field. Kept until the API stops. |
 | `GET /health` | `ok`. |
 | `GET /api/swagger` | The Swagger page. The OpenAPI description is at `/api/swagger/v1/swagger.json`. |
 
@@ -64,6 +65,8 @@ the Swagger docs, run in memory against the real app. All the project's tests:
 | `Intrahealth.Api/Program.cs` | The endpoints, Swagger, and serving the built website and docs when hosted. |
 | `Intrahealth.Api/SeedData.cs` | The invented patients. |
 | `Intrahealth.Api/Patient.cs` | The patient record the endpoints return. |
+| `Intrahealth.Api/PatientStore.cs` | Every patient in memory: the seed data plus registered ones. |
+| `Intrahealth.Api/NewPatient.cs` | The body of `POST /api/patients`, and its rules. |
 | `Intrahealth.Api.Tests/` | The xUnit tests. |
 
 ## Contributing

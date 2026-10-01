@@ -385,3 +385,30 @@ caught by the hosted website's fallback).
 
 **What would change it.** Real patient data, where the docs would be
 development-only.
+
+## D-23 — A third page: Register patient, tracked as GitHub issues
+
+**Decided:** 2026-10-01 · **Status:** settled
+
+A form at `/patients/new` that posts to a new `POST /api/patients`. The work
+was planned and tracked as GitHub issues #1–#5 with the `github-task`
+skill, not in `docs/TASKS.md`.
+
+**Why.** The owner asked for a third page tracked as issues. A form is the
+screen the first two pages lack: it uses TextField's error and helper
+states and Button's loading state. The form's rules live in the mapping
+layer and are repeated by the API, so errors show without a round trip and
+the API still refuses bad input.
+
+**Gender is a TextField**, checked against the four values, because `ui`
+has no select or radio group. Adding one means a sixth component with its
+tests, stories, docs and README section; that is its own piece of work.
+
+**New patients live in memory**, like the seed data, and vanish on restart.
+On the public host anyone can add one; a restart clears them.
+
+**Considered.** An appointments list (a new resource, but no new component
+states) and a summary dashboard (no API change, but only Cards).
+
+**What would change it.** A select component in `ui`, which gender should
+then use.

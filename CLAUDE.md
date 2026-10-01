@@ -12,7 +12,7 @@ repository:
 | Package | Path | What it is |
 | --- | --- | --- |
 | `ui` | `packages/ui` | The component library. Five components, one entry point. |
-| `app` | `packages/app` | The website. Two pages, built only from `ui`. |
+| `app` | `packages/app` | The website. Three pages, built only from `ui`. |
 | `api` | `api/` | ASP.NET Core mock API serving invented patient data. |
 
 ## Where the truth lives
@@ -171,6 +171,14 @@ Swagger docs for the API; concise interview notes; and a Contributing page on
 the docs site about adding a new component.
 
 **Done when:** every Phase 11 task in `docs/TASKS.md` is Done.
+
+### Phase 13 — Register patient page
+
+A third page: a form that registers a patient through a new
+`POST /api/patients`. Tracked as GitHub issues, not in `docs/TASKS.md`: #1
+lists the tasks.
+
+**Done when:** issue #1 and its tasks are closed.
 
 ## Working agreements
 

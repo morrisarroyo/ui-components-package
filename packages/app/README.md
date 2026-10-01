@@ -2,7 +2,7 @@
 
 ## Summary
 
-A clinic's patient list and a patient's record, the kind of Electronic Health
+A clinic's patient list, a patient's record and a form to register one, the kind of Electronic Health
 Record (EHR) screens the `ui` components exist to build. It is built only from
 those components and plain layout, and reads from the [mock API](../../api/README.md).
 
@@ -22,7 +22,7 @@ first visit can take about a minute.
 
 ## Tech stack
 
-React 19 and TypeScript, React Router 7 for the two routes, Vite to serve and
+React 19 and TypeScript, React Router 7 for the routes, Vite to serve and
 build, and Vitest with Testing Library for the tests. Every visible part comes
 from `ui`.
 
@@ -32,8 +32,9 @@ from `ui`.
 | --- | --- |
 | `/` | The patient list. Search by name; click a row, or press Enter on it, to open the patient. |
 | `/patients/:id` | One patient's details, or "Patient not found". |
+| `/patients/new` | Register a patient. Errors show on their fields; success opens the new record. |
 
-Both pages show a loading state, and a failure message if the API is down.
+Every page shows a failure message if the API is down, and the list and record a loading state.
 The list says when a search matches no one. A missing phone, email or
 address shows as "—".
 
@@ -60,8 +61,8 @@ Run from the repository root. Each needs `ui` built first
 | Path | What it holds |
 | --- | --- |
 | `src/main.tsx` | The routes. |
-| `src/pages/` | The two pages and their tests. |
-| `src/api/patients.ts` | The API calls and the payload-to-display mapping. |
+| `src/pages/` | The pages and their tests. |
+| `src/api/patients.ts` | The API calls, the payload-to-display mapping, and the register form's rules and payload. |
 
 ## Contributing
 
