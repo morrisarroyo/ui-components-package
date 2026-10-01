@@ -2,24 +2,21 @@
 
 ## Summary
 
-React UI components that developers use to build applications for the
-healthcare setting: the screens of an Electronic Health Record (EHR) system,
-such as a clinic's patient list and a patient's record. Product teams assemble
-them into their own apps, so every screen looks and behaves the same and is
-accessible by default. You pick a component and a variant; the library owns
-how it looks and behaves.
+React components that developers use to build healthcare apps: the screens
+of an Electronic Health Record (EHR) system, such as a patient list or a
+patient's record. You pick a component and a variant. The library handles
+how it looks, its states and its accessibility.
 
 ## Quick start
 
-In this repository, build the library once:
+Build the library once:
 
 ```bash
 npm install                    # at the root
 npm run build --workspace ui   # builds packages/ui/dist
 ```
 
-Then, in an app that depends on `ui`, import the stylesheet once at the root
-and use the components:
+Then import the stylesheet once in your app and use the components:
 
 ```tsx
 import 'ui/styles.css';
@@ -27,10 +24,6 @@ import { Button } from 'ui';
 
 <Button onClick={() => console.log('saved')}>Save</Button>
 ```
-
-To add `ui` to a new app, or to use it from another repository, see
-[Install](#install). To browse every component with live demos, open the
-[docs site](https://ui-components-package.onrender.com/docs/).
 
 | Component | Use it for |
 | --- | --- |
@@ -40,23 +33,20 @@ To add `ui` to a new app, or to use it from another repository, see
 | [Table](#table) | Many records as rows, optionally clickable. |
 | [DescriptionList](#descriptionlist) | One record's details as label/value pairs. |
 
-Read this file in the repository: its pictures, `src/` links and Storybook
-commands don't work from the installed package.
-
-For a browsable version, run `npm run docs` at the repository root and open
-<http://localhost:6007>: one page per component with live demos and its
-props, plus the design tokens. The [docs site README](./src/docs/README.md)
-says how to share it.
+- To add `ui` to another app, see [Install](#install).
+- For live demos, open the
+  [docs site](https://ui-components-package.onrender.com/docs/), or run
+  `npm run docs` and open <http://localhost:6007>.
+- Read this file in the repository; its pictures and links don't work from
+  the installed package.
 
 ## Tech stack
 
 | Area | Built with |
 | --- | --- |
-| Components | React 19 (a peer dependency, not bundled) and TypeScript |
-| Styling | CSS Modules; every value comes from a [token](#tokens) (a CSS custom property) |
-| Build | Vite in library mode, plus `tsc` for the type declarations |
-| Tests | Vitest and Testing Library |
-| Docs | Storybook 10 |
+| Components | React 19 and TypeScript |
+| Styling | CSS Modules and [tokens](#tokens) |
+| Build, tests, docs | Vite, Vitest, Storybook 10 |
 
 ## Contents
 
@@ -78,7 +68,6 @@ says how to share it.
 6. [Contributing: extending the library](#contributing-extending-the-library)
    - [Scaffold](#scaffold)
    - [Steps](#steps)
-   - [Why it's short](#why-its-short)
 
 ---
 
@@ -86,15 +75,12 @@ says how to share it.
 
 ### Install
 
-Requires React 19 and React DOM 19 (peer dependencies; React is not bundled)
-and a bundler that understands package `exports` and CSS imports, such as Vite.
+You need React 19, `react-dom` 19 and a bundler that handles CSS imports,
+such as Vite. The package is not on npm, and it must be built before use.
 
-The package is not on npm. `ui` resolves to the built files in `dist/`, so
-build it before your app uses it.
-
-**In this repository:** add your package's folder to `workspaces` in the root
-`package.json` (otherwise npm fetches an unrelated public package called
-`ui`), then depend on it:
+**In this repository:** add your app's folder to `workspaces` in the root
+`package.json`, then depend on `ui`. (Without the workspace entry, npm installs
+an unrelated public package called `ui`.)
 
 ```jsonc
 // packages/your-app/package.json
@@ -117,13 +103,12 @@ npm pack --workspace ui          # writes ui-0.1.0.tgz to this repository's root
 npm install /absolute/path/to/this-repo/ui-0.1.0.tgz
 ```
 
-After changing the library, rebuild it. `npm run dev --workspace ui` rebuilds
-the JavaScript and CSS on save but not the type declarations; run the full
-build when a prop or type changes.
+Rebuild after changing the library. `npm run dev --workspace ui` rebuilds on
+save, but not the types; after changing a prop, run the full build.
 
 ### Use
 
-Import the stylesheet once at your app's root, and components from `ui`:
+Import the stylesheet once at your app's root:
 
 ```tsx
 // main.tsx — your app's root
@@ -158,37 +143,36 @@ export function App() {
 }
 ```
 
-- **Import only `'ui'` and `'ui/styles.css'`.** The `exports` map rejects other
-  `ui/...` paths; never use a relative path into the library either.
-- **The stylesheet holds component styles and [tokens](#tokens) only.** It
-  doesn't style `body`, so set `font-family: var(--ui-font-family)` and
-  `color: var(--ui-color-text)` on your page. Without it, components render as
-  plain HTML.
-- **Prop types are exported** (`ButtonProps` and so on); each Props section
-  lists them.
+- **Import only `'ui'` and `'ui/styles.css'`.** Other paths into the library
+  are blocked.
+- **Without the stylesheet, components render as plain HTML.** It doesn't
+  style your page, so set `font-family: var(--ui-font-family)` and
+  `color: var(--ui-color-text)` yourself.
+- **Prop types are exported**, such as `ButtonProps`.
 
 ---
 
 ## A real screen: patient lookup
 
 All five components in one screen: search in a `Card`, results in a `Table`,
-the chosen record in a `DescriptionList`. Run `npm run docs` at the
-repository root and open **Examples / Patient lookup**. Search `lo` for
-results, `zz` for none, `error` for a failure, or one letter for the
-validation error; then click a row.
+the chosen record in a `DescriptionList`. To try it, run `npm run docs` and
+open **Examples / Patient lookup**. Search:
+
+- `lo` for results, then click a row;
+- `zz` for no results;
+- `error` for a failure;
+- one letter for a validation error.
 
 <img src="docs/examples/patient-lookup.png" alt="Patient lookup after searching &quot;lo&quot; and clicking Ada Lovelace: search card, results table, and her record in a description list" width="560">
 
-- **The screen passes state; components render it.** `loading`,
-  `errorMessage` and `emptyMessage` are all the screen sets.
-- **One `primary` button.** Try again and Close are `secondary`, `sm`.
-- **Missing values:** DescriptionList draws `—` itself; Table doesn't, so the
-  screen maps a missing health card to `'—'`
+- The screen only passes state (`loading`, `errorMessage`, `emptyMessage`);
+  the components draw it.
+- One `primary` button. Try again and Close are small `secondary` buttons.
+- DescriptionList shows `—` for a missing value; Table doesn't, so the screen
+  maps a missing health card to `'—'`
   ([why](#missing-values-who-draws-the-dash)).
-- **Layout is the screen's:** plain elements spaced with tokens. The `<div>`
-  around Search stops it stretching across the grid.
-
-A test keeps this listing identical to the story's source.
+- The screen owns the layout: plain elements spaced with tokens. The `<div>`
+  around Search stops it stretching.
 
 <!-- example:PatientLookup -->
 ```tsx
@@ -328,19 +312,17 @@ export function PatientLookup() {
 
 ### The contract
 
-- **You choose a variant or size; the library owns the appearance.** No
-  component takes a colour, pixel value, `className` or `style` prop.
-- **Spacing between components is yours.** Components have no outer margin;
-  space them with tokens, such as `display: flex; gap: var(--ui-space-2)`.
-- **Widths follow the container.** Table fills it; TextField, Card and Button
-  stretch in a grid or flex column. Use `justifyItems: 'start'` or a wrapping
-  `<div>` to keep natural width.
-- **Internals are private.** Generated class names (`ui-button-BiD3F`) can
-  change in any release; never target them.
-- **Tokens are public.** Use them in your own CSS so pages share the
-  components' scale.
-- **Theme globally only:** redefine tokens on `:root` after `ui/styles.css`.
-  Redefining them on a wrapper to recolour part of a page is not supported.
+- **You pick a variant or size; the library owns the look.** No component
+  takes a colour, pixel value, `className` or `style` prop.
+- **You space components.** They have no outer margin; use tokens, such as
+  `gap: var(--ui-space-2)`.
+- **Widths follow the container.** In a grid or flex column, components
+  stretch. To keep a component's natural width, use `justifyItems: 'start'` or
+  wrap it in a `<div>`.
+- **Don't target the library's class names.** They change between releases.
+- **Use tokens in your own CSS**, so your page matches the components.
+- **To theme, redefine tokens on `:root`** after `ui/styles.css`. Theming only
+  part of a page is not supported.
 
 ```css
 /* Your app's own layout: tokens, not literals. */
@@ -356,9 +338,9 @@ export function PatientLookup() {
 
 ### Tokens
 
-Every value is a CSS custom property on `:root`, defined once in
-`src/tokens.css`. Use the custom property; the spec name is the design
-document's name for it and is not valid CSS.
+A token is a named value, such as a colour, that every component shares. Use
+the custom property in CSS; the spec name is only the design document's
+label.
 
 | Custom property | Spec name | Value | Used for |
 | --- | --- | --- | --- |
@@ -376,8 +358,8 @@ document's name for it and is not valid CSS.
 | `--ui-space-1` … `-8` | space.1 … space.8 | `4` `8` `12` `16` `24` `32px` (1, 2, 3, 4, 6, 8) | Padding and gaps |
 | `--ui-radius-sm`, `-md` | radius.sm, radius.md | `4px`, `8px` | Buttons and inputs; cards |
 
-Typography: each role has `-size`, `-line` and `-weight`, such as
-`--ui-font-body-size`. The family is `--ui-font-family` (system UI).
+Each text role has `-size`, `-line` and `-weight` tokens, such as
+`--ui-font-body-size`. The font is `--ui-font-family` (the system font).
 
 | Role | Size / line | Weight | Used for |
 | --- | --- | --- | --- |
@@ -387,51 +369,47 @@ Typography: each role has `-size`, `-line` and `-weight`, such as
 | `--ui-font-heading-*` | 20px / 28px | 600 | Card titles |
 | `--ui-font-title-*` | 24px / 32px | 600 | Your page's `<h1>` |
 
-Focus ring: a 2px ring in `--ui-color-focus`, with a 2px ring in
-`--ui-color-primary` outside it, drawn `--ui-focus-ring-offset` (2px) out from
-Button and a table row's button. TextField shows focus with a
-`--ui-color-primary` border and a `--ui-color-focus` ring flush with it.
+Focus ring: a light-blue ring (`--ui-color-focus`) inside a blue one
+(`--ui-color-primary`), 2px out from Buttons and table rows
+(`--ui-focus-ring-offset`). A focused TextField gets a blue border and a
+light-blue ring.
 
 ---
 
 ## Accessibility
 
-The components meet the Web Content Accessibility Guidelines (WCAG) 2.2 at
-level AA, the W3C's accessibility standard.
+The components meet the Web Content Accessibility Guidelines (WCAG) 2.2,
+level AA.
 
 | Need | What the components do |
 | --- | --- |
 | Keyboard | Everything clickable works with Tab, Enter and Space. |
-| Visible focus | Keyboard focus shows a light-blue ring with a blue ring outside it. |
+| Visible focus | Keyboard focus shows a two-tone ring ([details](#tokens)). |
 | Contrast | Text is at least 4.5:1 against its background; borders and focus rings at least 3:1. |
-| Labels | A TextField's label is tied to its input. An error is announced and marks the input invalid. |
-| Screen readers | A loading Button is announced as busy and keeps focus. A clickable Table row is announced as a button. A missing value is read as "Not provided". A titled Card is a named region. |
-| Disabled | Disabled controls are natively disabled: they can't be focused or used. |
+| Labels | A TextField's label belongs to its input. Errors are read aloud. |
+| Screen readers | A loading Button reads as busy. A clickable row reads as a button. A missing value reads as "Not provided". A titled Card is a named region. |
+| Disabled | Disabled controls can't be focused or used. |
 
-Three colours differ from the design brief, to meet the contrast rule:
+Three colours differ from the design brief, for contrast:
 
 - table header text uses `--ui-color-text`;
 - the text input border uses `--ui-color-text-muted`;
 - focus adds the outer `--ui-color-primary` ring.
 
-Your part, on each page:
+On each page, you:
 
-- Give the page one `<h1>`, and place Cards under it.
-- Announce loading and errors: `role="status"` on a loading message and
-  `role="alert"` around an error, as the patient pages do.
-- Don't show meaning by colour alone.
+- give the page one `<h1>`, with Cards under it;
+- put `role="status"` on a loading message and `role="alert"` around an
+  error, so screen readers announce them;
+- don't show meaning by colour alone.
 
 ---
 
 ## Component reference
 
-Each component has: When to use it, Example, Props, Behaviour, States, Source.
-Examples run as written in an app that imports `ui/styles.css`; a test checks
-each props table against the code. To see a state live, run `npm run docs`
-and open the component's page; the Demo column names the section that shows
-it (hover or tab to it for hover and focus states). Links
-like `src/components/Button.tsx:38` point at the line that does what the
-sentence says.
+Examples run as written. To see a state live, run `npm run docs` and open
+the section named in the Demo column. Code links point at the line that does
+what the sentence says.
 
 ### Missing values: who draws the dash
 
@@ -440,22 +418,21 @@ sentence says.
 | `DescriptionList` | `null`, `undefined`, `''` | A muted `—` | Pass the value as it is. |
 | `Table` | Nothing; cells render as given | An empty cell | Map missing values to `'—'` when building `rows`. |
 
-`0` is shown in both. `false`, whitespace and `[]` render blank in both, so
-convert booleans to text and trim strings first.
+Both show `0`. Both show `false`, whitespace and `[]` as blank, so convert
+booleans to text and trim strings first.
 
 ### Button
 
-Triggers an action. Two variants, two sizes, built-in loading and disabled
-states.
+Triggers an action.
 
 #### When to use it
 
-For an action: save, search, submit, open a dialog. One `primary` per screen
-or section; the rest `secondary`. Use `loading` during async work instead of
-your own spinner.
+For an action: save, search, submit, open a dialog. Use one `primary` per
+screen or section and `secondary` for the rest. Set `loading` while waiting
+on a request instead of adding your own spinner.
 
-**When not to:** to link out to another page (use `<a>`; an in-app Back
-button is fine), or for an on/off setting (no toggle exists yet).
+**When not to:** for a link to another page (use `<a>`; an in-app Back
+button is fine), or an on/off setting (there is no toggle yet).
 
 #### Example
 
@@ -502,14 +479,11 @@ Types: `ButtonProps`, `ButtonVariant`, `ButtonSize`.
 
 #### Behaviour
 
-- `disabled` sets native `disabled`
-  ([`src/components/Button.tsx:59`](src/components/Button.tsx#L59 "disabled={disabled}")): no click,
-  no Tab, no keyboard activation.
-- `loading` keeps the button focusable
-  ([`src/components/Button.tsx:60`](src/components/Button.tsx#L60 "aria-disabled={loading || undefined}")) but
-  ignores every activation, including submitting its form, so a keyboard user
-  who pressed it keeps their place. It keeps the variant colours and
-  accessible name and sets `aria-busy`
+- `disabled` can't be clicked, tabbed to or pressed
+  ([`src/components/Button.tsx:59`](src/components/Button.tsx#L59 "disabled={disabled}")).
+- `loading` ignores clicks and form submits but keeps focus
+  ([`src/components/Button.tsx:60`](src/components/Button.tsx#L60 "aria-disabled={loading || undefined}")),
+  so a keyboard user keeps their place. Screen readers hear it as busy
   ([`src/components/Button.tsx:61`](src/components/Button.tsx#L61 "aria-busy={loading || undefined}")).
 
 #### States
@@ -535,16 +509,16 @@ props [`src/components/Button.tsx:7`](src/components/Button.tsx#L7 "export inter
 
 ### TextField
 
-A single-line input with a label above, an optional hint below, and an error
-state. Controlled: you hold the value.
+A one-line text input with a label, an optional hint and an error state. You
+hold the value in your own state.
 
 #### When to use it
 
-For short free text: a name, a search term, an email. Set `errorMessage` on
-submit when the value is wrong; clear it when the user edits.
+For short text: a name, a search term, an email. Set `errorMessage` when a
+submitted value is wrong, and clear it when the user edits.
 
-**When not to:** multi-line text or a fixed set of choices (no textarea,
-select or checkbox exists yet).
+**When not to:** for multi-line text or a fixed set of choices (there is no
+textarea, select or checkbox yet).
 
 #### Example
 
@@ -600,17 +574,17 @@ Types: `TextFieldProps`.
 
 #### Behaviour
 
-- Always `type="text"`; no `name`, `required`, `autoComplete`, `onBlur`,
-  `onKeyDown` or `ref`. Read the value from state. Enter in a `<form>`
-  submits it.
-- The label is tied to the input by a generated id
+- It is always a plain text input. There is no `name`, `required`,
+  `autoComplete`, `onBlur`, `onKeyDown` or `ref`; read the value from your
+  state. Enter inside a `<form>` submits the form.
+- Clicking the label focuses the input
   ([`src/components/TextField.tsx:30`](src/components/TextField.tsx#L30 "const id = useId();")).
 - An error replaces the hint
-  ([`src/components/TextField.tsx:36`](src/components/TextField.tsx#L36 "const message = hasError ? errorMessage : helperText;")), is
-  announced (`role="alert"`,
-  [`src/components/TextField.tsx:60`](src/components/TextField.tsx#L60 "role={hasError ? 'alert' : undefined}")) and
-  marks the input invalid.
-- Disabled cannot be focused or typed in.
+  ([`src/components/TextField.tsx:36`](src/components/TextField.tsx#L36 "const message = hasError ? errorMessage : helperText;")),
+  is read aloud
+  ([`src/components/TextField.tsx:60`](src/components/TextField.tsx#L60 "role={hasError ? 'alert' : undefined}"))
+  and marks the input invalid.
+- When disabled, it can't be focused or typed in.
 
 #### States
 
@@ -632,13 +606,12 @@ props [`src/components/TextField.tsx:4`](src/components/TextField.tsx#L4 "export
 
 ### Card
 
-A bordered container with an optional title and optional actions on the
-title's row.
+A bordered box with an optional title and optional actions beside it.
 
 #### When to use it
 
-To group part of a page: a search form, a record's demographics, an error
-message. The title names the group.
+To group part of a page under a name: a search form, a record's
+demographics, an error message.
 
 **When not to:** around a whole page, or inside another card.
 
@@ -680,11 +653,11 @@ Types: `CardProps`.
 
 #### Behaviour
 
-- A `<section>` whose title is always an `<h2>`; place Cards under your
+- The title is always a level-2 heading (`<h2>`), so place Cards under your
   page's `<h1>`.
-- With neither `title` nor `actions`, the title row is omitted
-  ([`src/components/Card.tsx:15`](src/components/Card.tsx#L15 "const hasHeader = Boolean(title) || Boolean(actions);")). Actions sit
-  right even without a title.
+- With no `title` and no `actions`, there is no title row
+  ([`src/components/Card.tsx:15`](src/components/Card.tsx#L15 "const hasHeader = Boolean(title) || Boolean(actions);")).
+  Actions sit on the right, with or without a title.
 
 #### States
 
@@ -704,17 +677,15 @@ props [`src/components/Card.tsx:5`](src/components/Card.tsx#L5 "export interface
 
 ### Table
 
-A header row of column names and one row per record. Rows can be clickable;
-a message shows when there are none.
+One row per record under a header row. Rows can be clickable.
 
 #### When to use it
 
-For many records of one shape that a user scans or picks from: patients,
-medications, results.
+For a list of similar records to scan or pick from: patients, medications,
+results.
 
-**When not to:** for one record (use [DescriptionList](#descriptionlist)), for
-layout, or when you need built-in sorting, paging or filtering (do those
-before passing `rows`).
+**When not to:** for one record (use [DescriptionList](#descriptionlist)) or
+for layout. It doesn't sort, page or filter; do that before passing `rows`.
 
 #### Example
 
@@ -758,18 +729,18 @@ Types: `TableProps`, `TableColumn`, `TableRow`.
 
 #### Behaviour
 
-- With `onRowClick`, the first cell of each row becomes a button named by its
-  content ([`src/components/Table.tsx:67`](src/components/Table.tsx#L67 "className={styles.rowButton}>")), so
-  screen readers announce the row as actionable, and Tab, Enter and Space
-  work. The whole row is also clickable
-  ([`src/components/Table.tsx:59`](src/components/Table.tsx#L59 "onClick={isClickable ? () => onRowClick?.(row) : undefined}")); each
-  activation calls `onRowClick` once. Put the column that names the record
-  first. Each row is a Tab stop, so for long lists filter or paginate first.
-- Keys no column names (like `id` above) stay on the row, unshown, and reach
-  `onRowClick`. Values are `ReactNode`: narrow with
+- With `onRowClick`, the whole row is clickable
+  ([`src/components/Table.tsx:59`](src/components/Table.tsx#L59 "onClick={isClickable ? () => onRowClick?.(row) : undefined}")).
+  Its first cell becomes a button
+  ([`src/components/Table.tsx:67`](src/components/Table.tsx#L67 "className={styles.rowButton}>")),
+  so Tab, Enter, Space and screen readers work. Put the column that names the
+  record first.
+- Each clickable row is a Tab stop, so filter or page long lists.
+- Row fields no column shows (like `id` above) are still passed to
+  `onRowClick`. Check their type first, such as
   `typeof row.id === 'string'`.
-- Cells render as given; map missing values to `'—'`
-  ([details](#missing-values-who-draws-the-dash)). Rows are keyed by position.
+- Cells show exactly what they're given; map missing values to `'—'`
+  ([details](#missing-values-who-draws-the-dash)).
 
 #### States
 
@@ -790,12 +761,12 @@ props [`src/components/Table.tsx:13`](src/components/Table.tsx#L13 "export inter
 
 ### DescriptionList
 
-Read-only label/value pairs, one per row, for a single record's details.
+Read-only label/value pairs for one record.
 
 #### When to use it
 
-For one record's fields: demographics, contact details. Usually inside a
-[Card](#card) that names the group.
+For one record's fields, such as demographics or contact details. Usually
+inside a [Card](#card).
 
 **When not to:** many records (use [Table](#table)) or editable fields (use
 [TextField](#textfield)).
@@ -828,11 +799,10 @@ Types: `DescriptionListProps`, `DescriptionListItem`.
 
 #### Behaviour
 
-- `null`, `undefined` and `''` render as a muted `—`
-  ([`src/components/DescriptionList.tsx:21`](src/components/DescriptionList.tsx#L21 "function isEmpty(value: ReactNode): boolean {")).
-  Pass values as they are; `0` shows, `false` and whitespace show blank.
-- Labels are row keys, so keep them unique. Labels sit in a fixed 160px
-  column.
+- `null`, `undefined` and `''` show as a grey `—`
+  ([`src/components/DescriptionList.tsx:21`](src/components/DescriptionList.tsx#L21 "function isEmpty(value: ReactNode): boolean {")),
+  so pass values as they are ([details](#missing-values-who-draws-the-dash)).
+- Keep labels unique. They sit in a fixed 160px column.
 
 #### States
 
@@ -853,14 +823,12 @@ props [`src/components/DescriptionList.tsx:16`](src/components/DescriptionList.t
 
 ## Contributing: extending the library
 
-Run the scaffold, then replace its four files step by step; the steps build a
-`Badge`, which is only an example and is not exported. Run commands from the repository root. House style:
+Run the scaffold, then fill in its files step by step. The steps build an
+example `Badge`. Run commands from the repository root; house style is in
 `docs/CONVENTIONS.md`.
 
-This README is tested (`src/readme.test.ts`): code links must still point at
-the code in their title, linked files and pictures must exist, the contents
-must match the headings, and props tables must match the code. If you move
-linked code, update the link's line and title.
+A test checks this README against the code. If you move code that a link
+points at, update the link's line number and title.
 
 ### Scaffold
 
@@ -877,12 +845,12 @@ src/index.ts                      + export { Badge } and type { BadgeProps }
 ```
 
 The name must be new and PascalCase
-([`scripts/new-component.mjs:24`](scripts/new-component.mjs#L24 "if (!/^[A-Z][A-Za-z0-9]*$/.test(name)) fail(`")). No
-subfolders or barrel files in `components/`.
+([`scripts/new-component.mjs:24`](scripts/new-component.mjs#L24 "if (!/^[A-Z][A-Za-z0-9]*$/.test(name)) fail(`")).
+Keep files flat in `components/`.
 
-Until step 7, `npm run test --workspace ui` fails once, on purpose: Badge is
-not documented yet. To test steps 1–5 alone, run
-`npx vitest run src/components/Badge` from `packages/ui`.
+Until step 7, the ui tests fail once, on purpose: Badge isn't documented
+yet. To test only Badge, run `npx vitest run src/components/Badge` from
+`packages/ui`.
 
 ### Steps
 
@@ -907,12 +875,12 @@ export function Badge({ tone = 'neutral', children }: BadgeProps) {
 }
 ```
 
-- Named function export; props in an exported `<Name>Props` interface with a
-  doc comment per prop.
-- Union types, never `string`, for fixed sets; export the union.
-- Defaults as literal destructuring defaults (`tone = 'neutral'`); the props
-  test reads them.
-- No colour, pixel, `className` or `style` props, and no `{...rest}` spread.
+- Export a named function, and its props as `<Name>Props` with a comment on
+  each prop.
+- For a fixed set of options, use and export a union type, not `string`.
+- Write defaults in the parameter list (`tone = 'neutral'`); the README test
+  reads them there.
+- No colour, pixel, `className` or `style` props, and no `{...rest}`.
 
 #### 2. Style it from tokens
 
@@ -938,23 +906,25 @@ export function Badge({ tone = 'neutral', children }: BadgeProps) {
 }
 ```
 
-- Every value is a `var(--ui-…)` token. A literal (such as a `1px` hairline:
-  there is no border-width token) needs a comment saying why. A value several
-  components need becomes a new token in `src/tokens.css`.
-- camelCase class names for the part (`.emptyValue`), not the look; no
-  element selectors, no `:global`.
-- Focus rings use the `--ui-focus-ring-*` tokens: `:focus-visible` on
+- Use a `var(--ui-…)` token for every value. A literal, such as a `1px`
+  border, needs a comment saying why. If several components need a value, add
+  a token to `src/tokens.css`.
+- Name classes in camelCase after the part (`.emptyValue`), not the look. No
+  element selectors and no `:global`.
+- For focus rings, use the `--ui-focus-ring-*` tokens: `:focus-visible` on
   clickable things, as Button does
   ([`src/components/Button.module.css:18`](src/components/Button.module.css#L18 ".button:focus-visible {")),
-  `:focus` on text inputs.
+  and `:focus` on text inputs.
 
 #### 3. Make it accessible
 
-Associate labels with `useId`
-([`src/components/TextField.tsx:30`](src/components/TextField.tsx#L30 "const id = useId();"));
-make anything clickable reachable by Tab and activated by Enter and Space; use
-native `disabled`; mark decorative parts `aria-hidden`. A Badge needs none of
-these.
+A Badge needs none of these, but other components may:
+
+- tie labels to inputs with `useId`
+  ([`src/components/TextField.tsx:30`](src/components/TextField.tsx#L30 "const id = useId();"));
+- make anything clickable work with Tab, Enter and Space;
+- use the native `disabled` attribute;
+- mark decorative parts `aria-hidden`.
 
 #### 4. Test its behaviour
 
@@ -983,9 +953,8 @@ describe('Badge', () => {
 });
 ```
 
-Vitest and Testing Library. Query as a user would (`getByRole`,
-`getByLabelText`, `getByText`), assert behaviour, one behaviour per test, no
-snapshots.
+For writing tests that catch real breakage, see
+[`docs/TESTING.md`](../../docs/TESTING.md#writing-tests).
 
 #### 5. Give it a story per state
 
@@ -1010,17 +979,16 @@ export const Danger: Story = {
 };
 ```
 
-The story test renders every story, so one that throws fails the tests.
+A test renders every story, so a story that crashes fails.
 
-Stories are the demos, not pages: Storybook runs in docs-only mode, so a
-component appears in the sidebar only once it has a docs page. Add
-`src/docs/Badge.mdx`, modelled on `src/docs/Button.mdx`: a title and one-line
-description, a `<Canvas of={BadgeStories.Neutral} />` per state, the
-design-token table, and `<ArgTypes of={BadgeStories} />` for the API.
+To list Badge in the docs site, add `src/docs/Badge.mdx`, copying
+`src/docs/Button.mdx`: a title and one-line description, a
+`<Canvas of={BadgeStories.Neutral} />` per state, the token table, and
+`<ArgTypes of={BadgeStories} />` for the props.
 
 #### 6. Export its types
 
-Change the scaffold's second line in `src/index.ts` so the two read:
+Change the scaffold's second line in `src/index.ts` to:
 
 ```ts
 // src/index.ts
@@ -1028,7 +996,7 @@ export { Badge } from './components/Badge';
 export type { BadgeProps, BadgeTone } from './components/Badge';
 ```
 
-The entry-point test fails for any component not exported here.
+A test fails for any component not exported here.
 
 #### 7. Document it here
 
@@ -1070,37 +1038,26 @@ What it does for you, and its limits.
 Component, props, styles, tests and stories, as links.
 ```
 
-The props test requires props in interface order, Required as `yes`/`no`, and
-Default as the code literal in backticks (`` `'neutral'` ``) or `—`. Then:
+In the props table, list props in the order the code declares them. Write
+Required as `yes` or `no`, and Default as the code value in backticks
+(`` `'neutral'` ``) or `—`. Then:
 
 1. Add Badge to the component table at the top.
 2. Add `   - [Badge](#badge)` to the contents, after DescriptionList.
-3. Add a `STATES` row per state in
+3. Add a row per state to `STATES` in
    [`scripts/capture-states.mjs:21`](scripts/capture-states.mjs#L21 "const STATES = ["):
-   `['badge-danger', 'components-badge--danger']` (image name, story id), plus
-   `'hover'`, `'hover-row'` or `'tab'` for interaction states.
-4. Run `npx playwright install chromium` once, then
+   `['badge-danger', 'components-badge--danger']` (image name, story id).
+   For hover or focus states, add `'hover'`, `'hover-row'` or `'tab'`.
+4. To take the pictures, run `npx playwright install chromium` once, then
    `npm run capture-states --workspace ui`.
-5. Add the `<img>` cells last; the test fails on missing pictures.
+5. Add the `<img>` cells last; the test fails on a missing picture.
 
 #### 8. Check it
 
 ```bash
+npm run lint                            # lint, from the root
 npm run typecheck --workspace ui        # types
 npm run test --workspace ui             # behaviour, entry point, stories, README
 npm run build --workspace ui            # the package consumers get
 npm run build-storybook --workspace ui  # every story builds
 ```
-
-### Why it's short
-
-| Choice | What it saves you | Where |
-| --- | --- | --- |
-| Tokens defined once | You name a role, not a value; a token change reaches every component. | [`src/tokens.css:13`](src/tokens.css#L13 ":root {") |
-| Hashed CSS Module class names | No collisions, no naming scheme; consumers can't depend on internals. | [`vite.config.ts:11`](vite.config.ts#L11 "generateScopedName: 'ui-[local]-[hash:base64:5]',") |
-| One entry point behind `exports` | Two lines register a component; no consumer imports a file you might move. | [`src/index.ts:9`](src/index.ts#L9 "export { Button } from './components/Button';"), [`package.json:9`](package.json#L9 "exports") |
-| Entry point imports the tokens | Every token lands in `ui.css`; a stylesheet uses them without importing. | [`src/index.ts:7`](src/index.ts#L7 "import './tokens.css';") |
-| Tests discover components | Export, story and README checks cover a new component without test edits. | [`src/index.test.ts:6`](src/index.test.ts#L6 "import.meta.glob(['./components/*.tsx', '!./components/*.tes"), [`src/stories.test.tsx:9`](src/stories.test.tsx#L9 "const storyFiles = import.meta.glob<StoriesModule>('./**/*.s") |
-| Storybook uses the library's Vite config | What you see in Storybook is what ships. | [`.storybook/main.ts:16`](.storybook/main.ts#L16 "framework: '@storybook/react-vite',"), [`.storybook/preview.ts:8`](.storybook/preview.ts#L8 "import '../src/tokens.css';") |
-| React is external | A component adds only its own code. | [`vite.config.ts:23`](vite.config.ts#L23 "external: ['react', 'react-dom', 'react/jsx-runtime'],") |
-| The scaffold | Files start in house style and pass all but the README test. | [`scripts/new-component.mjs:27`](scripts/new-component.mjs#L27 "const files = {") |

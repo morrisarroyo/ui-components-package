@@ -4,11 +4,8 @@ import { Meta } from '@storybook/addon-docs/blocks';
 
 # Contributing
 
-How to add a new component to the library, beside Button, TextField, Card,
-Table and DescriptionList, so that developers building healthcare apps can use
-it like the others.
-
-The full walkthrough, with the code for an example `Badge`, is
+How to add a component for building healthcare screens that works like the
+others. Full walkthrough, with code for an example `Badge`:
 <a href="https://github.com/morrisarroyo/ui-components-package/blob/main/packages/ui/README.md#contributing-extending-the-library" target="_blank" rel="noreferrer">Contributing in the library README</a>.
 
 ## Quick start
@@ -21,40 +18,39 @@ npm run new-component --workspace ui -- Badge      # PascalCase, and a new name
 npm run storybook                                  # http://localhost:6006, reloads on save
 ```
 
-The scaffold creates the component's four files and exports it:
+This creates four files and the export:
 
 | File | What goes in it |
 | --- | --- |
 | `src/components/Badge.tsx` | The component and its typed props. |
 | `src/components/Badge.module.css` | Its styles, from design tokens only. |
 | `src/components/Badge.test.tsx` | Its behaviour tests. |
-| `src/components/Badge.stories.tsx` | One story per variant and state; these are the demos. |
-| `src/index.ts` | The export, from the one entry point. |
+| `src/components/Badge.stories.tsx` | One story per variant and state: the demos. |
+| `src/index.ts` | The export. |
 
 ## Checklist
 
-1. **Props.** A small typed set: a variant, a size, a label. Never a colour, a
-   pixel value, `className` or `style`.
-2. **Styles.** Every value is a `var(--ui-…)` [design token](?path=/docs/foundations-tokens--docs).
+1. **Props.** A variant, a size, a label. Never a colour, pixel value,
+   `className` or `style`.
+2. **Styles.** Only `var(--ui-…)` [design tokens](?path=/docs/foundations-tokens--docs).
    A value several components need becomes a new token in `src/tokens.css`.
-3. **States.** Hover, focus, error, loading and disabled live inside the
-   component, not in the page that uses it.
-4. **Accessibility.** Labels are attached to inputs, anything clickable works
-   from the keyboard, disabled means the native `disabled`, and contrast meets the Web Content
-   Accessibility Guidelines (WCAG) 2.2 at level AA.
-5. **Tests.** Query as a user would (by role, label or text), one behaviour
-   per test, no snapshots.
-6. **Stories.** One per state. A component appears in this site only once it
-   has a docs page.
-7. **Docs page.** Add `src/docs/Badge.mdx`, modelled on `Button.mdx`: a lead
-   sentence, a demo per state, the tokens it uses, and the props table. Add it
-   to the sidebar order in `.storybook/preview.ts`.
-8. **README.** Add a `### Badge` section to the library README. Its tests fail
-   until every prop is documented exactly as in the code.
+3. **States.** Hover, focus, error, loading and disabled belong to the
+   component, not the page.
+4. **Accessibility.** Labelled inputs, keyboard support, native `disabled`,
+   and Web Content Accessibility Guidelines (WCAG) 2.2 AA contrast.
+5. **Tests.** Find elements as a user would (role, label, text). One
+   behaviour per test; no snapshots.
+6. **Stories.** One per state.
+7. **Docs page.** Copy `Button.mdx` to `src/docs/Badge.mdx` and add it to the
+   sidebar order in `.storybook/preview.ts`. Without a page, the component
+   doesn't appear here.
+8. **README.** Add a `### Badge` section to the library README listing every
+   prop exactly as in the code. A test checks it.
 
 ## Check it
 
 ```bash
+npm run lint                            # lint, from the root
 npm run typecheck --workspace ui        # types
 npm run test --workspace ui             # behaviour, export, stories, README
 npm run build --workspace ui            # the package apps install

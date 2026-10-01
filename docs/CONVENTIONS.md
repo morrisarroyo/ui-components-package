@@ -1,176 +1,93 @@
 # Conventions
 
-How to write code that fits this repository. `CLAUDE.md` holds the rules that
-are not negotiable; this file holds the house style that makes the code look
-like one person wrote it.
-
-## Repository layout
-
-```
-CLAUDE.md                     working context, phases
-README.md                     project README (deliverable)
-INTERVIEW.md                  interview notes (deliverable)
-TESTING.md                    what each test suite covers, how to run it
-Dockerfile                    the hosted image: site, API and docs
-Dockerfile.ci                 every check, run by building it
-render.yaml                   the free Render service
-playwright.config.ts          end-to-end test setup
-.github/workflows/ci.yml      CI on every push and pull request
-.claude/                      the harness: skills and their README
-docs/
-  DESIGNDOCUMENT.md           the reconciled spec
-  TASKS.md                    the work order
-  API-CONTRACT.md             endpoints and payloads
-  DECISIONS.md                why things are the way they are
-  CONVENTIONS.md              this file
-  TESTING-GUIDE.md            how to write effective tests
-e2e/                          end-to-end tests, in Chromium
-packages/ui/
-  src/
-    tokens.css                every token-sheet value, defined once
-    index.ts                  the only public entry point
-    components/
-      Button.tsx
-      Button.module.css
-      Button.test.tsx
-      Button.stories.tsx
-    docs/                     the Storybook docs pages (MDX)
-    examples/                 the worked example
-  scripts/                    component scaffold, state screenshots
-  docs/                       state screenshots used by the README
-  .storybook/                 Storybook config (dev-only, not published)
-  README.md                   the library documentation (deliverable)
-packages/app/
-  src/
-    main.tsx                  React root, router, ui stylesheet import
-    api/                      typed API calls and the display mapping
-    pages/                    one file per page
-api/Intrahealth.Api/          the ASP.NET Core project
-api/Intrahealth.Api.Tests/    its xUnit tests
-```
+House style for code, so it reads as one person's. Non-negotiable rules are in
+`CLAUDE.md`; the layout is in the
+[project README](../README.md#repository-layout).
 
 ## The `ui` package
 
-### One component, four files, one folder
+### One component, four files
 
-`components/Name.tsx`, `components/Name.module.css`, `components/Name.test.tsx`,
-`components/Name.stories.tsx`. Stories are usage examples for Storybook; they
-are excluded from the library build and are not documentation on their own.
-Start a new component with `npm run new-component --workspace ui -- Name`,
-which writes all four in this style and adds the export.
-No barrel files inside `components/` — `src/index.ts` is the only place that
-re-exports.
+`Name.tsx`, `Name.module.css`, `Name.test.tsx` and `Name.stories.tsx`, in
+`src/components/`. Stories stay out of the library build. Only `src/index.ts`
+re-exports; no other index files.
+
+To add one, run `npm run new-component --workspace ui -- Name` and follow
+[Contributing](../packages/ui/README.md#contributing-extending-the-library).
+It is not done until documented.
 
 ### Component authoring
 
-- A **named function export**, not a default export, and not
-  `React.FC`. `export function Button(props: ButtonProps)`.
-- Props typed by an **exported interface** named `<Component>Props`, so a
-  consumer can type a wrapper without re-deriving it.
-- **Union types, never `string`**, for anything with a fixed set of values.
-  Export the union too (`ButtonVariant`, `ButtonSize`) when a consumer might
-  hold one in a variable.
-- **Every prop carries a doc comment.** It is what the props table in the
-  README is checked against, and what a consumer sees on hover.
-- Defaults are set by **destructuring defaults** in the signature, never
-  `defaultProps`, so the default is visible in the same line as the type.
-- **No prop spreading onto the DOM** (`{...rest}`). The prop surface is the
-  documented one; anything else is a way for a consumer to reach past the API.
-- **No `className` or `style` prop.** A consumer who can restyle a component
-  can break it, and the brief forbids the app overriding library styles.
+- **Named function export:** `export function Button(props: ButtonProps)`.
+  No default export, no `React.FC`.
+- **Exported `<Component>Props` interface,** so consumers can type wrappers.
+- **Union types, not `string`,** for fixed values. Export the union
+  (`ButtonVariant`) if consumers may need it.
+- **A doc comment on every prop.** The README props table is checked against
+  it.
+- **Defaults in the signature,** not `defaultProps`.
+- **No `{...rest}` onto the HTML element.** The documented props are the whole
+  API.
+- **No `className` or `style` prop.** The app must not override library
+  styles.
 
 ### Styling
 
-- Every value comes from a token: `var(--ui-space-4)`, never `16px`. A literal
-  in a component stylesheet needs a comment saying why no token fits.
-- One `.module.css` per component; class names are camelCase and describe the
-  part (`.header`, `.headerCell`, `.emptyValue`), not the appearance
+- Values come from tokens: `var(--ui-space-4)`, not `16px`. A literal needs a
+  comment saying why.
+- Class names are camelCase and name the part (`.headerCell`), not the look
   (`.blueBox`).
-- Component styles never use element selectors that could leak (`div`, `p`) or
-  `:global`.
-- Focus rings use the shared `--ui-focus-ring-*` tokens so every component's
-  focus looks identical.
-- `:focus-visible`, not `:focus`, for keyboard focus rings — a mouse click
-  should not leave a ring behind.
+- No bare element selectors (`div`, `p`) and no `:global`.
+- Focus rings use the `--ui-focus-ring-*` tokens and `:focus-visible`, so
+  mouse clicks show no ring.
 
 ### Accessibility
 
-Not a polish pass; it is part of "done".
+Part of "done", not a later pass.
 
-- Inputs are associated with their label through `useId`, never a hand-written
-  id that could collide when the component appears twice.
-- Anything clickable is operable from the keyboard: reachable by Tab, activated
-  by Enter (and Space where the role implies it).
-- Disabled and loading controls are genuinely non-interactive — the `disabled`
-  attribute — not merely styled and left clickable.
-- Error messages are associated with their input via `aria-describedby` and
-  announced (`role="alert"`).
-- Decorative elements such as spinners are `aria-hidden`.
+- Link labels to inputs with `useId`, not hand-written ids.
+- Anything clickable works with Tab and Enter (and Space where the role
+  expects it).
+- Disabled and loading controls set the `disabled` attribute.
+- Errors link to their input with `aria-describedby` and use `role="alert"`.
+- Decorative elements, such as spinners, are `aria-hidden`.
 
 ### Tests
 
-- Vitest + Testing Library, in `Name.test.tsx` beside the component.
-- Query the way a user finds things: `getByRole`, `getByLabelText`,
-  `getByText`. Reach for `data-testid` only when nothing else works, and then
-  say why in a comment.
-- Assert **behaviour**: that a disabled button does not fire its handler, that
-  the error message replaces the helper text. Not that a class name is present,
-  and never a snapshot.
-- One behaviour per test, named as a sentence about the component:
-  `it('does not call onClick while loading')`.
-- More on writing tests that catch real breakage:
-  [`docs/TESTING-GUIDE.md`](./TESTING-GUIDE.md).
-
-### Adding a component
-
-1. Create the three files in `src/components/`.
-2. Style it from tokens only.
-3. Export the component **and** its props type from `src/index.ts`.
-4. Write behaviour tests.
-5. Add a section to `packages/ui/README.md`: props table, one runnable usage
-   example, and when to use it and when not to.
-
-Step 5 is not optional. A component that is not documented is not done.
+Tests sit beside the component in `Name.test.tsx`. Use `data-testid` only when
+no role, label or text works, and comment why. More in
+[`docs/TESTING.md`](./TESTING.md#writing-tests).
 
 ## The `app` package
 
-- `app` imports from `'ui'` and `'ui/styles.css'`. Nothing else from the
-  library, ever — no `ui/src/...`, no relative path into `packages/ui`.
-- Pages are assembled from `ui` components plus plain layout markup (`div`,
-  `main`, `h1`). If a page needs something styled that the library does not
-  provide, that is a sign it should be a library component — raise it rather
-  than styling it locally.
-- The stylesheet is imported once, in `main.tsx`.
-- All API access and all field mapping live under `src/api/`. A page receives
-  display-ready values and never reads an API field name.
-- Network failures are caught at the call site in `src/api/` and surfaced to
-  pages as a typed result, so a page never inspects a `Response` object.
+- Import only `'ui'` and `'ui/styles.css'`; the stylesheet once, in
+  `main.tsx`.
+- Pages use `ui` components and plain layout markup (`div`, `main`, `h1`).
+  Styling the library lacks becomes a library component.
+- API calls and field mapping live in `src/api/`. Pages get display-ready
+  values and a typed failure result, never API field names or a `Response`.
 
 ## The `api` project
 
-- Minimal API endpoints in one file until there is a reason to split them.
-- Seed data in its own file, separate from the endpoints.
-- Nullable fields are nullable in the C# model too, and serialise as `null`
-  rather than being omitted.
-- The JSON property names on the wire are exactly those in
-  `docs/API-CONTRACT.md`.
+- Endpoints in one file until there is a reason to split; seed data in its
+  own file.
+- Nullable fields are nullable in the C# model and sent as `null`, not left
+  out.
+- JSON names match [`API-CONTRACT.md`](./API-CONTRACT.md) exactly.
 
 ## Commits
 
-- One task from `docs/TASKS.md`, one commit. The history is assessed against
-  that file.
-- Subject line in the imperative, under 72 characters, naming the area:
-  `ui: add Button with loading and disabled states`.
-- The body says **why**, when the why is not obvious from the diff.
-- Never `wip`, `fix`, or `updates`.
-- Documentation changes ride along in the commit that changed the code. A prop
-  and its row in the README move together.
+- One task from `docs/TASKS.md`, one commit.
+- Subject: imperative, under 72 characters, naming the area, such as
+  `ui: add Button with loading and disabled states`. Never `wip`, `fix` or
+  `updates`.
+- The body says **why** when the diff doesn't.
+- Code and docs change together: a prop and its README row in one commit.
 
 ## TypeScript
 
-- `strict` everywhere. No `any`; use `unknown` and narrow.
-- No non-null assertions (`!`) — handle the absent case, which is the whole
-  point of the `—` behaviour.
-- Types that describe API payloads live beside the code that fetches them, and
-  are named after the wire shape (`PatientDto`) so they are never confused with
-  display models (`PatientDisplay`).
+- `strict` everywhere. No `any`; use `unknown` and narrow it.
+- No non-null assertions (`!`). Handle the missing case; that is what `—` is
+  for.
+- Payload types sit beside the code that fetches them, named for the API
+  (`PatientDto`), separate from display models (`PatientDisplay`).

@@ -6,8 +6,8 @@ import * as TextFieldStories from '../components/TextField.stories';
 
 # TextField
 
-A single-line text input with a label above it. It can show a short hint below
-the input, or an error message when the value is invalid.
+A one-line text input with a label above it, and an optional hint or error
+below.
 
 <DocLinks
   links={[
@@ -22,23 +22,20 @@ the input, or an error message when the value is invalid.
 
 ## Helper text
 
-A hint below the input in font.label and color.text.muted, space.1 from the
-input.
+A hint below the input, in font.label and color.text.muted.
 
 <Canvas of={TextFieldStories.WithHelperText} />
 
 ## Error
 
-The field is in its error state when `errorMessage` is provided and not empty.
-The border becomes color.danger, and the message shows below the input in
-color.danger, replacing the helper text. Otherwise the helper text, if
-provided, shows.
+Set `errorMessage` to show it below the input, in place of the hint. The
+border and message turn color.danger.
 
 <Canvas of={TextFieldStories.WithError} />
 
 ## Disabled
 
-color.disabled.bg background and color.disabled.text text.
+Greyed out (color.disabled.bg, color.disabled.text) and can't be edited.
 
 <Canvas of={TextFieldStories.Disabled} />
 
@@ -47,14 +44,14 @@ color.disabled.bg background and color.disabled.text text.
 | Part | Style |
 | --- | --- |
 | Label | font.label, color.text.muted, space.1 above the input |
-| Input | space.2 vertical and space.3 horizontal padding, color.text.muted border (not color.border, which is too faint to meet the 3:1 contrast rule), radius.sm, font.body |
+| Input | space.2 × space.3 padding, color.text.muted border (color.border is too faint for 3:1 contrast), radius.sm, font.body |
 | Focus | border becomes color.primary, 2px outline in color.focus |
 
 ## Accessibility
 
-- The label is associated with the input: clicking it focuses the input, and
-  screen readers announce it.
-- An error message is announced and marks the input invalid.
+- The label belongs to the input: clicking it focuses the input, and screen
+  readers read it.
+- An error is announced, and the input is marked invalid.
 
 ## API
 

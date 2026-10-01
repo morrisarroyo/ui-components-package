@@ -1,22 +1,25 @@
 # Harness
 
-The Claude Code skills this project was built with. Most are my reusable,
-user-level skills, copied here unchanged, so they were written for other
-projects too: some examples mention Unity or Plastic SCM, and they describe a
-generic `Tasks.md`.
+The Claude Code skills that built this project. They read `CLAUDE.md` first.
+Most are my own general skills, copied unchanged, so some examples mention
+other tools (Unity, the Plastic source control system) and a generic
+`Tasks.md`. The second table maps those terms to this repository.
 
 | Skill | What it does | Used for |
 | --- | --- | --- |
-| `phase-tasks` | Breaks one phase of `CLAUDE.md` into tasks with dependencies, a done state and a check, and writes them to the task plan. | Planning phases |
-| `implement-tasks` | Implements startable tasks one at a time and runs each task's own check. | Phases 1–4 |
-| `test-and-fix` | Runs the tests, finds root causes, fixes code, never weakens a test. | Every task |
-| `commit-gate` | Verification, then the owner reviews the diff, then commit. | Reviewed commits |
+| `phase-tasks` | Splits a phase of `CLAUDE.md` into tasks, each with dependencies and a check. | Planning phases |
+| `implement-tasks` | Implements ready tasks one at a time and runs each check. | Phases 1–4 |
+| `test-and-fix` | Runs tests and fixes the code, never the test. | Every task |
+| `commit-gate` | Verify, owner reviews the diff, then commit. | Reviewed commits |
 | `commit-task` | Commits one task and checks the commit captured it. | Every commit |
 | `auto-phase` | Runs a whole phase unattended: implement, verify, commit, repeat. | Phases 1–4 and 6 |
-| `document-writer` | Makes docs short and plain, with a checker script for wordy phrases and long sentences. | Writing and editing docs |
-| `github-task` | Files tasks as GitHub issues, starts, updates and closes them with evidence. Written for this project. | The Register patient page |
+| `document-writer` | Makes docs short and plain, with a wordiness checker. | Writing docs |
+| `github-task` | Tracks tasks as GitHub issues. Written for this project. | The Register patient page |
+| `sanity-check` | Checks every claim in the docs against the code, fixes the docs, reports code bugs. Written for this project. | Before delivery |
 
-## How the generic terms map to this repository
+`code-review`, named in `commit-gate`, is a built-in Claude Code command.
+
+## Generic terms in this repository
 
 | In the skills | Here |
 | --- | --- |
@@ -27,9 +30,3 @@ generic `Tasks.md`.
 | Run log / changeset manifest | `AutoPhase.md`, kept locally and not committed |
 | Changeset (`cm`) | A git commit |
 | Unity, Plastic SCM, EditMode/PlayMode | Not applicable |
-
-`code-review`, mentioned by `commit-gate`, is Claude Code's built-in review
-command, not a skill of mine.
-
-The project context the skills read first is `CLAUDE.md` at the repository
-root.

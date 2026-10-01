@@ -6,11 +6,15 @@ import * as PatientLookupStories from '../examples/PatientLookup.stories';
 # Patient lookup
 
 All five components in one screen: a search form in a Card, results in a
-Table, and the chosen record in a DescriptionList.
+Table, the chosen patient in a DescriptionList.
 
 ## Try it
 
-Search `lo` for results, `zz` for none, `error` for a failed request, or a
-single letter for the validation error; then click a row.
+Search for:
+
+- `lo`, for results (then click a row);
+- `zz`, for none;
+- `error`, for a failed request;
+- one letter, for a validation error.
 
 <Canvas of={PatientLookupStories.Default} />

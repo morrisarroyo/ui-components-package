@@ -2,13 +2,13 @@
 
 ## Summary
 
-A clinic's patient list, a patient's record and a form to register one, the kind of Electronic Health
-Record (EHR) screens the `ui` components exist to build. It is built only from
-those components and plain layout, and reads from the [mock API](../../api/README.md).
+Electronic Health Record (EHR) screens built only from the `ui` components: a
+clinic's patient list, a patient's record and a form to register a patient.
+Data comes from the [mock API](../../api/README.md).
 
 ## Quick start
 
-Needs Node 20+ and the .NET 10 SDK. From the repository root:
+From the repository root (prerequisites: [project README](../../README.md#quick-start)):
 
 ```bash
 npm install                    # once
@@ -16,46 +16,40 @@ npm run api                    # terminal 1: the API on http://localhost:5080
 npm run dev                    # terminal 2: builds ui, serves the site on http://localhost:5173
 ```
 
-Open <http://localhost:5173>. Or try the live copy:
-<https://ui-components-package.onrender.com>. It sleeps when idle, so the
-first visit can take about a minute.
+Live copy: <https://ui-components-package.onrender.com>.
 
 ## Tech stack
 
-React 19 and TypeScript, React Router 7 for the routes, Vite to serve and
-build, and Vitest with Testing Library for the tests. Every visible part comes
-from `ui`.
+React 19, TypeScript, React Router 7, Vite and Vitest.
 
 ## Pages
 
 | Route | Page |
 | --- | --- |
-| `/` | The patient list. Search by name; click a row, or press Enter on it, to open the patient. |
+| `/` | Patient list. Search by name; click a row or press Enter to open it. |
 | `/patients/:id` | One patient's details, or "Patient not found". |
-| `/patients/new` | Register a patient. Errors show on their fields; success opens the new record. |
+| `/patients/new` | Register a patient. Errors show on their fields; success opens the record. |
 
-Every page shows a failure message if the API is down, and the list and record a loading state.
-The list says when a search matches no one. A missing phone, email or
-address shows as "—".
+Every page shows loading, empty and API-down messages where they apply. A
+missing phone, email or address shows as "—".
 
-## How it uses `ui`
+## Rules
 
-- It imports only `'ui'` and `'ui/styles.css'`, by package name, and never
-  overrides a `ui` style.
-- `src/api/patients.ts` is the one mapping layer: the only code that calls
-  the API, knows its field names, or decides a value is missing.
+- Import only `'ui'` and `'ui/styles.css'`. Never override a `ui` style.
+- Only `src/api/patients.ts` calls the API or decides a value is missing.
 
 ## Commands
 
-Run from the repository root. Each needs `ui` built first
-(`npm run build --workspace ui`); `npm run dev` does that for you.
+Run from the repository root, after `npm run build --workspace ui`.
 
 | Command | What it does |
 | --- | --- |
 | `npm run dev --workspace app` | The site alone on :5173. |
-| `npm run build --workspace app` | Type-checks and builds the site into `dist/`. |
-| `npm run test --workspace app` | The mapping tests, and both pages in every state against mocked responses. |
-| `npm run test:e2e` | Both pages in Chromium against the real API, from the repository root. |
+| `npm run build --workspace app` | Type-checks and builds into `dist/`. |
+| `npm run test --workspace app` | Unit and page tests. |
+| `npm run test:e2e` | Browser tests against the real API. |
+
+Test coverage: [docs/TESTING.md](../../docs/TESTING.md).
 
 ## Files
 
@@ -63,16 +57,14 @@ Run from the repository root. Each needs `ui` built first
 | --- | --- |
 | `src/main.tsx` | The routes. |
 | `src/pages/` | The pages and their tests. |
-| `src/api/patients.ts` | The API calls, the payload-to-display mapping, and the register form's rules and payload. |
+| `src/api/patients.ts` | API calls, display values and the register form's rules. |
 
 ## Contributing
 
 To add a page:
 
-1. Build it from `ui` components and plain layout markup. If it needs a
-   component `ui` lacks, add it to the library first: see the library
-   README's [Contributing](../ui/README.md#contributing-extending-the-library).
+1. Build it from `ui` components and plain layout. Missing a component? Add it
+   to the library first ([how](../ui/README.md#contributing-extending-the-library)).
 2. Add its route in `src/main.tsx`.
-3. Fetch and map its data in `src/api/patients.ts`, the one mapping layer.
-4. Test it in every state, as `src/pages/` does, and run
-   `npm run test --workspace app`.
+3. Fetch and map its data in `src/api/patients.ts`.
+4. Test every state, as `src/pages/` does.

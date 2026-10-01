@@ -4,9 +4,8 @@ import { Meta, ColorPalette, ColorItem, Typeset } from '@storybook/addon-docs/bl
 
 # Design tokens
 
-Every value in the token sheet is defined once, as a CSS custom property on
-`:root`, and components reference it by name. Use the custom property in CSS;
-the dotted name is the token sheet's name for it.
+Each value is defined once, as a CSS variable. In CSS, use the variable
+(`--ui-…`); the dotted name is the design sheet's name for it.
 
 ## Colour
 
@@ -44,7 +43,7 @@ the dotted name is the token sheet's name for it.
 
 ## Typography
 
-Each role is a size, a line height and a weight
+Each role has a size, line height and weight
 (`--ui-font-<role>-size`, `-line`, `-weight`).
 
 | Token | Size / line height | Weight |

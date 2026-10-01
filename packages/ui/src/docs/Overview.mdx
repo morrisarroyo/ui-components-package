@@ -4,40 +4,31 @@ import { Meta } from '@storybook/addon-docs/blocks';
 
 # UI Components Package
 
-React UI components that developers use to build applications for the
-healthcare setting: the screens of an Electronic Health Record (EHR) system,
-such as a clinic's patient list and a patient's record. Product teams assemble
-them into their own apps, so every screen looks and behaves the same and is
-accessible by default.
-
-You choose a variant, a size or a label; each component owns its appearance
-and its states: hover, focus, error, loading and disabled.
+React components for building Electronic Health Record (EHR) screens, such
+as a clinic's patient list and a patient's record. Screens built from them
+look and behave alike, and are accessible by default.
 
 | Component | Use it for |
 | --- | --- |
-| [Button](?path=/docs/components-button--docs) | Triggering an action. |
-| [TextField](?path=/docs/components-textfield--docs) | Entering one line of text, with a label, a hint and an error. |
-| [Card](?path=/docs/components-card--docs) | Grouping related content under an optional title. |
-| [Table](?path=/docs/components-table--docs) | Showing many records as rows, optionally clickable. |
-| [DescriptionList](?path=/docs/components-descriptionlist--docs) | Showing one record's details as label/value pairs. |
+| [Button](?path=/docs/components-button--docs) | Running an action. |
+| [TextField](?path=/docs/components-textfield--docs) | One line of text, with a label, hint and error. |
+| [Card](?path=/docs/components-card--docs) | Grouping content under an optional title. |
+| [Table](?path=/docs/components-table--docs) | Many records as rows, optionally clickable. |
+| [DescriptionList](?path=/docs/components-descriptionlist--docs) | One record's details as label/value pairs. |
 
-Every colour, spacing, radius and type value comes from the
+Colours, spacing and type come from the
 [design tokens](?path=/docs/foundations-tokens--docs).
 
 ## See them live
 
-A patient list and a patient record built only from these components, and the
-mock API that feeds them:
+A website built only from these components, and its mock API:
 
 - <a href="https://ui-components-package.onrender.com" target="_blank" rel="noreferrer">Example website</a>
 - <a href="https://ui-components-package.onrender.com/api/patients" target="_blank" rel="noreferrer">Mock API</a>
 
-The free host sleeps when idle, so the first visit can take about a minute.
-
 ## Usage
 
-Import the stylesheet once at your app's root, and the components from the
-package entry point:
+Import the stylesheet once, then the components:
 
 ```tsx
 import 'ui/styles.css';
@@ -46,24 +37,18 @@ import { Button, Card, TextField } from 'ui';
 
 ## Principles
 
-- **A small, typed set of props.** You set a variant or a label; you never pass
-  a colour or a pixel value.
-- **States are the component's job.** Hover, focus, error, loading and
-  disabled are built in.
-- **Accessible by default.** Labels are attached to inputs, everything
-  clickable works from the keyboard, and disabled things are actually
-  disabled.
+- **Few props.** You pick a variant, size or label, never a colour or pixel value.
+- **States built in:** hover, focus, error, loading and disabled.
 
 ## Accessibility
 
-The components meet the Web Content Accessibility Guidelines (WCAG) 2.2 at
-level AA, the W3C's accessibility standard. That covers:
+The components meet the Web Content Accessibility Guidelines (WCAG) 2.2,
+level AA:
 
 - keyboard use and visible focus;
-- contrast of 4.5:1 for text and 3:1 for borders and focus rings;
+- contrast of 4.5:1 for text, 3:1 for borders and focus rings;
 - labelled inputs;
-- announcements for errors, loading and missing values.
+- screen-reader announcements for errors, loading and missing values.
 
-To meet the contrast rule, three colours differ from the design brief: table
-header text, the text input border and the focus ring. Each component page
-says how.
+Three colours differ from the design brief to meet contrast: table header
+text, the text input border and the focus ring.

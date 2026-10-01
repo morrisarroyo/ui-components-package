@@ -1,11 +1,8 @@
 # Decisions
 
-A running log of the choices the brief left open, written as they are made.
-`INTERVIEW.md` is assembled from this file rather than reconstructed from
-memory at the end.
-
-Each entry: what was decided, why, what else was considered, and what would
-change the answer.
+The choices the brief left open, logged as they were made. `INTERVIEW.md` is
+built from this file. Each entry says what was decided, why, what else was
+considered, and what would change it.
 
 ---
 
@@ -13,20 +10,14 @@ change the answer.
 
 **Decided:** 2026-09-25 · **Status:** settled
 
-One repository containing all three packages: `packages/ui`, `packages/app`
-and `api/`.
+One repository holds `packages/ui`, `packages/app` and `api/`.
 
-**Why.** The brief calls the choice explicitly unassessed, so the tie-breaker
-is the constraint it does care about — `app` must consume `ui` as a package,
-not as a folder of source files. Workspaces give that for free: `ui` is
-installed into `node_modules` under its package name and imported like any
-other dependency, while still being editable in place. Three repositories would
-mean publishing to a registry or wiring `npm link`, and the brief says
-publishing is not assessed either.
+**Why.** The brief requires `app` to use `ui` as a package. With workspaces,
+`app` imports `ui` by name like any dependency, and `ui` stays editable in
+place. Separate repositories would need publishing, which is not assessed.
 
-**Considered.** Three separate repositories; one repository with a path
-dependency. The path dependency was rejected because it invites deep imports
-into source, which is exactly what the brief warns against.
+**Considered.** Three repositories. A path dependency, rejected because it
+invites imports into `ui`'s source, which the brief warns against.
 
 ---
 
@@ -34,9 +25,8 @@ into source, which is exactly what the brief warns against.
 
 **Decided:** 2026-09-25 · **Status:** settled
 
-**Why.** It ships with the Node toolchain, needs no extra install step on a
-reviewer's machine, and the repository has three packages and no build graph
-worth orchestrating. A task runner would be weight with nothing to carry.
+**Why.** npm comes with Node, so reviewers install nothing extra. Three
+packages do not need a task runner.
 
 ---
 
@@ -44,16 +34,12 @@ worth orchestrating. A task runner would be weight with nothing to carry.
 
 **Decided:** 2026-09-25 · **Status:** settled
 
-**Why.** The library must ship styles that a consuming app cannot accidentally
-target or collide with, and must not require the consumer to adopt a styling
-framework. CSS Modules give locally scoped class names at build time with no
-runtime and no peer dependency; the build emits one plain stylesheet the
-consumer imports once. Combined with D-4, the token layer stays themeable while
-component internals stay private.
+**Why.** The library's styles must not clash with the app's, and the app must
+not have to adopt a styling framework. CSS Modules make class names unique at
+build time, with no runtime cost. The app imports one plain stylesheet.
 
-**Considered.** Tailwind (forces the consumer to adopt the framework or ship a
-large stylesheet), CSS-in-JS (runtime cost and an extra peer dependency), plain
-global CSS with a naming convention (collides by construction).
+**Considered.** Tailwind (the app must adopt it). CSS-in-JS (runtime cost and
+an extra dependency). Global CSS with a naming rule (clashes are inevitable).
 
 ---
 
@@ -61,19 +47,14 @@ global CSS with a naming convention (collides by construction).
 
 **Decided:** 2026-09-25 · **Status:** settled
 
-Every token-sheet value is a custom property on `:root` in
-`packages/ui/src/tokens.css`, imported by the package entry point.
+Every token-sheet value is a CSS variable in `packages/ui/src/tokens.css`.
 
-**Why.** One definition per value, referenced by name everywhere, so a new
-component matches the existing five by construction — which is what the
-documentation's Styling section has to be able to promise. The `--ui-` prefix
-keeps the library out of the consumer's namespace. Redefining a token on
-`:root` after importing the stylesheet is a deliberate theming escape hatch,
-distinct from overriding a component's styles, which stays forbidden.
+**Why.** Each value is defined once and used by name, so new components match
+automatically. The prefix avoids the app's own names. An app may redefine a
+token to theme the library; overriding a component's styles stays forbidden.
 
-**Considered.** Sass variables (compiled away, so nothing is themeable and
-nothing is inspectable in devtools) and a TypeScript token object (would push
-styling into JS and defeat D-3).
+**Considered.** Sass variables (compiled away, so not themeable). A
+TypeScript token object (moves styling into code).
 
 ---
 
@@ -81,9 +62,8 @@ styling into JS and defeat D-3).
 
 **Decided:** 2026-09-25 · **Status:** settled
 
-**Why.** The hash is what makes collisions impossible; the readable `local`
-part is what makes the DOM debuggable in a reviewer's devtools. A pure hash
-would be private but unreadable.
+**Why.** The hash prevents clashes; the readable part makes classes easy to
+find in browser devtools.
 
 ---
 
@@ -91,13 +71,11 @@ would be private but unreadable.
 
 **Decided:** 2026-09-25 · **Status:** settled
 
-`ui` builds to an ES module plus a single stylesheet, with React marked
-external and declarations emitted by `tsc`.
+`ui` builds to an ES module, one stylesheet and type declarations, without
+React inside.
 
-**Why.** One toolchain for both packages, CSS Modules supported natively, and
-library mode produces exactly the artefacts a consumer needs. React is external
-so the app never ends up with two copies of React — the classic way a workspace
-library breaks hooks.
+**Why.** One tool for both packages, with CSS Modules built in. Leaving React
+out stops the app loading two copies, which breaks React hooks.
 
 ---
 
@@ -105,13 +83,10 @@ library breaks hooks.
 
 **Decided:** 2026-09-25 · **Status:** settled
 
-The `ui` package's `exports` map points at `dist/`, and `ui` must be built
-before `app` runs.
+`ui` exports only `dist/`, so it must be built before `app` runs.
 
-**Why.** It is the constraint the brief states outright, and it makes the
-constraint enforceable rather than a matter of discipline: a deep import into
-`ui/src` does not resolve. The cost is a build step before `npm run dev`, which
-the root script handles.
+**Why.** The brief requires it, and this enforces it: an import into
+`ui/src` fails. The root script runs the build first.
 
 ---
 
@@ -119,11 +94,10 @@ the root script handles.
 
 **Decided:** 2026-09-25 · **Status:** settled
 
-**Why.** Vitest reuses the existing Vite config, including the CSS Modules
-setup, so tests run against the same transform pipeline as the build. Testing
-Library pushes tests towards behaviour and accessible queries, which is what
-the brief asks for — "tests that check behaviour rather than snapshot
-everything". No snapshot tests will be written.
+**Why.** Vitest reuses the Vite config, so tests build code as the library
+does. Testing Library steers tests towards behaviour, as the brief asks:
+"tests that check behaviour rather than snapshot everything". There are no
+snapshot tests.
 
 ---
 
@@ -133,9 +107,8 @@ everything". No snapshot tests will be written.
 
 Two routes: the patient list, and a patient by id.
 
-**Why.** The detail page must be reachable by id and the Back button must
-behave like browser history. Hand-rolling that is a worse use of the time
-budget than a dependency the brief explicitly does not assess.
+**Why.** The detail page needs its own address, and Back must work like the
+browser's. Hand-writing that is time spent on something not assessed.
 
 ---
 
@@ -143,12 +116,11 @@ budget than a dependency the brief explicitly does not assess.
 
 **Decided:** 2026-09-25 · **Status:** settled
 
-The website calls same-origin `/api/...`; Vite's dev server forwards `/api` to
-`http://localhost:5080`.
+The website calls `/api/...` on its own address, and the dev server forwards
+it to `http://localhost:5080`.
 
-**Why.** No CORS configuration in the API, no environment variable to set
-before the site works, and no host or port anywhere in the client code. For a
-mock API run locally, the proxy is the whole deployment story.
+**Why.** The API needs no cross-origin setup, the site needs no settings, and
+client code holds no host or port.
 
 ---
 
@@ -156,14 +128,12 @@ mock API run locally, the proxy is the whole deployment story.
 
 **Decided:** 2026-09-25 · **Status:** settled
 
-See `docs/API-CONTRACT.md` for the shape.
+The shape is in `docs/API-CONTRACT.md`.
 
-**Why.** FHIR is permitted but explicitly not assessed, and a real FHIR
-`Patient` resource would spend the reader's attention on nested arrays of
-`HumanName` and `ContactPoint` that the two pages do not need. The payload
-keeps the EHR-shaped parts that matter — separate name parts, a structured
-address, genuinely nullable contact fields — because they are what gives the
-website's mapping layer real work to do.
+**Why.** FHIR (Fast Healthcare Interoperability Resources) is allowed but not assessed, and
+its patient record is full of nesting the pages do not need. The payload keeps
+what matters in health records: name parts, a structured address, and contact
+fields that can be empty. Those give the mapping layer real work.
 
 ---
 
@@ -171,13 +141,12 @@ website's mapping layer real work to do.
 
 **Decided:** 2026-09-25 · **Status:** settled
 
-No `name` or `displayAddress` field on the wire; the website joins name parts
-and address parts in one mapping module.
+The API sends name and address parts; the website's mapping module joins
+them.
 
-**Why.** The brief assesses whether the API-to-display mapping is in one place
-and handles missing fields. Formatting on the server would move that logic out
-of the place being assessed and bake one presentation into an API that other
-consumers would have to live with.
+**Why.** The brief assesses whether that mapping is in one place and handles
+missing fields. Formatting on the server would move it, and force one
+presentation on every API user.
 
 ---
 
@@ -185,20 +154,17 @@ consumers would have to live with.
 
 **Decided:** 2026-09-25 · **Status:** settled
 
-The mapping layer passes `null` for a missing value; `DescriptionList` renders
-the em dash.
+The mapping passes `null` for a missing value, and `DescriptionList` draws
+the dash.
 
-**Why.** The component spec already defines the em dash, so putting it in the
-mapping too would create two definitions of "missing" that could drift. The
-mapping's job is to decide *whether* a value is missing; the library's job is
-to decide what missing *looks like*.
+**Why.** The component spec already defines the dash, and a second definition
+could drift. The mapping decides *whether* a value is missing; the library
+decides how missing *looks*.
 
-**Amended 2026-09-29 (T-7.2).** That split holds for `DescriptionList`, which
-draws the dash itself. `Table` renders cells exactly as given, so the list page
-showed a blank Phone cell for a patient with no phone. The mapping module now
-also builds the list row (`toPatientRow`) and spells a missing phone as `—`,
-as the library README tells Table consumers to. The mapping module is still
-the one place that decides how a missing value reaches the screen.
+**Amended 2026-09-29 (T-7.2).** `Table` shows cells as given, so a patient
+with no phone had a blank cell. The mapping now writes a missing phone as `—`
+in the list row (`toPatientRow`), as the library README advises. It is still
+the one place that decides how missing values reach the screen.
 
 ---
 
@@ -206,10 +172,8 @@ the one place that decides how a missing value reaches the screen.
 
 **Decided:** 2026-09-25 · **Status:** settled
 
-**Why.** The brief names them. Unscoped bare names are unusual for a real
-product — a real one would be `@intrahealth/ui` — but matching the brief keeps
-every import in the documentation identical to the import the reviewer expects
-to read. Noted here so the choice reads as deliberate rather than naive.
+**Why.** The brief names them, so the docs' imports match what the reviewer
+expects. A real product would use a scoped name like `@intrahealth/ui`.
 
 ---
 
@@ -217,30 +181,23 @@ to read. Noted here so the choice reads as deliberate rather than naive.
 
 **Decided:** 2026-09-25 · **Status:** settled
 
-A clickable row is a `<tr>` with `tabIndex={0}` and Enter/Space handlers.
-It does not take `role="button"`.
+A clickable row is a focusable `<tr>` that responds to Enter and Space, not a
+`role="button"`.
 
-**Why.** `role="button"` on a `<tr>` replaces its row role, so its cells stop
-being cells and a screen reader can no longer move through the table by row
-and column. That trades the whole table's accessibility for one row's. With
-the native role kept, the row is still reachable by Tab and activatable from
-the keyboard, which is what the spec requires.
+**Why.** Making a row a button stops screen readers moving through the table
+by row and column. The row still works from the keyboard, as the spec
+requires.
 
-**Considered.** `role="button"` on the row (the first draft; breaks table
-navigation), and a link or button inside the first cell (keeps both
-semantics but changes the Table API, since the consumer would have to say
-which cell holds it).
+**Considered.** `role="button"` on the row (the first draft). A button in the
+first cell (keeps both, but the consumer would have to say which cell).
 
-**What would change it.** A requirement for screen readers to announce the
-row as actionable, which would favour the in-cell control.
+**What would change it.** A need for screen readers to announce the row as
+clickable.
 
-**Amended 2026-09-29 (T-7.10).** That requirement arrived: a review against
-the brief found the focusable `<tr>` was never announced as clickable. The
-first cell of a clickable row is now a real `<button>` named by its content,
-and the row keeps its native role and stays clickable as a whole. The API
-objection above is met by convention rather than a prop: the button is always
-in the first column, and the README tells consumers to put the column that
-names the record first.
+**Amended 2026-09-29 (T-7.10).** That need arrived: a review found the row
+was never announced as clickable. The first cell is now a real `<button>`,
+and the whole row stays clickable. No prop was added: the button is always
+in the first column, and the README says to put the record's name there.
 
 ---
 
@@ -248,23 +205,20 @@ names the record first.
 
 **Decided:** 2026-09-25 · **Status:** settled
 
-Day, short month name, four-digit year, built from the parts of the
-`YYYY-MM-DD` string in the mapping module. A value that is not a valid
-`YYYY-MM-DD` passes through unchanged.
+The mapping builds day, short month and year from the `YYYY-MM-DD` string.
+Anything else passes through unchanged.
 
-**Why.** The contract says "formatted for display" and leaves the format
-open. A numeric form is ambiguous between the Canadian, American and ISO
-readings of `02/03/1984`, and a clinician misreading a birth date is a real
-safety problem. Reading the string's parts, rather than going through
-`Date`, means the date can never shift by a day with the viewer's
-timezone.
+**Why.** A numeric date such as `02/03/1984` reads differently in Canada and
+the US. A misread birth date is a safety risk. Reading the string's parts,
+rather than converting to a date object, means the time zone can never shift
+the day.
 
-**Considered.** Showing the ISO string as-is (unambiguous but reads as data,
-not as a date), and `Intl.DateTimeFormat` (locale-aware, but needs a `Date`,
-which brings the timezone problem back unless every call is pinned to UTC).
+**Considered.** The raw `YYYY-MM-DD` string (clear, but reads as data). The
+browser's date formatter (follows the locale, but brings back the time-zone
+risk).
 
-**What would change it.** A product locale setting, at which point this
-becomes `Intl.DateTimeFormat` with `timeZone: 'UTC'`.
+**What would change it.** A product locale setting, which would mean the
+browser's formatter, pinned to one time zone.
 
 ---
 
@@ -272,24 +226,18 @@ becomes `Intl.DateTimeFormat` with `timeZone: 'UTC'`.
 
 **Decided:** 2026-09-28 · **Status:** settled
 
-Storybook 10 with the `@storybook/react-vite` framework, installed as a dev
-dependency of `ui` only. One `Name.stories.tsx` beside each component, one
-story per variant and state. Stories are excluded from the declaration build
-and never reach `dist/`.
+Storybook 10, used only by `ui`, with a story file beside each component and
+a story per variant and state. Stories never ship in `dist/`.
 
-**Why.** It gives a place to see every state — hover, focus, error, loading,
-disabled — without running the API and the site. The Vite framework reuses
-`vite.config.ts`, so stories render with the same CSS Modules naming and the
-same `tokens.css` a consumer gets. The design document counts Storybook as
-usage examples, not documentation, so `packages/ui/README.md` stays the
-reference.
+**Why.** It shows every state without running the API and site, styled
+exactly as in an app. The design document counts it as usage examples;
+`packages/ui/README.md` stays the reference.
 
-**Considered.** Ladle (lighter, but a second, less familiar tool), and a demo
-page in `app` (would mix library states into the website).
+**Considered.** Ladle (lighter, less familiar). A demo page in `app` (mixes
+library states into the website).
 
-**What would change it.** Interaction or visual-regression tests in CI, at
-which point the stories become the test fixtures via the Storybook Vitest
-addon.
+**What would change it.** Interaction or visual tests in CI, which would
+reuse the stories.
 
 ---
 
@@ -297,23 +245,18 @@ addon.
 
 **Decided:** 2026-09-28 · **Status:** settled
 
-An xUnit project, `api/Intrahealth.Api.Tests`, hosts the real `Program` with
-`WebApplicationFactory` and sends HTTP requests to it in memory. Tests read
-the raw JSON rather than deserialising into `Patient`.
+An xUnit project, `api/Intrahealth.Api.Tests`, starts the real API in memory
+and sends it requests. Tests read the raw JSON.
 
-**Why.** The contract is the wire shape — camelCase names, nulls present
-rather than omitted, the 404 ProblemDetails body — and deserialising into
-the record the API serialised from would hide exactly those. In-memory
-hosting runs the same routing and serialisation as `dotnet run` with no port
-to allocate. The only change to the API is a `public partial class Program`
-so the factory can see the entry point.
+**Why.** The contract is the JSON: its field names, nulls left in, and the 404
+body. Converting back into the API's own types would hide mistakes in those.
+In memory, the tests run the real routing with no port needed.
 
-**Considered.** Unit-testing the search predicate alone (misses routing,
-query binding and serialisation), and tests against a running server on
-:5080 (needs orchestration and a free port, for no extra coverage).
+**Considered.** Testing only the search logic (misses routing and JSON). A
+running server (needs a free port, adds nothing).
 
-**What would change it.** A real database, at which point the factory would
-swap the data source for a test one.
+**What would change it.** A real database, which the tests would swap for a
+test one.
 
 ---
 
@@ -321,9 +264,10 @@ swap the data source for a test one.
 
 **Decided:** 2026-09-29 · **Status:** settled (owner's choice, grilling Q16)
 
-The owner asked for the components to meet WCAG 2.2 AA. Three of the brief's
-colour pairings fail its contrast rules, so the components use other colours
-the brief already defines. The token values are unchanged.
+The owner asked for the components to meet the Web Content Accessibility
+Guidelines (WCAG) 2.2 at level AA. Three of the brief's colour pairings fail
+its contrast rules, so those parts use other colours from the brief. The
+token values are unchanged.
 
 | Part | Brief | Measured | Now | Measured |
 | --- | --- | --- | --- | --- |
@@ -331,14 +275,13 @@ the brief already defines. The token values are unchanged.
 | Text input border | color.border on white | 1.47:1 (needs 3) | color.text.muted | 4.83:1 |
 | Focus ring (Button, table rows) | 2px color.focus, 2px offset | 1.80:1 (needs 3) | the same ring, plus a 2px color.primary ring outside it | 4.63:1 |
 
-**Why.** It meets the standard without changing the token sheet, which the
-brief defines exactly, and each change is small and visible in one place.
+**Why.** It meets the standard without changing the brief's token sheet, and
+each change is small.
 
-**Considered.** Changing the token values (compliant, but it rewrites the
-brief's most explicit table and moves every component), and keeping the brief
-exactly with the three documented as exceptions (does not meet the standard).
+**Considered.** Changing the token values (rewrites the brief's most exact
+table). Listing the three as exceptions (fails the standard).
 
-**What would change it.** A revised token sheet whose values pass on their own.
+**What would change it.** A revised token sheet whose values pass.
 
 ---
 
@@ -346,23 +289,19 @@ exactly with the three documented as exceptions (does not meet the standard).
 
 **Decided:** 2026-09-29 · **Status:** settled
 
-A single Docker image: the API serves the built website at `/`, its own
-endpoints at `/api` and the Storybook docs at `/docs`. It runs as one free
-Render web service, described in `render.yaml`.
+One Docker image, run as a free Render web service (`render.yaml`). The API
+serves the website at `/`, itself at `/api` and the docs at `/docs`.
 
-**Why.** The owner asked for a free host for all three. The website calls
-`/api` on its own address, so serving both from one process needs no CORS
-and no change to the client. Render runs Docker images for free; the API
-needs .NET, which free static hosts cannot run.
+**Why.** The owner asked for free hosting for all three. One address needs
+no cross-origin setup or client change. Free static hosts cannot run the .NET
+API; Render runs Docker for free.
 
-**Considered.** A static host (Netlify, Cloudflare Pages) for the site and
-docs, forwarding `/api` to an API hosted elsewhere: two services to run.
-Azure App Service: more setup, and billing. Fly.io and Railway: no longer
-free.
+**Considered.** A static host for the site and docs plus a separate API (two
+services). Azure (more setup, and billing). Fly.io and Railway (no longer
+free).
 
-**What would change it.** Needing the API awake at all times. The free
-service sleeps after 15 minutes idle, and the next visit takes about a
-minute to wake it.
+**What would change it.** Needing the API always awake. The free service
+sleeps after 15 idle minutes and takes about a minute to wake.
 
 ---
 
@@ -370,66 +309,61 @@ minute to wake it.
 
 **Decided:** 2026-10-01 · **Status:** settled
 
-The API describes itself with Swashbuckle: an OpenAPI document at
-`/api/swagger/v1/swagger.json` and a Swagger page at `/api/swagger` to read
-and try each endpoint. It is on in every environment, the hosted one
-included.
+The API serves a Swagger page at `/api/swagger` to read and try each
+endpoint, and its OpenAPI document at `/api/swagger/v1/swagger.json`. It is
+on everywhere, hosting included.
 
-**Why.** The owner asked for Swagger docs. Under `/api`, the page reaches the
-browser through the website's dev proxy and the hosted container with no new
-routes. The API is a mock with invented data, so there is nothing to hide.
+**Why.** The owner asked for it. Under `/api` it works through the dev proxy
+and the hosted container with no new routes. The data is invented, so there
+is nothing to hide.
 
-**Considered.** .NET's built-in OpenAPI document alone (no page to try
-endpoints), and Swagger at `/swagger` (outside the proxied `/api` path, and
-caught by the hosted website's fallback).
+**Considered.** The OpenAPI document alone (no page to try endpoints).
+`/swagger` (outside the proxied path, and caught by the hosted site).
 
-**What would change it.** Real patient data, where the docs would be
-development-only.
+**What would change it.** Real patient data, where it would run in
+development only.
 
 ## D-22 — End-to-end tests with Playwright, against the real API
 
 **Decided:** 2026-10-01 · **Status:** settled
 
-Playwright drives both pages in Chromium. Its config starts the API and the
-site, so the tests read the real seed data through the real proxy. Only the
-failure test stubs the network, by refusing the list request. The tests run
-with `npm run test:e2e`, not `npm test`.
+Playwright drives both pages in a real browser against the real API and seed
+data. Only the failure test fakes the network. Run with `npm run test:e2e`,
+not `npm test`.
 
-**Why.** The owner asked for behaviour tests of the pages; the `app` tests
-already cover them against mocked responses in jsdom. These close the gap
-between the two: real routing, real fetches, a real browser. Kept out of
-`npm test` because they need the .NET SDK and a browser download.
+**Why.** The owner asked for behaviour tests of the pages. The `app` tests
+use fake responses in a simulated browser; these add real routing, requests
+and browser. They stay out of `npm test` because they need .NET and a browser
+download.
 
-**Considered.** Cypress (a second test runner with its own assertion style)
-and Vitest browser mode (no built-in way to start the API).
+**Considered.** Cypress (a second test runner). Vitest browser mode (cannot
+start the API).
 
-**What would change it.** A CI pipeline, where they would run on every push.
+**What would change it.** A CI pipeline, which would run them on every push.
 
 ## D-23 — A third page: Register patient, tracked as GitHub issues
 
 **Decided:** 2026-10-01 · **Status:** settled
 
-A form at `/patients/new` that posts to a new `POST /api/patients`. The work
-was planned and tracked as GitHub issues #1–#5 with the `github-task`
-skill, not in `docs/TASKS.md`.
+A form at `/patients/new` that posts to a new `POST /api/patients`. It was
+tracked as GitHub issues #1–#5 with the `github-task` skill, not in
+`docs/TASKS.md`.
 
-**Why.** The owner asked for a third page tracked as issues. A form is the
-screen the first two pages lack: it uses TextField's error and helper
-states and Button's loading state. The form's rules live in the mapping
-layer and are repeated by the API, so errors show without a round trip and
-the API still refuses bad input.
+**Why.** The owner asked for a third page tracked as issues. A form uses the
+states the other pages lack: TextField's error and helper text, and Button's
+loading. The website checks the form for instant errors, and the API checks
+again so it still refuses bad input.
 
-**Gender is a TextField**, checked against the four values, because `ui`
-has no select or radio group. Adding one means a sixth component with its
-tests, stories, docs and README section; that is its own piece of work.
+**Gender is a TextField** checked against four values, because `ui` has no
+select. Adding one is a sixth component, its own piece of work.
 
-**New patients live in memory**, like the seed data, and vanish on restart.
-On the public host anyone can add one; a restart clears them.
+**New patients live in memory** and vanish on restart. On the public host,
+anyone can add one.
 
-**Considered.** An appointments list (a new resource, but no new component
-states) and a summary dashboard (no API change, but only Cards).
+**Considered.** An appointments list (no new component states). A summary
+dashboard (only Cards).
 
-**What would change it.** A select component in `ui`, which gender should
+**What would change it.** A select component in `ui`, which gender would
 then use.
 
 ---
@@ -438,22 +372,41 @@ then use.
 
 **Decided:** 2026-10-01 · **Status:** settled
 
-`npm run ci` runs every check in one command: type checks, the `ui`, `app`
-and API tests, the website and docs builds, and the end-to-end tests.
-`Dockerfile.ci` runs that command while it builds, on Playwright's image with
-the .NET 10 SDK added, so `docker build -f Dockerfile.ci .` (`npm run
-ci:docker`) is the whole CI on any machine with Docker. GitHub Actions builds
-it on every push and pull request to `main`, builds the hosted `Dockerfile`,
-and scans the history for secrets with gitleaks, also run as a container.
+`npm run ci` runs every check, test and build, end-to-end tests included.
+`npm run ci:docker` runs it inside a Docker build (`Dockerfile.ci`), so it is
+the whole continuous integration (CI) on any machine with Docker. GitHub
+Actions runs that on every push and pull request to `main`. It also builds
+the hosted image and scans the history for secrets with gitleaks.
 
-**Why.** The owner asked for CI with Docker, run by one command. A build
-that fails when a check fails needs no CI-specific scripting, and the same
-image runs locally and on GitHub. A separate file keeps the hosted image
-small and lets Render build `Dockerfile` without the test stage.
+**Why.** The owner asked for CI in Docker, run by one command. The build fails
+when a check fails, so CI needs no scripts of its own. The same image runs
+locally and on GitHub. A separate file keeps tests out of the hosted image.
 
-**Considered.** Installing Node, .NET and Chromium with GitHub's setup actions
-(faster with caching, but CI would differ from a local run), and a test stage
-in the hosted `Dockerfile` (Render would build it on every deploy).
+**Considered.** Installing the tools with GitHub's setup actions (faster, but
+differs from a local run). A test stage in the hosted `Dockerfile` (Render
+would build it every deploy).
 
-**What would change it.** CI time becoming a problem; the jobs would then
-split by suite and run in parallel.
+**What would change it.** CI becoming too slow, which would mean splitting it
+into parallel jobs.
+
+## D-25 — Lint that enforces the project's own rules
+
+**Decided:** 2026-10-01 · **Status:** settled
+
+`npm run lint` runs ESLint on the TypeScript, Stylelint on the CSS and
+`dotnet format` on the API, and `npm run ci` runs it first. Warnings fail it.
+
+**Why.** The owner asked for lint that makes sense here. So the rules are the
+brief's rules, not a style guide: hard-coded colour, spacing or font size
+fails Stylelint (rule 3), a deep import from `app` into `ui` fails ESLint
+(rule 1), and jsx-a11y catches the accessibility mistakes a reviewer would
+(rule 5). The rest is the recommended bug-finding sets. Only the C#, where
+`dotnet format` is the standard tool, has its formatting checked.
+
+**Considered.** Stylistic presets such as `stylelint-config-standard`
+(dozens of findings about naming and ordering that no rule asks for), and
+Prettier (a whole-repository reformat for no reviewer benefit). ESLint 10
+(`eslint-plugin-jsx-a11y` does not support it yet, so ESLint 9).
+
+**What would change it.** jsx-a11y supporting ESLint 10, or a rule the team
+keeps disabling, which would mean the rule is wrong for this code.

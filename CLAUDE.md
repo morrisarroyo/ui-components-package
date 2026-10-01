@@ -1,13 +1,9 @@
 # CLAUDE.md — UI Components Package
 
-Working context for agents and humans. Read this first, then the document it
-points at for whatever you are about to touch.
+Working context for building React components that developers use to build
+healthcare apps: the screens of an Electronic Health Record (EHR) system.
 
 ## What this project is
-
-A React + TypeScript UI components package for an EHR product suite, proven
-by a small website that consumes it and a C# mock API that feeds it. Three packages in one
-repository:
 
 | Package | Path | What it is |
 | --- | --- | --- |
@@ -26,192 +22,172 @@ repository:
 | How do I write code that fits here? | `docs/CONVENTIONS.md` |
 | How does a consumer use the library? | `packages/ui/README.md` |
 
-`docs/DESIGNDOCUMENT.md` is the reconciled design input, derived from the
-candidate brief in the repository root (kept on disk, not committed: it is
-the employer's document). **The brief is the source of truth for
-requirements; do not contradict it.** If the design document and the brief ever
-disagree, the brief wins and the design document gets fixed.
+**The brief is the source of truth.** It is the employer's document, kept in
+the repository root but not committed. If the design document disagrees with
+it, fix the design document.
 
 ## Rules that are not negotiable
 
-These come straight from the brief and are what the work is assessed on.
+From the brief; the work is assessed on them.
 
-1. **`app` consumes `ui` as a package.** Imports come from the `ui` entry point
-   only. No deep imports into `ui/src`, no relative paths into the library, and
-   `app` never overrides a `ui` style.
+1. **`app` consumes `ui` as a package.** It imports from the `ui` entry point
+   only, never from `ui/src`, and never overrides a `ui` style.
 2. **`ui` components never take a colour or a pixel value as a prop.** The
-   consumer picks a variant or a size; the library owns the appearance.
+   consumer picks a variant or a size; the library owns the look.
 3. **Every value in the token sheet is defined once**, in
-   `packages/ui/src/tokens.css`, and referenced by custom property name. No
-   hard-coded hex, spacing or font size in a component stylesheet.
+   `packages/ui/src/tokens.css`. Component styles use the token names, never a
+   raw colour, spacing or font size.
 4. **States are the component's job**, not the page's: hover, focus, error,
-   loading and disabled all live inside the component.
-5. **Accessible by default.** Labels are associated with inputs, anything
-   clickable works from the keyboard, and disabled things are genuinely
-   disabled rather than styled to look it.
-6. **The documentation must match the code exactly.** An undocumented prop and
-   a documented prop that does not exist are equally wrong. When a prop
-   changes, the props table in `packages/ui/README.md` changes in the same
-   commit.
-7. **One mapping layer.** The translation from API payload to display values
-   lives in exactly one module in `app`, and it is what handles missing fields.
+   loading and disabled.
+5. **Accessible by default.** Labels belong to their inputs, anything
+   clickable works from the keyboard, and disabled means disabled, not only
+   greyed out.
+6. **The documentation must match the code exactly.** No undocumented props,
+   no documented props that don't exist. A prop change updates the props table
+   in `packages/ui/README.md` in the same commit.
+7. **One mapping layer.** One module in `app` turns API data into display
+   values, and it handles missing fields.
 
 ## Phases
 
-Work proceeds in phases. Each phase is broken into tasks in `docs/TASKS.md`,
-where each task has its own done state and its own verification check.
+Each phase is split into tasks in `docs/TASKS.md`, each with its own check.
 
 ### Phase 0 — Repository and toolchain
 
-Stand up the monorepo so every later phase has somewhere to land: npm
-workspaces at the root, the `ui` and `app` package skeletons with their build
-and test configuration, the `api` project, and the project documents.
+npm workspaces, the three package skeletons, and the project documents.
 
 **Done when:** `npm install` succeeds at the root, each package has a
 documented command, and the docs in the table above exist.
 
 ### Phase 1 — The component library
 
-Build the five components — Button, TextField, Card, Table, DescriptionList —
-against section 3 of the design document. Tokens first, then components, then
-behaviour tests, then the library build that `app` will consume.
+Button, TextField, Card, Table and DescriptionList, to section 3 of the design
+document.
 
-**Done when:** all five components are exported from the single entry point,
-their specified behaviours are implemented rather than only styled, the tests
-pass, and `npm run build --workspace ui` produces a consumable package.
+**Done when:** all five components are exported from the single entry point.
+Their behaviours work, not only their styles. The tests pass, and
+`npm run build --workspace ui` produces a consumable package.
 
 ### Phase 2 — The mock API
 
-An ASP.NET Core project serving invented patient data from memory, to the
-contract in `docs/API-CONTRACT.md`. No database, no authentication.
+Invented patient data from memory, to `docs/API-CONTRACT.md`. No database, no
+login.
 
 **Done when:** `dotnet run --project api/Intrahealth.Api` serves every endpoint
-in the contract, including the search filter and the not-found case, and the
-seed data includes patients with missing fields so the `—` path is exercisable.
+in the contract, including search and not-found. Some seed patients have
+missing fields, so the `—` path can be tested.
 
 ### Phase 3 — The website
 
-The patient list and patient detail pages, built only from `ui` components and
-plain layout markup, reading from the running API through one mapping layer.
+Patient list and detail pages, built only from `ui`.
 
-**Done when:** both pages behave exactly as section 5 of the design document
-describes — loading, search, empty results, API failure, row navigation,
-missing values and patient-not-found — against the real API.
+**Done when:** against the real API, both pages behave as section 5 of the
+design document says. That covers loading, search, no results, API failure,
+row navigation, missing values and patient not found.
 
 ### Phase 4 — Documentation and delivery
 
-The library documentation in `packages/ui/README.md` (the graded Part 2), the
-project README, and the interview notes.
+The library docs (graded Part 2), the project README and the interview notes.
 
-**Done when:** a developer could build a third page from `packages/ui/README.md`
-alone, every documented prop exists and every existing prop is documented, each
-package's documented command has been run and works from a clean checkout, and
-`INTERVIEW.md` records the decisions, the process and at least one thing that
-had to be corrected.
+**Done when:**
+
+- a developer could build a third page from `packages/ui/README.md` alone;
+- every documented prop exists and every prop is documented;
+- each package's documented command works from a clean checkout;
+- `INTERVIEW.md` records the decisions, the process and at least one
+  correction.
 
 ### Phase 5 — Library additions
 
-Work on `ui` after delivery: Storybook as a browsable set of usage examples,
-and behaviour tests that close the gaps in the component test suite.
+Storybook examples and more behaviour tests.
 
-**Done when:** `npm run storybook` shows every component in every state, the
-stories are kept rendering by a test, and each component's props and states
-are covered by a behaviour test that fails when the behaviour breaks.
+**Done when:** `npm run storybook` shows every component in every state. A test
+keeps the stories rendering. A behaviour test covers each prop and state, and
+fails when the behaviour breaks.
 
 ### Phase 6 — Documentation depth, extension and project tests
 
-The library documentation grows from a props reference into something a
-developer can build from: what every state looks like, a worked example of a
-real screen, an extension guide backed by a component scaffold, a clearer
-layout that links into the code by line, and three clarity passes. `app` and
-`api` get unit tests of their own.
+Deeper library docs, an extension guide with a component scaffold, and tests
+for `app` and `api`.
 
-**Done when:** each state of each component is documented with how it is
-triggered and what it looks like, the worked example renders and matches its
-listing, a scaffolded component passes every check untouched, every code
-reference in the docs resolves, and `npm test` and `npm run test:api` pass.
+**Done when:**
+
+- each state of each component says how it is triggered and what it looks
+  like;
+- the worked example renders and matches its listing;
+- a scaffolded component passes every check untouched;
+- every code reference in the docs resolves;
+- `npm test` and `npm run test:api` pass.
 
 ### Phase 7 — Fixes from the review against the brief
 
-Fixes the owner accepted after a four-area review graded the project against
-the brief: concise docs, "—" on Page 1, a loading Button that keeps focus, a
-configurable API port, the harness explained, the repository ready to share,
-and a process record that matches the repository.
+Fixes from a graded review against the brief, such as "—" on Page 1 and a
+loading Button that keeps focus.
 
 **Done when:** every Phase 7 task in `docs/TASKS.md` is Done or blocked only
 on the owner.
 
 ### Phase 8 — Component documentation site
 
-Storybook docs pages, one per component plus the design tokens, in the style
-of Material UI's component pages and limited to the design requirements.
+A Storybook page per component plus the tokens, styled after Material UI.
 
 **Done when:** `npm run build-storybook --workspace ui` produces them as a
 static HTML site.
 
 ### Phase 9 — Accessibility to WCAG 2.2 AA
 
-The components meet the W3C accessibility standard (WCAG 2.2, level AA), and
-the docs say so.
+The components meet the Web Content Accessibility Guidelines (WCAG) 2.2 at
+level AA.
 
 **Done when:** every Phase 9 task in `docs/TASKS.md` is Done.
 
 ### Phase 10 — Hosting
 
-The website, the API and the component docs hosted for free at one public
-address, so a reviewer can use them without cloning the repository.
+Website, API and docs hosted free at one public address.
 
 **Done when:** the public address serves the website at `/`, the API at
 `/api` and the docs at `/docs`.
 
 ### Phase 11 — READMEs, Swagger and contributing
 
-A README with a quick start for each part, linked from the project README;
-Swagger docs for the API; concise interview notes; and a Contributing page on
-the docs site about adding a new component.
+A README per part, Swagger docs for the API, and a Contributing page.
 
 **Done when:** every Phase 11 task in `docs/TASKS.md` is Done.
 
 ### Phase 12 — End-to-end tests
 
-Behaviour tests of both pages in a real browser, against the running API.
+Both pages tested in a real browser against the running API.
 
 **Done when:** every Phase 12 task in `docs/TASKS.md` is Done.
 
 ### Phase 13 — Register patient page
 
-A third page: a form that registers a patient through a new
-`POST /api/patients`. Tracked as GitHub issues, not in `docs/TASKS.md`: #1
-lists the tasks.
+A form that registers a patient through `POST /api/patients`. Tracked in
+GitHub issue #1, not `docs/TASKS.md`.
 
 **Done when:** issue #1 and its tasks are closed.
 
 ### Phase 14 — CI, secrets, testing guide and clean-up
 
-Continuous integration in Docker, run by one command; a check that no secret
-is in the repository; a guide to writing effective tests; and a tidy
-repository.
+Continuous integration (CI) in Docker, a secrets scan, a testing guide, and a
+tidy repository.
 
 **Done when:** every Phase 14 task in `docs/TASKS.md` is Done.
 
 ## Working agreements
 
-- **Follow `docs/CONVENTIONS.md`** for file layout, naming, styling and tests.
-- **One task, one commit.** The commit history is assessed against
-  `docs/TASKS.md`, so the two must tell the same story. Commit messages say what
-  changed and why, not "wip".
-- **Verify before claiming done.** Each task in `docs/TASKS.md` carries a
-  verification check; run it. Do not report a task complete on the strength of
-  the code looking right.
-- **Record decisions as they are made,** in `docs/DECISIONS.md`, while the
-  reasoning is fresh. `INTERVIEW.md` is assembled from that log, not
-  reconstructed from memory at the end.
-- **Record corrections as they happen.** When something generated is wrong and
-  gets fixed, that goes in `INTERVIEW.md` — the brief asks for it explicitly.
+- **Follow `docs/CONVENTIONS.md`** for code, and the repository layout in
+  `README.md` for where files go.
+- **One task, one commit,** saying what changed and why. Reviewers compare
+  the history with `docs/TASKS.md`.
+- **Verify before claiming done.** Run the task's check.
+- **Record decisions as you make them** in `docs/DECISIONS.md`.
+- **Record corrections as they happen** in `INTERVIEW.md`; the brief asks for
+  them.
 - **Time-box anything that fights back,** note it in `INTERVIEW.md`, and move
-  on. Scope is small on purpose.
-- **Do not build what is out of scope.** Section 9 of the design document lists
-  what is explicitly not assessed; work spent there is work taken from what is.
+  on.
+- **Stay in scope.** Section 9 of the design document lists what is not
+  assessed.
 
 ## Commands
 
@@ -224,10 +200,10 @@ npm run dev                          # build ui, then start the website on :5173
 npm run api                          # start the mock API on :5080 (Swagger at /api/swagger)
 npm run storybook                    # browse the ui components on :6006
 npm run test:api                     # the mock API's xUnit tests
+npm run lint                         # ESLint, Stylelint and dotnet format
 npm run test:e2e                     # both pages in Chromium against the real API
 npm run ci                           # every check and build, as CI runs it
 npm run ci:docker                    # the same, inside Docker (Dockerfile.ci)
 ```
 
-The website's dev server proxies `/api` to the mock API, so both need to be
-running to use the site.
+The website forwards `/api` to the mock API, so both must run.

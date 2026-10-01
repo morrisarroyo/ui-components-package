@@ -6,9 +6,8 @@ import * as CardStories from '../components/Card.stories';
 
 # Card
 
-A bordered container that groups related content on a page. It has an optional
-title at the top and an optional slot on the same row for buttons; whatever
-you place inside it becomes the body.
+A bordered box that groups related content, with an optional title and
+actions.
 
 <DocLinks
   links={[
@@ -27,7 +26,7 @@ you place inside it becomes the body.
 
 ## With actions
 
-Actions sit right-aligned on the title's row.
+Actions sit on the right of the title row.
 
 <Canvas of={CardStories.WithTitleAndActions} />
 
@@ -36,15 +35,12 @@ Actions sit right-aligned on the title's row.
 | Part | Style |
 | --- | --- |
 | Container | color.surface background, color.border border, radius.md, space.6 padding |
-| Title | font.heading, at the top |
-| Actions | right-aligned on the title row |
-| Title row | space.4 gap below it |
+| Title row | font.heading title, actions on the right, space.4 gap below |
 
 ## Accessibility
 
-- A titled card is a region named by its title, so screen-reader users can
-  jump to it.
-- The title is an `h2`; place cards under the page's `h1`.
+- Screen-reader users can jump to a titled card by its title.
+- The title is an `h2`, so put cards under the page's `h1`.
 
 ## API
 

@@ -6,9 +6,8 @@ import * as DescriptionListStories from '../components/DescriptionList.stories';
 
 # DescriptionList
 
-A read-only list of label and value pairs, one per row, for the details of a
-single record, such as a patient's name, date of birth and phone. It is the
-read-only counterpart to a form.
+Label and value pairs for one record's details, such as a patient's name,
+date of birth and phone.
 
 <DocLinks
   links={[
@@ -23,8 +22,8 @@ read-only counterpart to a form.
 
 ## Missing values
 
-An item whose value is empty, `null` or `undefined` renders as "—" in
-color.text.muted. Screen readers hear "Not provided" instead of the dash.
+An empty, `null` or `undefined` value shows as "—" in color.text.muted.
+Screen readers say "Not provided".
 
 <Canvas of={DescriptionListStories.MissingValues} />
 
@@ -32,9 +31,9 @@ color.text.muted. Screen readers hear "Not provided" instead of the dash.
 
 | Part | Style |
 | --- | --- |
-| Label | font.label, color.text.muted, fixed width 160px |
-| Value | font.body, color.text, to the right of the label |
-| Rows | space.3 vertical gap, color.border bottom border on every row except the last |
+| Label | font.label, color.text.muted, 160px wide |
+| Value | font.body, color.text, right of the label |
+| Rows | space.3 vertical padding, color.border line between rows |
 
 ## API
 

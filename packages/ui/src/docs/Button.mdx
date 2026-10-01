@@ -6,8 +6,7 @@ import * as ButtonStories from '../components/Button.stories';
 
 # Button
 
-A clickable button that triggers an action. It comes in two visual styles and
-two sizes, and can show that it is busy or unavailable.
+Runs an action. Two styles, two sizes, and loading and disabled states.
 
 <DocLinks
   links={[
@@ -22,8 +21,7 @@ two sizes, and can show that it is busy or unavailable.
 
 ## Variants
 
-Use **primary** for the main action on a screen, and **secondary** for
-everything else.
+**Primary** for the screen's main action; **secondary** for the rest.
 
 <Canvas of={ButtonStories.Variants} />
 
@@ -45,24 +43,23 @@ Both sizes use radius.sm and font.button.
 
 ## Loading
 
-A spinner replaces the label and the button is non-interactive. Its width does
-not change.
+A spinner replaces the label, at the same width. Clicks are ignored.
 
 <Canvas of={ButtonStories.Loading} />
 
 ## Disabled
 
-color.disabled.bg background, color.disabled.text text, and non-interactive.
+Greyed out (color.disabled.bg, color.disabled.text) and can't be clicked or focused.
 
 <Canvas of={ButtonStories.Disabled} />
 
 ## Accessibility
 
-- Works from the keyboard: Tab to it, activate with Enter or Space.
-- Keyboard focus shows a 2px ring in color.focus, 2px out, with a 2px ring in
-  color.primary outside it so it meets the 3:1 contrast rule.
-- Disabled is the native `disabled` attribute, so it is actually disabled.
-- Loading is announced as busy and keeps keyboard focus.
+- Tab to it; press Enter or Space to activate.
+- Keyboard focus shows a color.focus ring inside a color.primary ring, to meet
+  the 3:1 contrast rule.
+- Disabled is truly disabled (the native `disabled` attribute).
+- Loading is announced as busy, and the button keeps keyboard focus.
 
 ## API
 
