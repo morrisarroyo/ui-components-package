@@ -420,3 +420,21 @@ Prettier (a whole-repository reformat for no reviewer benefit). ESLint 10
 
 **What would change it.** jsx-a11y supporting ESLint 10, or a rule the team
 keeps disabling, which would mean the rule is wrong for this code.
+
+## D-26 — CI deploys to Render once every check passes
+
+**Decided:** 2026-10-01 · **Status:** settled
+
+A Deploy job in `ci.yml` runs after the three checks, on pushes to `main`
+only. It calls the service's Render deploy hook, kept in the GitHub secret
+`RENDER_DEPLOY_HOOK_URL`. `render.yaml` turns Render's own deploy on push off.
+
+**Why.** The owner asked for deploying in CI. Before, Render deployed every
+push, even one that failed CI. Now a broken commit never goes live.
+
+**Considered.** Render's `checksPass` trigger (same result, but the deploy is
+not visible in CI). The Render API with an API key (can wait for the deploy to
+finish, but needs a broader secret).
+
+**What would change it.** Needing CI to fail when a deploy fails, which would
+mean the Render API.

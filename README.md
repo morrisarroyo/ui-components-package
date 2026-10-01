@@ -102,7 +102,10 @@ api/Intrahealth.slnx          both API projects, for dotnet format
 
 One Docker image serves the website at `/`, the API at `/api` and the docs at
 `/docs`. To deploy it free: push to GitHub, then in Render choose
-**New → Blueprint** and pick the repository.
+**New → Blueprint** and pick the repository. Copy the service's deploy hook
+(**Settings → Deploy Hook**) into a GitHub repository secret named
+`RENDER_DEPLOY_HOOK_URL`. CI then deploys each push to `main` that passes
+every check.
 
 ## Contributing
 

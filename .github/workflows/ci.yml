@@ -1,5 +1,6 @@
-# Runs on every push and pull request to main. Each job is a Docker build or
-# run, so CI here is the same as `npm run ci:docker` on any machine.
+# Runs on every push and pull request to main. Each check is a Docker build or
+# run, so CI here is the same as `npm run ci:docker` on any machine. A push to
+# main that passes every check is then deployed to Render.
 name: CI
 
 on:
@@ -48,3 +49,19 @@ jobs:
           fetch-depth: 0
       - name: Scan every commit
         run: docker run --rm -v "$PWD:/repo" ghcr.io/gitleaks/gitleaks:v8.30.1 git --redact --verbose /repo
+
+  deploy:
+    name: Deploy to Render
+    needs: [checks, image, secrets]
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call the Render deploy hook
+        env:
+          RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+        run: |
+          if [ -z "$RENDER_DEPLOY_HOOK_URL" ]; then
+            echo "::error::Add the RENDER_DEPLOY_HOOK_URL repository secret (Render → service → Settings → Deploy Hook)."
+            exit 1
+          fi
+          curl --fail --silent --show-error -X POST "$RENDER_DEPLOY_HOOK_URL"

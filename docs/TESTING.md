@@ -57,7 +57,7 @@ visually-hidden `-1px`.
 
 ## Continuous integration
 
-GitHub Actions runs three jobs on every push and pull request to `main`
+GitHub Actions runs these jobs on every push and pull request to `main`
 ([`ci.yml`](../.github/workflows/ci.yml)):
 
 | Job | What it does |
@@ -65,6 +65,7 @@ GitHub Actions runs three jobs on every push and pull request to `main`
 | Tests and builds | Builds `Dockerfile.ci`, which runs `npm run ci`. |
 | Hosted image | Builds `Dockerfile`, the image Render deploys. |
 | Secrets | Scans every commit for passwords, keys and tokens. |
+| Deploy | Push to `main` only: once the other three pass, deploys to Render. |
 
 With only Docker installed:
 

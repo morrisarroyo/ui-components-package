@@ -674,3 +674,12 @@ repository, and lint.
   `test-and-fix` skill runs lint as part of verification.
 - **Verify:** plant each of those violations and see lint fail; `npm run ci`
   passes.
+
+### T-14.6 CI deploys to Render
+- **Depends on:** T-14.1
+- **Status:** Blocked on the owner (add the `RENDER_DEPLOY_HOOK_URL` secret)
+- **Done when:** a push to `main` that passes every CI check calls Render's
+  deploy hook, and Render no longer deploys on push by itself (D-26). The
+  project README and `docs/TESTING.md` say so.
+- **Verify:** a push to `main` runs the Deploy job green and the live site
+  serves that commit; a pull request skips the job.

@@ -1,7 +1,10 @@
 # Render Blueprint: one free web service built from the Dockerfile.
+# CI deploys it through a deploy hook once every check passes (D-26), so
+# Render does not deploy on push by itself.
 services:
   - type: web
     name: ui-components-package
     runtime: docker
     plan: free
     healthCheckPath: /health
+    autoDeployTrigger: "off"
