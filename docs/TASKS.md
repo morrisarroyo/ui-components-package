@@ -662,3 +662,21 @@ The owner asked for the components to meet the W3C accessibility standard
   website and mock API, opening in a new tab.
 - **Verify:** the built Overview page shows both links with the live
   addresses; after the redeploy, the hosted Overview shows them too.
+
+---
+
+## Phase 11 — READMEs, Swagger and contributing
+
+The owner's checklist: a README with a quick start for each part, linked from
+the project README; Swagger docs for the API; concise interview notes; and a
+Contributing page on the docs site about adding a new component.
+
+### T-11.1 Swagger docs for the API
+- **Depends on:** —
+- **Status:** Done
+- **Done when:** the API serves a Swagger page at `/api/swagger` and its
+  OpenAPI document at `/api/swagger/v1/swagger.json`, describing both patient
+  endpoints and the 404 (D-21).
+- **Verify:** `npm run test:api` passes, including tests for both; with
+  Swagger disabled a test fails.
+

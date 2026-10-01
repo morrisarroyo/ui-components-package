@@ -164,6 +164,14 @@ address, so a reviewer can use them without cloning the repository.
 **Done when:** the public address serves the website at `/`, the API at
 `/api` and the docs at `/docs`.
 
+### Phase 11 — READMEs, Swagger and contributing
+
+A README with a quick start for each part, linked from the project README;
+Swagger docs for the API; concise interview notes; and a Contributing page on
+the docs site about adding a new component.
+
+**Done when:** every Phase 11 task in `docs/TASKS.md` is Done.
+
 ## Working agreements
 
 - **Follow `docs/CONVENTIONS.md`** for file layout, naming, styling and tests.
@@ -191,7 +199,7 @@ npm run build --workspace ui         # build the library
 npm test                             # build ui, then every workspace's tests
 npm run test  --workspace ui         # library tests only
 npm run dev                          # build ui, then start the website on :5173
-npm run api                          # start the mock API on :5080
+npm run api                          # start the mock API on :5080 (Swagger at /api/swagger)
 npm run storybook                    # browse the ui components on :6006
 npm run test:api                     # the mock API's xUnit tests
 ```
