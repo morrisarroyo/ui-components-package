@@ -31,7 +31,7 @@ The full log, with alternatives and what would change each answer, is
 | D-18 | API tests | xUnit, real `Program` in memory via `WebApplicationFactory` | Tests the wire shape, not the C# record. |
 | D-19 | Accessibility | WCAG 2.2 AA; three brief colours swapped for other brief tokens | The brief's table header text, input border and focus ring fail AA contrast; the token values stay. |
 
-Smaller choices taken inside tasks are in `AutoPhase.md`: the search is a form,
+Smaller choices taken inside tasks: the search is a form,
 so Enter also searches; Back goes to `/`, so it works from a directly opened
 link; the app's layout CSS uses the library's tokens and never targets a `ui`
 class.
@@ -58,8 +58,7 @@ components were drafted together and then verified and committed one task at
 a time, which is why those five commits are seconds apart.
 
 **The harness.** `CLAUDE.md` (context and rules, read first), the documents in
-`docs/`, `AutoPhase.md` (the run log: what verified each task, decisions taken
-alone, where the plan was wrong) and the skills in `.claude/skills/`, explained
+`docs/` and the skills in `.claude/skills/`, explained
 in [`.claude/README.md`](./.claude/README.md). `phase-tasks` is the planning
 skill (Phases 6 and 7 were planned directly in conversation); `auto-phase`
 ran Phases 1–4 and 6 in full auto: implement one task, run

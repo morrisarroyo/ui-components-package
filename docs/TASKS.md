@@ -14,7 +14,7 @@ story.
 
 **Status summary:** Phases 0–6 complete. Phase 7 (fixes from the review
 against the brief) in progress. Phases 5–7 came after the original delivery
-(Phase 4). The run log with the evidence for each task is `AutoPhase.md`.
+(Phase 4).
 
 ---
 
