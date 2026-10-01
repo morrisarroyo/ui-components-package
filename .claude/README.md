@@ -1,6 +1,6 @@
 # Harness
 
-The Claude Code skills this project was built with. They are my reusable,
+The Claude Code skills this project was built with. Most are my reusable,
 user-level skills, copied here unchanged, so they were written for other
 projects too: some examples mention Unity or Plastic SCM, and they describe a
 generic `Tasks.md`.
@@ -14,6 +14,7 @@ generic `Tasks.md`.
 | `commit-task` | Commits one task and checks the commit captured it. | Every commit |
 | `auto-phase` | Runs a whole phase unattended: implement, verify, commit, repeat. | Phases 1–4 and 6 |
 | `document-writer` | Makes docs short and plain, with a checker script for wordy phrases and long sentences. | Writing and editing docs |
+| `github-task` | Files tasks as GitHub issues, starts, updates and closes them with evidence. Written for this project. | The Register patient page |
 
 ## How the generic terms map to this repository
 
