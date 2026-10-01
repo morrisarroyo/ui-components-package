@@ -92,7 +92,7 @@ task, and two record a pause for a manual browser check.
 
 ## Tests
 
-`npm test` and `npm run test:api` run 255 tests across the library, the
+`npm test` and `npm run test:api` run 295 tests across the library, the
 website and the API. `npm run test:e2e` runs 14 more: both pages in Chromium
 against the real API. What each suite covers: [TESTING.md](./TESTING.md).
 

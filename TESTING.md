@@ -32,8 +32,8 @@ first.
 | `ui` entry point | 2 | `packages/ui/src/index.test.ts` | Every component is exported, and nothing else. |
 | `ui` stories | 21 | `packages/ui/src/stories.test.tsx` | Every Storybook story renders. |
 | `ui` README | 81 | `packages/ui/src/readme.test.ts` | The library README's code links, contents and props tables match the code. |
-| `app` | 54 | `packages/app/src/**/*.test.ts(x)` | The mapping from API data to display values, and both pages in every state. |
-| `api` | 25 | `api/Intrahealth.Api.Tests/` | Every endpoint, the search rules, the 404 body, the JSON shape and the Swagger docs. |
+| `app` | 81 | `packages/app/src/**/*.test.ts(x)` | The mapping between API data and display values, and all three pages in every state. |
+| `api` | 38 | `api/Intrahealth.Api.Tests/` | Every endpoint, the search rules, registering a patient and its validation, the 404 body, the JSON shape and the Swagger docs. |
 | End to end | 14 | `e2e/patients.spec.ts` | Every behaviour in the page spec, in Chromium against the real API. |
 
 The `ui` and `app` tests use Vitest and Testing Library. They query the page
