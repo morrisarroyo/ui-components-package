@@ -20,6 +20,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
     options.SwaggerDoc("v1", new() { Title = "Mock patient API", Version = "v1" }));
 
+// Every patient, seed data first, for the life of the process.
+builder.Services.AddSingleton<PatientStore>();
+
 var app = builder.Build();
 
 app.UseSwagger(options => options.RouteTemplate = "api/swagger/{documentName}/swagger.json");
@@ -43,15 +46,15 @@ app.MapGet("/health", () => "ok").ExcludeFromDescription();
 // "given family" contain the search text, ignoring case. An absent, empty or
 // whitespace-only search means no filter. No match is 200 with [], never 404:
 // an empty search result is not an error.
-app.MapGet("/api/patients", (string? search) =>
+app.MapGet("/api/patients", (string? search, PatientStore store) =>
 {
     var term = search?.Trim();
     if (string.IsNullOrEmpty(term))
     {
-        return Results.Ok(SeedData.Patients);
+        return Results.Ok(store.All());
     }
 
-    var matches = SeedData.Patients
+    var matches = store.All()
         .Where(patient => Matches(patient, term))
         .ToList();
     return Results.Ok(matches);
@@ -60,9 +63,9 @@ app.MapGet("/api/patients", (string? search) =>
 .Produces<List<Patient>>();
 
 // One patient by id, or 404 with the standard ProblemDetails body.
-app.MapGet("/api/patients/{id}", (string id) =>
+app.MapGet("/api/patients/{id}", (string id, PatientStore store) =>
 {
-    var patient = SeedData.Patients.FirstOrDefault(candidate => candidate.Id == id);
+    var patient = store.Find(id);
     return patient is null
         ? Results.Problem(statusCode: StatusCodes.Status404NotFound, detail: $"No patient with id '{id}'.")
         : Results.Ok(patient);
@@ -70,6 +73,23 @@ app.MapGet("/api/patients/{id}", (string id) =>
 .WithSummary("Get one patient by id")
 .Produces<Patient>()
 .ProducesProblem(StatusCodes.Status404NotFound);
+
+// A new patient, given an id and kept in memory until the process stops.
+// Invalid input is 400 with one error per field, keyed by its JSON name.
+app.MapPost("/api/patients", (NewPatient patient, PatientStore store) =>
+{
+    var errors = patient.Validate(DateOnly.FromDateTime(DateTime.UtcNow));
+    if (errors.Count > 0)
+    {
+        return Results.ValidationProblem(errors);
+    }
+
+    var created = store.Add(patient);
+    return Results.Created($"/api/patients/{created.Id}", created);
+})
+.WithSummary("Register a new patient")
+.Produces<Patient>(StatusCodes.Status201Created)
+.ProducesValidationProblem();
 
 // The website's own routes, such as /patients/p-0003, load its index.html so
 // the client router can take over. Unknown /api paths stay a 404 instead.

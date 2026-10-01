@@ -89,6 +89,34 @@ Returns one patient.
 }
 ```
 
+### `POST /api/patients`
+
+Registers a new patient. The body is a Patient without `id`. The API assigns
+the next free id (`p-0013`, …) and keeps the patient in memory until it stops.
+
+- **201 Created** — the stored Patient, with `Location: /api/patients/{id}`.
+  Values are trimmed; a blank optional value is stored as `null`, and so is an
+  address whose parts are all blank.
+- **400 Bad Request** — ASP.NET Core's `ValidationProblemDetails`, one message
+  per invalid field, keyed by its JSON name. Nothing is stored.
+
+| Field | Rule |
+| --- | --- |
+| `givenName`, `familyName` | Required, not blank. |
+| `gender` | One of `female`, `male`, `other`, `unknown`. |
+| `birthDate` | A real date as `YYYY-MM-DD`, not in the future. |
+| `email` | Optional; when given, shaped like `name@example.com`. |
+
+```jsonc
+// 400 body
+{
+  "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+  "title": "One or more validation errors occurred.",
+  "status": 400,
+  "errors": { "birthDate": ["Enter a date as YYYY-MM-DD."] }
+}
+```
+
 ### `GET /health`
 
 **200 OK**, body `"ok"`. Not used by the website; it exists so the API can be
@@ -101,6 +129,8 @@ confirmed up without reasoning about the data.
 | Search matches nothing | `200` with `[]` | Table shows "No patients match your search" |
 | Unknown patient id | `404` + ProblemDetails | Card titled "Patient not found", Back button still present |
 | API not running, network failure, non-2xx on the list | no response / `5xx` | Card titled "Something went wrong" instead of the Table |
+| Registering with invalid input | `400` + field errors | Each error shown on its field |
+| Registering fails any other way | no response / `5xx` | Card titled "Something went wrong"; the form keeps its values |
 
 ## Display mapping
 

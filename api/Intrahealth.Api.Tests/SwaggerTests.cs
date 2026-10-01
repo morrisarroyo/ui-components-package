@@ -19,6 +19,16 @@ public class SwaggerTests(WebApplicationFactory<Program> factory) : ApiTests(fac
     }
 
     [Fact]
+    public async Task Describes_registering_a_patient_and_its_400()
+    {
+        var document = await GetJson("/api/swagger/v1/swagger.json");
+        var responses = document.GetProperty("paths").GetProperty("/api/patients").GetProperty("post").GetProperty("responses");
+
+        Assert.True(responses.TryGetProperty("201", out _));
+        Assert.True(responses.TryGetProperty("400", out _));
+    }
+
+    [Fact]
     public async Task Serves_the_swagger_page()
     {
         var response = await Client.GetAsync("/api/swagger/index.html");
