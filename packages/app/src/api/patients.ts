@@ -1,9 +1,10 @@
 /**
  * The website's only door to the mock API, and its one mapping layer.
  *
- * This module holds the typed calls to both patient endpoints and the single
+ * This module holds the typed calls to the patient endpoints, the single
  * translation from the API payload (`PatientDto`) to display values
- * (`PatientDisplay`). It is the only place in `app` that knows an API field
+ * (`PatientDisplay`), and the one from the Register patient form to the
+ * payload it sends (`NewPatientDto`). It is the only place in `app` that knows an API field
  * name, and the only place that decides whether a value is missing. Pages
  * receive display-ready values and a typed result, never a `Response`.
  *
@@ -31,6 +32,9 @@ export interface PatientDto {
   address: AddressDto | null;
 }
 
+/** The body of `POST /api/patients`: a patient without its id. */
+export type NewPatientDto = Omit<PatientDto, 'id'>;
+
 // --- Display shape -----------------------------------------------------------
 
 /** One patient, as the pages show it. `null` means the value is missing. */
@@ -53,6 +57,46 @@ export type PatientListResult =
 export type PatientResult =
   | { status: 'ok'; patient: PatientDisplay }
   | { status: 'not-found' }
+  | { status: 'error' };
+
+// --- Register patient form ------------------------------------------------------
+
+/** What the Register patient form holds: one string per field, as typed. */
+export interface PatientForm {
+  givenName: string;
+  familyName: string;
+  gender: string;
+  birthDate: string;
+  phone: string;
+  email: string;
+  line: string;
+  city: string;
+  region: string;
+  postalCode: string;
+}
+
+export type PatientFormField = keyof PatientForm;
+
+/** One message per invalid field; a field with no entry is valid. */
+export type PatientFormErrors = Partial<Record<PatientFormField, string>>;
+
+export const EMPTY_PATIENT_FORM: PatientForm = {
+  givenName: '',
+  familyName: '',
+  gender: '',
+  birthDate: '',
+  phone: '',
+  email: '',
+  line: '',
+  city: '',
+  region: '',
+  postalCode: '',
+};
+
+/** The outcome of registering a patient. */
+export type CreatePatientResult =
+  | { status: 'ok'; id: string }
+  | { status: 'invalid'; errors: PatientFormErrors }
   | { status: 'error' };
 
 // --- Mapping -----------------------------------------------------------------
@@ -128,6 +172,91 @@ export function toPatientRow(patient: PatientDisplay) {
   };
 }
 
+/** Today as `YYYY-MM-DD`, in local time. */
+function isoDate(date: Date): string {
+  const pad = (value: number) => String(value).padStart(2, '0');
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+}
+
+/** `YYYY-MM-DD` naming a day that exists: not `1984-02-30`. */
+function isRealDate(value: string): boolean {
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
+  if (!match) {
+    return false;
+  }
+  const [year, month, day] = [Number(match[1]), Number(match[2]), Number(match[3])];
+  const date = new Date(Date.UTC(year, month - 1, day));
+  return date.getUTCFullYear() === year && date.getUTCMonth() === month - 1 && date.getUTCDate() === day;
+}
+
+/**
+ * The form's errors, by the same rules as the API (docs/API-CONTRACT.md), so
+ * they show before anything is sent. Gender is matched ignoring case.
+ */
+export function validatePatientForm(form: PatientForm, today: Date = new Date()): PatientFormErrors {
+  const errors: PatientFormErrors = {};
+  if (form.givenName.trim() === '') {
+    errors.givenName = 'Enter a given name.';
+  }
+  if (form.familyName.trim() === '') {
+    errors.familyName = 'Enter a family name.';
+  }
+  if (!KNOWN_GENDERS.has(form.gender.trim().toLowerCase())) {
+    errors.gender = 'Enter female, male, other or unknown.';
+  }
+  const birthDate = form.birthDate.trim();
+  if (!isRealDate(birthDate)) {
+    errors.birthDate = 'Enter a date as YYYY-MM-DD.';
+  } else if (birthDate > isoDate(today)) {
+    errors.birthDate = 'Birth date cannot be in the future.';
+  }
+  const email = form.email.trim();
+  if (email !== '' && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+    errors.email = 'Enter an email address like name@example.com.';
+  }
+  return errors;
+}
+
+/** A present value, trimmed, or null. */
+function trimmedOrNull(value: string): string | null {
+  return presentOrNull(value)?.trim() ?? null;
+}
+
+/** The payload for a valid form: values trimmed, blank optional values null. */
+export function toNewPatientDto(form: PatientForm): NewPatientDto {
+  const address: AddressDto = {
+    line: trimmedOrNull(form.line),
+    city: trimmedOrNull(form.city),
+    region: trimmedOrNull(form.region),
+    postalCode: trimmedOrNull(form.postalCode),
+  };
+  const hasAddress = Object.values(address).some((part) => part !== null);
+  return {
+    givenName: form.givenName.trim(),
+    familyName: form.familyName.trim(),
+    gender: form.gender.trim().toLowerCase(),
+    birthDate: form.birthDate.trim(),
+    phone: trimmedOrNull(form.phone),
+    email: trimmedOrNull(form.email),
+    address: hasAddress ? address : null,
+  };
+}
+
+/** The API's 400 field errors, keyed by form field; fields the form lacks are dropped. */
+function toFormErrors(body: unknown): PatientFormErrors {
+  const errors: PatientFormErrors = {};
+  const apiErrors: unknown = typeof body === 'object' && body !== null && 'errors' in body ? body.errors : null;
+  if (typeof apiErrors !== 'object' || apiErrors === null) {
+    return errors;
+  }
+  for (const [field, messages] of Object.entries(apiErrors)) {
+    if (field in EMPTY_PATIENT_FORM && Array.isArray(messages) && typeof messages[0] === 'string') {
+      errors[field as PatientFormField] = messages[0];
+    }
+  }
+  return errors;
+}
+
 // --- Calls ---------------------------------------------------------------------
 
 /**
@@ -164,6 +293,32 @@ export async function fetchPatient(id: string): Promise<PatientResult> {
     }
     const body = (await response.json()) as PatientDto;
     return { status: 'ok', patient: toPatientDisplay(body) };
+  } catch {
+    return { status: 'error' };
+  }
+}
+
+/**
+ * Registers a patient. A 400 whose errors name form fields is
+ * `{ status: 'invalid' }` with those errors; any other failure is
+ * `{ status: 'error' }`. Validate with `validatePatientForm` first.
+ */
+export async function createPatient(form: PatientForm): Promise<CreatePatientResult> {
+  try {
+    const response = await fetch('/api/patients', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(toNewPatientDto(form)),
+    });
+    if (response.status === 400) {
+      const errors = toFormErrors(await response.json());
+      return Object.keys(errors).length > 0 ? { status: 'invalid', errors } : { status: 'error' };
+    }
+    if (!response.ok) {
+      return { status: 'error' };
+    }
+    const body = (await response.json()) as PatientDto;
+    return { status: 'ok', id: body.id };
   } catch {
     return { status: 'error' };
   }

@@ -1,5 +1,14 @@
-import { fetchPatient, fetchPatients, toPatientDisplay, toPatientRow } from './patients';
-import type { PatientDto } from './patients';
+import {
+  EMPTY_PATIENT_FORM,
+  createPatient,
+  fetchPatient,
+  fetchPatients,
+  toNewPatientDto,
+  toPatientDisplay,
+  toPatientRow,
+  validatePatientForm,
+} from './patients';
+import type { PatientDto, PatientForm } from './patients';
 
 const complete: PatientDto = {
   id: 'p-0001',
@@ -237,5 +246,128 @@ describe('toPatientRow', () => {
 
   it('spells a missing phone as "—", since the Table shows cells as given', () => {
     expect(toPatientRow(toPatientDisplay({ ...complete, phone: null })).phone).toBe('—');
+  });
+});
+
+const ada: PatientForm = {
+  givenName: 'Ada',
+  familyName: 'Lovelace',
+  gender: 'female',
+  birthDate: '1990-12-10',
+  phone: '+1 416 555 0100',
+  email: 'ada@example.com',
+  line: '1 Front St',
+  city: 'Toronto',
+  region: 'ON',
+  postalCode: 'M5J 2N8',
+};
+
+const TODAY = new Date(2026, 9, 1);
+
+describe('validatePatientForm', () => {
+  it('accepts a complete form', () => {
+    expect(validatePatientForm(ada, TODAY)).toEqual({});
+  });
+
+  it('accepts a form with only the required fields', () => {
+    const form = { ...EMPTY_PATIENT_FORM, givenName: 'Ada', familyName: 'Lovelace', gender: 'other', birthDate: '1990-12-10' };
+
+    expect(validatePatientForm(form, TODAY)).toEqual({});
+  });
+
+  it('requires the name, gender and birth date', () => {
+    expect(Object.keys(validatePatientForm(EMPTY_PATIENT_FORM, TODAY))).toEqual([
+      'givenName',
+      'familyName',
+      'gender',
+      'birthDate',
+    ]);
+  });
+
+  it('treats a blank name as missing', () => {
+    expect(validatePatientForm({ ...ada, givenName: '   ' }, TODAY).givenName).toBe('Enter a given name.');
+  });
+
+  it('accepts a gender in any case, but only the four values', () => {
+    expect(validatePatientForm({ ...ada, gender: ' Female ' }, TODAY).gender).toBeUndefined();
+    expect(validatePatientForm({ ...ada, gender: 'f' }, TODAY).gender).toBe('Enter female, male, other or unknown.');
+  });
+
+  it.each(['02/03/1984', '1984-2-3', '1984-02-30'])('rejects %s as a birth date', (birthDate) => {
+    expect(validatePatientForm({ ...ada, birthDate }, TODAY).birthDate).toBe('Enter a date as YYYY-MM-DD.');
+  });
+
+  it('rejects a birth date after today, and accepts today', () => {
+    expect(validatePatientForm({ ...ada, birthDate: '2026-10-02' }, TODAY).birthDate).toBe(
+      'Birth date cannot be in the future.',
+    );
+    expect(validatePatientForm({ ...ada, birthDate: '2026-10-01' }, TODAY).birthDate).toBeUndefined();
+  });
+
+  it('rejects an email without an @ and a domain', () => {
+    expect(validatePatientForm({ ...ada, email: 'ada.example.com' }, TODAY).email).toBe(
+      'Enter an email address like name@example.com.',
+    );
+  });
+});
+
+describe('toNewPatientDto', () => {
+  it('trims values and lowercases the gender', () => {
+    const dto = toNewPatientDto({ ...ada, givenName: ' Ada ', gender: 'Female' });
+
+    expect(dto.givenName).toBe('Ada');
+    expect(dto.gender).toBe('female');
+    expect(dto.address).toEqual({ line: '1 Front St', city: 'Toronto', region: 'ON', postalCode: 'M5J 2N8' });
+  });
+
+  it('sends blank optional values as null', () => {
+    const dto = toNewPatientDto({ ...ada, phone: ' ', email: '', city: '' });
+
+    expect(dto.phone).toBeNull();
+    expect(dto.email).toBeNull();
+    expect(dto.address?.city).toBeNull();
+  });
+
+  it('sends an address with every part blank as null', () => {
+    expect(toNewPatientDto({ ...ada, line: '', city: ' ', region: '', postalCode: '' }).address).toBeNull();
+  });
+});
+
+describe('createPatient', () => {
+  it('posts the payload and returns the new id', async () => {
+    respond(201, { ...complete, id: 'p-0013' });
+
+    expect(await createPatient(ada)).toEqual({ status: 'ok', id: 'p-0013' });
+    const [url, init] = vi.mocked(fetch).mock.calls[0] ?? [];
+    expect(url).toBe('/api/patients');
+    expect(init?.method).toBe('POST');
+    expect(JSON.parse(String(init?.body))).toEqual(toNewPatientDto(ada));
+  });
+
+  it("returns the API's field errors as form errors", async () => {
+    respond(400, { status: 400, errors: { birthDate: ['Birth date cannot be in the future.'], 'address.zip': ['x'] } });
+
+    expect(await createPatient(ada)).toEqual({
+      status: 'invalid',
+      errors: { birthDate: 'Birth date cannot be in the future.' },
+    });
+  });
+
+  it('reports a 400 that names no form field as an error', async () => {
+    respond(400, { title: 'Bad Request' });
+
+    expect(await createPatient(ada)).toEqual({ status: 'error' });
+  });
+
+  it('reports a server error as an error', async () => {
+    respond(500, {});
+
+    expect(await createPatient(ada)).toEqual({ status: 'error' });
+  });
+
+  it('reports a network failure as an error', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new TypeError('Failed to fetch')));
+
+    expect(await createPatient(ada)).toEqual({ status: 'error' });
   });
 });
