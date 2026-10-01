@@ -81,9 +81,9 @@ npm run ci:docker              # same as: docker build -f Dockerfile.ci .
 | `ui` entry point | 2 | `packages/ui/src/index.test.ts` | Every component is exported, and nothing else. |
 | `ui` stories | 21 | `packages/ui/src/stories.test.tsx` | Every Storybook story renders. |
 | `ui` README | 81 | `packages/ui/src/readme.test.ts` | The library README's links, contents and props tables match the code. |
-| `app` | 81 | `packages/app/src/**/*.test.ts(x)` | The display mapping, and all three pages in every state. |
+| `app` | 83 | `packages/app/src/**/*.test.ts(x)` | The display mapping, and all three pages in every state. |
 | `api` | 38 | `api/Intrahealth.Api.Tests/` | Every endpoint, search, registration and its validation, not-found, JSON shape, Swagger. |
-| End to end | 15 | `e2e/` | Every behaviour of the list and detail pages, and one journey across all three pages. |
+| End to end | 22 | `e2e/` | Every behaviour of all three pages, including registering a patient, and one journey across them. |
 
 Only the end-to-end failure test fakes the network.
 

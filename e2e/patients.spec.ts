@@ -1,10 +1,12 @@
 // Both pages in a real browser against the running mock API, one test per
 // behaviour in section 5 of docs/DESIGNDOCUMENT.md. Patients come from
-// api/Intrahealth.Api/SeedData.cs: twelve in all; Samuel Okafor (p-0007) has no
+// api/Intrahealth.Api/SeedData.cs: twelve in all, plus any the Register tests
+// have added, so list checks ask for at least twelve. Samuel Okafor (p-0007) has no
 // phone and Priya Raman (p-0003) no email.
 import { expect, test } from '@playwright/test';
 import type { Page } from '@playwright/test';
 
+const SEEDED_PATIENTS = 12;
 const PATIENT_LIST = /\/api\/patients(\?.*)?$/;
 
 /** Body rows only: the Table's header row is excluded. */
@@ -39,7 +41,7 @@ test.describe('Patient list', () => {
     await expect(page.getByRole('table')).toHaveCount(0);
 
     release();
-    await expect(patientRows(page)).toHaveCount(12);
+    await expect.poll(() => patientRows(page).count()).toBeGreaterThanOrEqual(SEEDED_PATIENTS);
     await expect(page.getByRole('status')).toHaveCount(0);
   });
 
@@ -65,7 +67,7 @@ test.describe('Patient list', () => {
 
   test('searching by part of a name shows only the matching patients', async ({ page }) => {
     await page.goto('/');
-    await expect(patientRows(page)).toHaveCount(12);
+    await expect.poll(() => patientRows(page).count()).toBeGreaterThanOrEqual(SEEDED_PATIENTS);
 
     await page.getByLabel('Search by name').fill('okonkwo');
     await page.getByRole('button', { name: 'Search' }).click();
@@ -77,7 +79,7 @@ test.describe('Patient list', () => {
 
   test('the Search button shows its loading state while the search runs', async ({ page }) => {
     await page.goto('/');
-    await expect(patientRows(page)).toHaveCount(12);
+    await expect.poll(() => patientRows(page).count()).toBeGreaterThanOrEqual(SEEDED_PATIENTS);
 
     const release = await holdResponses(page, /\/api\/patients\?search=/);
     await page.getByLabel('Search by name').fill('chen');

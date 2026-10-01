@@ -106,13 +106,9 @@ issues (#2–#6) instead of task ids.
 ## Known gaps
 
 None against the brief. The four found in review were fixed in T-7.10 to
-T-7.13. Two small ones remain beyond it:
-
-- The Register form checks "birth date not in the future" against the
-  browser's date, the API against Coordinated Universal Time (UTC). Early in the day east of UTC, the API
-  refuses today's date; the form shows that error on the field.
-- The end-to-end tests open the Register page but don't fill it in; the
-  website's tests cover its states with fake responses.
+T-7.13. Two small ones found on 1 Oct were fixed the same day: the Register
+form judged "today" by the browser's date while the API used Coordinated Universal Time (UTC), and no
+end-to-end test filled in the form.
 
 ## With two more hours
 

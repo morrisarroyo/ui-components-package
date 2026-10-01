@@ -1,8 +1,11 @@
 // One user journey across all three pages, in a real browser against the
 // running mock API: search, open a patient, Back, Register patient, Cancel.
 // Patients come from api/Intrahealth.Api/SeedData.cs; "oko" matches only
-// Amara Okonkwo (p-0001), and there are twelve in all.
+// Amara Okonkwo (p-0001). There are twelve, plus any the Register tests have
+// added, so list checks ask for at least twelve.
 import { expect, test } from '@playwright/test';
+
+const SEEDED_PATIENTS = 12;
 
 test('search, open a patient, go back, open Register patient, and return to the list', async ({ page }) => {
   const rows = page.locator('tbody tr');
@@ -10,7 +13,7 @@ test('search, open a patient, go back, open Register patient, and return to the 
 
   // Main page: search narrows the list to one patient.
   await page.goto('/');
-  await expect(rows).toHaveCount(12);
+  await expect.poll(() => rows.count()).toBeGreaterThanOrEqual(SEEDED_PATIENTS);
   await search.fill('oko');
   await page.getByRole('button', { name: 'Search' }).click();
   await expect(rows).toHaveCount(1);
@@ -39,5 +42,5 @@ test('search, open a patient, go back, open Register patient, and return to the 
   await page.getByRole('button', { name: 'Cancel' }).click();
   await expect(page).toHaveURL('/');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Patients');
-  await expect(rows).toHaveCount(12);
+  await expect.poll(() => rows.count()).toBeGreaterThanOrEqual(SEEDED_PATIENTS);
 });
