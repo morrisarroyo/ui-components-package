@@ -16,14 +16,15 @@ export function PatientDetailPage() {
   const { state: locationState } = useLocation();
   const backTo =
     typeof locationState?.backTo === 'string' && locationState.backTo.startsWith('/') ? locationState.backTo : '/';
-  const [state, setState] = useState<DetailState>({ status: 'loading' });
+  // A result for another id (the previous patient) means this one is loading.
+  const [loaded, setLoaded] = useState<{ id: string; result: PatientResult } | null>(null);
+  const state: DetailState = loaded?.id === id ? loaded.result : { status: 'loading' };
 
   useEffect(() => {
     let current = true;
-    setState({ status: 'loading' });
     void fetchPatient(id).then((result) => {
       if (current) {
-        setState(result);
+        setLoaded({ id, result });
       }
     });
     return () => {

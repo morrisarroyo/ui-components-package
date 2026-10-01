@@ -51,9 +51,13 @@ export function PatientListPage() {
     void load(initialSearch);
     return () => {
       // Unmounting (or StrictMode's rehearsal unmount) retires any request
-      // still in flight.
+      // still in flight. The ref is a counter, not a DOM node, so reading
+      // its latest value here is the point.
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       latestRequest.current++;
     };
+    // Loads once on mount; later searches load from handleSearch.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

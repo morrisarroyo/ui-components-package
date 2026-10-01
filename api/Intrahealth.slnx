@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="Intrahealth.Api.Tests/Intrahealth.Api.Tests.csproj" />
+  <Project Path="Intrahealth.Api/Intrahealth.Api.csproj" />
+</Solution>

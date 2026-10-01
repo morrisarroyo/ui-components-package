@@ -36,16 +36,17 @@
   color: var(--ui-color-text-muted);
 }
 
-/* Text for screen readers only. The clip values are the standard technique,
+/* Text for screen readers only. These values are the standard technique,
    not design values, so they have no tokens. */
 .visuallyHidden {
   position: absolute;
   width: 1px;
   height: 1px;
   padding: 0;
+  /* stylelint-disable-next-line declaration-property-unit-disallowed-list -- visually-hidden technique, not spacing */
   margin: -1px;
   overflow: hidden;
-  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
   white-space: nowrap;
   border: 0;
 }

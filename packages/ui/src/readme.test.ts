@@ -59,7 +59,7 @@ describe('README code references', () => {
 describe('README contents list', () => {
   it('lists every section and subsection heading, in order', () => {
     const contents = readme.slice(readme.indexOf('## Contents'), readme.indexOf('\n---', readme.indexOf('## Contents')));
-    const listed = [...contents.matchAll(/^(?:\d+\.|   -) \[(.+)\]\(#(.+)\)$/gm)].map(([, text, anchor]) => ({ text, anchor }));
+    const listed = [...contents.matchAll(/^(?:\d+\.| {3}-) \[(.+)\]\(#(.+)\)$/gm)].map(([, text, anchor]) => ({ text, anchor }));
 
     // Headings inside fenced code (the Contributing template) are not sections.
     const afterContents = withoutCode(readme.slice(readme.indexOf('## Contents') + '## Contents'.length));

@@ -1,6 +1,6 @@
 ---
 name: test-and-fix
-description: Run the project's tests and builds, diagnose any failures down to root cause, and rewrite the offending code until verification actually passes. Asks before structural rewrites, and never weakens a test to make it green. Use when asked to test the code, check that things still work, or fix failing tests.
+description: Run the project's linters, tests and builds, diagnose any failures down to root cause, and rewrite the offending code until verification actually passes. Asks before structural rewrites, and never weakens a test to make it green. Use when asked to test or lint the code, check that things still work, or fix failing tests or lint errors.
 ---
 
 Run the project's verification, find out what's actually broken, and fix it.
@@ -9,7 +9,10 @@ Run the project's verification, find out what's actually broken, and fix it.
 Deleting an assertion, loosening a comparison, adding a skip, catching and swallowing the
 error, or narrowing the input until the bug is out of range — all of these produce green
 output and leave the bug in the product. Green that was obtained by lowering the bar is worse
-than red, because it stops anyone looking.
+than red, because it stops anyone looking. The same goes for lint: never turn a rule off,
+lower its severity, widen an ignore list, or add a suppression to get a clean run. A disable
+comment on one line is acceptable only when the code is right and the rule is wrong there,
+and the comment must say why.
 
 ---
 
@@ -25,6 +28,11 @@ ceremony around them, rather than reconstructing equivalents from memory.
 Note whether the project distinguishes **per-change** verification from **per-milestone**
 verification. If it does, run the per-change bar by default and the fuller one only when
 asked, or when the change is large enough to warrant it.
+
+**Lint is part of verification.** If the project has a lint command (an `npm run lint`
+script, a linter config such as `eslint.config.js` or `stylelint.config.js`, `dotnet format`,
+`ruff`, `golangci-lint`), run it with the tests, and run it first: it is fast and its
+findings often explain a test failure. Treat a lint failure like a test failure.
 
 If no verification is documented, look at what exists — test directories, test frameworks in
 the manifest, build scripts — then say what you found and what you intend to run before
@@ -52,13 +60,16 @@ Three traps sit around the run itself:
   reporting fewer tests than expected usually means something did not compile; investigate
   the count before believing any green.
 
-Sort every failure into one of three buckets before touching any code:
+Sort every failure into one of four buckets before touching any code:
 
 - **A real bug** — the code does the wrong thing. Fix the code.
 - **A stale or wrong test** — the code is right and the test encodes an outdated expectation.
   Fixing this means changing the test, which is legitimate *only* when the specification backs
   you up. Cite the document or requirement that says so. "The test is inconvenient" is not
   evidence that the test is wrong.
+- **A lint finding** — usually a real bug or a broken project rule; fix the code. If the code
+  is right and the rule is wrong in this one place, a disable comment that says why is the
+  only acceptable change. A rule that is wrong everywhere is a config change: ask first.
 - **Environment or flake** — a missing tool, a locked project, a licensing error, a timeout,
   a genuinely nondeterministic test. Fix the environment or report it. Do not "fix" code to
   work around it.
