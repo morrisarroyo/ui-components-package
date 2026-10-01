@@ -43,3 +43,30 @@
 .backRow {
   display: flex;
 }
+
+/* The title shares its row with the page's main action. */
+.titleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ui-space-3);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-space-6);
+}
+
+/* As many fields a row as fit: three on a desktop, one on a phone. */
+.fieldGrid {
+  display: grid;
+  /* No token fits a column width; 240px keeps a label and input on one line. */
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--ui-space-4);
+}
+
+.actions {
+  display: flex;
+  gap: var(--ui-space-3);
+}

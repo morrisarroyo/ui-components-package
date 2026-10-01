@@ -54,6 +54,7 @@ function renderPage() {
     <MemoryRouter initialEntries={['/']}>
       <Routes>
         <Route path="/" element={<PatientListPage />} />
+        <Route path="/patients/new" element={<p>Register page</p>} />
         <Route path="/patients/:id" element={<DetailStub />} />
       </Routes>
     </MemoryRouter>,
@@ -182,5 +183,14 @@ describe('PatientListPage', () => {
     await userEvent.click(await screen.findByText('Daniel Tremblay'));
 
     expect(screen.getByText('Detail page for p-0002')).toBeInTheDocument();
+  });
+
+  it('opens the Register patient page from its button', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(json([amara])));
+    renderPage();
+
+    await userEvent.click(screen.getByRole('button', { name: 'Register patient' }));
+
+    expect(screen.getByText('Register page')).toBeInTheDocument();
   });
 });

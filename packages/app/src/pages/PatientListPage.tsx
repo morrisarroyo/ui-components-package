@@ -73,7 +73,12 @@ export function PatientListPage() {
 
   return (
     <main className={styles.page}>
-      <h1 className={styles.title}>Patients</h1>
+      <div className={styles.titleRow}>
+        <h1 className={styles.title}>Patients</h1>
+        <Button variant="secondary" onClick={() => navigate('/patients/new')}>
+          Register patient
+        </Button>
+      </div>
 
       <Card>
         {/* A form, so Enter in the field searches too; the brief requires only the button. */}

@@ -6,9 +6,11 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import 'ui/styles.css';
 import { PatientListPage } from './pages/PatientListPage';
 import { PatientDetailPage } from './pages/PatientDetailPage';
+import { RegisterPatientPage } from './pages/RegisterPatientPage';
 
 const router = createBrowserRouter([
   { path: '/', element: <PatientListPage /> },
+  { path: '/patients/new', element: <RegisterPatientPage /> },
   { path: '/patients/:id', element: <PatientDetailPage /> },
 ]);
 
