@@ -304,6 +304,25 @@ describe('validatePatientForm', () => {
     expect(validatePatientForm({ ...ada, birthDate: '2026-10-01' }, TODAY).birthDate).toBeUndefined();
   });
 
+  it.each(['Asia/Tokyo', 'America/Toronto'])(
+    'judges "today" by the UTC date, as the API does, with the browser in %s',
+    (timeZone) => {
+      vi.stubEnv('TZ', timeZone);
+      try {
+        // 23:30 UTC on 1 Oct is already 2 Oct in Tokyo.
+        const lateOnFirst = new Date('2026-10-01T23:30:00Z');
+        expect(validatePatientForm({ ...ada, birthDate: '2026-10-02' }, lateOnFirst).birthDate).toBe(
+          'Birth date cannot be in the future.',
+        );
+        // 00:30 UTC on 2 Oct is still 1 Oct in Toronto.
+        const earlyOnSecond = new Date('2026-10-02T00:30:00Z');
+        expect(validatePatientForm({ ...ada, birthDate: '2026-10-02' }, earlyOnSecond).birthDate).toBeUndefined();
+      } finally {
+        vi.unstubAllEnvs();
+      }
+    },
+  );
+
   it('rejects an email without an @ and a domain', () => {
     expect(validatePatientForm({ ...ada, email: 'ada.example.com' }, TODAY).email).toBe(
       'Enter an email address like name@example.com.',

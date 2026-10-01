@@ -172,10 +172,12 @@ export function toPatientRow(patient: PatientDisplay) {
   };
 }
 
-/** Today as `YYYY-MM-DD`, in local time. */
+/**
+ * Today as `YYYY-MM-DD`, in UTC: the date the API checks against
+ * (`DateTime.UtcNow`), so the form never accepts a date the API refuses.
+ */
 function isoDate(date: Date): string {
-  const pad = (value: number) => String(value).padStart(2, '0');
-  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+  return date.toISOString().slice(0, 10);
 }
 
 /** `YYYY-MM-DD` naming a day that exists: not `1984-02-30`. */

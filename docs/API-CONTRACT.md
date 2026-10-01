@@ -94,7 +94,7 @@ free id (`p-0013`, …) and keeps the patient until it stops.
 | --- | --- |
 | `givenName`, `familyName` | Required, not blank. |
 | `gender` | One of the four values above. |
-| `birthDate` | A real `YYYY-MM-DD` date, not in the future. |
+| `birthDate` | A real `YYYY-MM-DD` date, not after today's date in UTC (Coordinated Universal Time). |
 | `email` | Optional; when given, shaped like `name@example.com`. |
 
 ```json
