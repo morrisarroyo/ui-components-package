@@ -82,10 +82,21 @@ Phases 5 onwards came after submission, at my direction.
 8. **The review found more (Phase 7):** a blank cell for a missing phone, a
    loading Button that dropped focus, unannounced clickable rows, a fixed API
    port, stale counts. Each got its own commit.
+9. **Docs drifted while several sessions worked at once (1 Oct).** A sanity
+   check of every doc against the code found about twenty mismatches. Among
+   them: two pages counted where there are three, the wrong primary Button
+   border, and a focus ring claimed for TextField that only Button and table
+   rows draw. All were fixed in one commit (`774abf6`). Lesson: check the docs
+   against the code after parallel work, not only the tests.
+10. **A commit script emptied a file.** Staging `docs/TASKS.md` by hand failed
+    silently, so `22fb7ba` committed it empty and `90fa843` restored it. Both
+    were already pushed, so the history keeps them. Lesson: check each
+    commit's diff before pushing.
 
 **Where history differs from the plan.** The first commit holds all of Phase 0
 and the API contract. A few commits fix defects instead of finishing a task.
-Two record a pause for a manual browser check.
+Two record a pause for a manual browser check. Phase 13 commits name GitHub
+issues (#2–#6) instead of task ids.
 
 ## Tests
 
@@ -95,7 +106,13 @@ Two record a pause for a manual browser check.
 ## Known gaps
 
 None against the brief. The four found in review were fixed in T-7.10 to
-T-7.13.
+T-7.13. Two small ones remain beyond it:
+
+- The Register form checks "birth date not in the future" against the
+  browser's date, the API against Coordinated Universal Time (UTC). Early in the day east of UTC, the API
+  refuses today's date; the form shows that error on the field.
+- The end-to-end tests open the Register page but don't fill it in; the
+  website's tests cover its states with fake responses.
 
 ## With two more hours
 
