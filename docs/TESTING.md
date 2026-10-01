@@ -68,7 +68,7 @@ npm run ci:docker              # same as: docker build -f Dockerfile.ci .
 | `ui` worked example | 5 | `packages/ui/src/examples/` | The worked example works and matches its README listing. |
 | `ui` entry point | 2 | `packages/ui/src/index.test.ts` | Every component is exported, and nothing else. |
 | `ui` stories | 21 | `packages/ui/src/stories.test.tsx` | Every Storybook story renders. |
-| `ui` README | 70 | `packages/ui/src/readme.test.ts` | The library README's links, contents and props tables match the code. |
+| `ui` README | 81 | `packages/ui/src/readme.test.ts` | The library README's links, contents and props tables match the code. |
 | `app` | 81 | `packages/app/src/**/*.test.ts(x)` | The display mapping, and all three pages in every state. |
 | `api` | 38 | `api/Intrahealth.Api.Tests/` | Every endpoint, search, registration and its validation, not-found, JSON shape, Swagger. |
 | End to end | 15 | `e2e/` | Every behaviour in the page spec, and one journey across all three pages. |

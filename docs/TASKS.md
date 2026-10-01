@@ -626,8 +626,8 @@ the API, shorter interview notes, and a docs page on adding a component.
 ## Phase 14 — CI, secrets, testing guide and clean-up
 
 The owner asked for continuous integration (CI) in Docker run by one
-command, no secrets on the remote, a guide to better tests, and a clean
-repository.
+command, no secrets on the remote, a guide to better tests, a clean
+repository, and lint.
 
 ### T-14.1 Continuous integration in Docker, one command
 - **Depends on:** —
@@ -662,3 +662,15 @@ repository.
   file.
 - **Verify:** every tracked screenshot and script is used; the layout lists
   every top-level item; `npm run ci` passes.
+
+### T-14.5 Lint that enforces the project's rules
+- **Depends on:** T-14.1
+- **Status:** Done
+- **Done when:** `npm run lint` runs ESLint, Stylelint and `dotnet format`,
+  and `npm run ci` runs it first (D-25). It fails on a hard-coded colour,
+  spacing or font size outside `tokens.css`, a deep import from `app` into
+  `ui`, and an accessibility mistake jsx-a11y can see. A scaffolded component
+  lints clean. `docs/TESTING.md` says what each linter checks, and the
+  `test-and-fix` skill runs lint as part of verification.
+- **Verify:** plant each of those violations and see lint fail; `npm run ci`
+  passes.

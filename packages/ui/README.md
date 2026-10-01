@@ -68,6 +68,7 @@ import { Button } from 'ui';
 6. [Contributing: extending the library](#contributing-extending-the-library)
    - [Scaffold](#scaffold)
    - [Steps](#steps)
+   - [Why it's short](#why-its-short)
 
 ---
 
@@ -1061,3 +1062,16 @@ npm run test --workspace ui             # behaviour, entry point, stories, READM
 npm run build --workspace ui            # the package consumers get
 npm run build-storybook --workspace ui  # every story builds
 ```
+
+### Why it's short
+
+| Choice | What it saves you | Where |
+| --- | --- | --- |
+| Tokens defined once | You name a role, not a value; a token change reaches every component. | [`src/tokens.css:13`](src/tokens.css#L13 ":root {") |
+| Hashed CSS Module class names | No collisions, no naming scheme; consumers can't depend on internals. | [`vite.config.ts:11`](vite.config.ts#L11 "generateScopedName: 'ui-[local]-[hash:base64:5]',") |
+| One entry point behind `exports` | Two lines register a component; no consumer imports a file you might move. | [`src/index.ts:9`](src/index.ts#L9 "export { Button } from './components/Button';"), [`package.json:9`](package.json#L9 "exports") |
+| Entry point imports the tokens | Every token lands in `ui.css`; a stylesheet uses them without importing. | [`src/index.ts:7`](src/index.ts#L7 "import './tokens.css';") |
+| Tests discover components | Export, story and README checks cover a new component without test edits. | [`src/index.test.ts:6`](src/index.test.ts#L6 "import.meta.glob(['./components/*.tsx', '!./components/*.tes"), [`src/stories.test.tsx:9`](src/stories.test.tsx#L9 "const storyFiles = import.meta.glob<StoriesModule>('./**/*.s") |
+| Storybook uses the library's Vite config | What you see in Storybook is what ships. | [`.storybook/main.ts:16`](.storybook/main.ts#L16 "framework: '@storybook/react-vite',"), [`.storybook/preview.ts:8`](.storybook/preview.ts#L8 "import '../src/tokens.css';") |
+| React is external | A component adds only its own code. | [`vite.config.ts:23`](vite.config.ts#L23 "external: ['react', 'react-dom', 'react/jsx-runtime'],") |
+| The scaffold | Files start in house style and pass all but the README test. | [`scripts/new-component.mjs:27`](scripts/new-component.mjs#L27 "const files = {") |
