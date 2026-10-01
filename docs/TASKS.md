@@ -689,3 +689,12 @@ Contributing page on the docs site about adding a new component.
 - **Verify:** the built site lists the page last in the sidebar; it renders
   with no console errors.
 
+### T-11.3 A README per part, linked from the project README
+- **Depends on:** T-11.1, T-11.2
+- **Status:** Done
+- **Done when:** the UI components, Storybook docs, example website, mock API
+  and tests each have a README that starts with a Quick start, and the
+  project README links every README in the repository.
+- **Verify:** every README has a Quick start section; every link in the
+  project README resolves; `npm test` passes.
+

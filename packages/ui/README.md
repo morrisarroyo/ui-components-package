@@ -7,6 +7,29 @@ them into their own apps, so every screen looks and behaves the same and is
 accessible by default. You pick a component and a variant; the library owns
 how it looks and behaves.
 
+## Quick start
+
+In this repository, build the library once:
+
+```bash
+npm install                    # at the root
+npm run build --workspace ui   # builds packages/ui/dist
+```
+
+Then, in an app that depends on `ui`, import the stylesheet once at the root
+and use the components:
+
+```tsx
+import 'ui/styles.css';
+import { Button } from 'ui';
+
+<Button onClick={() => console.log('saved')}>Save</Button>
+```
+
+To add `ui` to a new app, or to use it from another repository, see
+[Install](#install). To browse every component with live demos, open the
+[docs site](https://ui-components-package.onrender.com/docs/).
+
 | Component | Use it for |
 | --- | --- |
 | [Button](#button) | Triggering an action. |
@@ -20,7 +43,8 @@ commands don't work from the installed package.
 
 For a browsable version, run `npm run docs` at the repository root and open
 <http://localhost:6007>: one page per component with live demos and its
-props, plus the design tokens. The project README says how to share it.
+props, plus the design tokens. The [docs site README](./src/docs/README.md)
+says how to share it.
 
 ## Contents
 
